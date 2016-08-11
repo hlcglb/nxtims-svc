@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hyundaiuni.nxtims.mapper.sample.SampleMapper">
+    <select id="get" resultType="hashmap">
+        <![CDATA[
+            SELECT *
+              FROM TEMPMSTR T
+             WHERE EMP_NO = #{id}
+        ]]>
+    </select>
+
+    <insert id="insert">
+        <![CDATA[
+            INSERT INTO TEST_TABLE(
+                        REMARK)
+                 VALUES(#{REMARK})
+        ]]>
+    </insert>
+</mapper>

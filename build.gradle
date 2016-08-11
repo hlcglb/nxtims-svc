@@ -1,0 +1,45 @@
+buildscript {
+    repositories {
+        maven {
+            url 'https://artifactory.hlc.co.kr/artifactory/list/jcenter/'
+        }
+    }
+    dependencies {
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.4.0.RELEASE'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'spring-boot'
+
+repositories {
+    maven {
+        url 'https://artifactory.hlc.co.kr/artifactory/list/jcenter/'
+    }
+}
+
+dependencies {
+    compile 'org.springframework.boot:spring-boot-starter-actuator'
+    compile 'org.springframework.boot:spring-boot-starter-jdbc'
+    compile 'org.springframework.boot:spring-boot-starter-web'
+    compile 'org.springframework.boot:spring-boot-devtools'
+    compile 'org.mybatis.spring.boot:mybatis-spring-boot-starter:1.1.1'
+
+    compile 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16'
+    compile 'com.oracle:ojdbc6:11.2.0.3'
+    compile 'de.codecentric:spring-boot-admin-starter-client:1.4.1'
+    compile 'org.jolokia:jolokia-core'
+
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
+}
+
+jar {
+    baseName = 'app'
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'

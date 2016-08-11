@@ -1,0 +1,59 @@
+spring:
+  application:
+    name: nxtims-svc
+  datasource:
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    url: jdbc:log4jdbc:oracle:thin:testteams/tms_0216@203.242.44.91:1526:HLCDBUDEV
+  boot:
+    admin:
+      auto-deregistration: true
+      client:
+        prefer-ip: true
+mybatis:
+  config-location: classpath:mybatis.xml
+logging:
+  level:
+    jdbc: WARN
+---
+spring:
+  profiles: default
+server:
+  port: 7311
+logging:
+  level:
+    jdbc:
+      sqltiming: INFO
+      resultsettable: INFO
+---
+spring:
+  profiles: development
+  boot:
+    admin:
+      url: http://app-hlcadmin-dev.default
+server:
+  tomcat:
+    port-header: X-Forwarded-Port
+    protocol-header: X-Forwarded-Proto
+    remote-ip-header: X-Forwarded-For
+---
+spring:
+  profiles: staging
+  boot:
+    admin:
+      url: http://app-hlcadmin-stage.default
+server:
+  tomcat:
+    port-header: X-Forwarded-Port
+    protocol-header: X-Forwarded-Proto
+    remote-ip-header: X-Forwarded-For
+---
+spring:
+  profiles: production
+  boot:
+    admin:
+      url: http://app-hlcadmin.default
+server:
+  tomcat:
+    port-header: X-Forwarded-Port
+    protocol-header: X-Forwarded-Proto
+    remote-ip-header: X-Forwarded-For

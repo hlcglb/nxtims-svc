@@ -1,0 +1,18 @@
+buildscript {
+    repositories {
+        maven {
+            url 'https://artifactory.hlc.co.kr/artifactory/list/jcenter/'
+        }
+        maven {
+            url 'https://plugins.gradle.org/m2/'
+        }
+    }
+    dependencies {
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.4.0.RELEASE'
+        classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.0.1'
+        classpath 'org.hidetake:gradle-ssh-plugin:2.4.2'
+    }
+}
+
+apply from: 'build.gradle'
+apply from: '../deploy.gradle'
