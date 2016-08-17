@@ -4,8 +4,8 @@
     <select id="get" resultType="hashmap">
         <![CDATA[
             SELECT *
-              FROM TEMPMSTR T
-             WHERE EMP_NO = #{id}
+              FROM USERS T
+             WHERE USER_ID = #{id}
         ]]>
     </select>
 
