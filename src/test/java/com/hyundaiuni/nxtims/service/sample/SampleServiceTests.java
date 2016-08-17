@@ -20,7 +20,7 @@ public class SampleServiceTests {
 
     @Test
     public void testGet() {
-        assertThat(sampleService.get("21101711")).isNotEmpty();
+        assertThat(sampleService.get("200065")).isNotEmpty();
     }
 
     @Test

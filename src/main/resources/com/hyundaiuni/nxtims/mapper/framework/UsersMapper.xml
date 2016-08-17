@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hyundaiuni.nxtims.mapper.framework.UsersMapper">
+    <select id="getUser" parameterType="string" resultType="com.hyundaiuni.nxtims.domain.framework.User">
+        <![CDATA[
+            SELECT USER_ID AS userId,
+                   USER_NM AS userNm,
+                   USER_PWD AS userPwd,
+                   DECODE(SIGN(TO_DATE(EXPIRED_YMD,'YYYYMMDD')-TRUNC(SYSDATE)),-1,'Y','N') AS expiredYn,
+                   NVL(LOCKED_YN,'N') AS lockedYn,
+                   DECODE(SIGN(TO_DATE(PWD_EXPIRED_YMD,'YYYYMMDD')-TRUNC(SYSDATE)),-1,'Y','N') AS pwdExpiredYn,
+                   USE_YN AS useYn
+              FROM USERS
+             WHERE USER_ID = #{userId}
+        ]]>
+    </select>
+</mapper>
