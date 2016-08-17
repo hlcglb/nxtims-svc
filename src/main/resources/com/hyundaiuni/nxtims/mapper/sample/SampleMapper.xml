@@ -11,7 +11,7 @@
 
     <insert id="insert">
         <![CDATA[
-            INSERT INTO TEST_TABLE(
+            INSERT INTO REMARKS(
                         REMARK)
                  VALUES(#{REMARK})
         ]]>
