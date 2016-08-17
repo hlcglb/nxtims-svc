@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.hyundaiuni.nxtims.domain.framework.Auth;
+import com.hyundaiuni.nxtims.exception.ServiceException;
 import com.hyundaiuni.nxtims.mapper.framework.UsersMapper;
 
 @Service
@@ -19,13 +20,17 @@ public class UsersService {
     public com.hyundaiuni.nxtims.domain.framework.User getUser(String userId) {
         com.hyundaiuni.nxtims.domain.framework.User user = usersMapper.getUser(userId);
         
+        if(user == null){
+            throw new ServiceException("000","UsernameNotFoundException");
+        }
+        
         Auth auth = new Auth();
         auth.setAuthId("ROLE_ADMIN");
 
         List<Auth> authList = new ArrayList<Auth>();
         authList.add(auth);
 
-        user.setAuthList(authList);        
+        user.setAuthList(authList);
 
         return user;
     }
