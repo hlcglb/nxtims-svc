@@ -1,4 +1,4 @@
-package com.hyundaiuni.nxtims.service.framework;
+package com.hyundaiuni.nxtims.service.app;
 
 import java.util.List;
 
@@ -8,9 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
-import com.hyundaiuni.nxtims.domain.framework.Auth;
-import com.hyundaiuni.nxtims.domain.framework.User;
-import com.hyundaiuni.nxtims.mapper.framework.UsersMapper;
+import com.hyundaiuni.nxtims.domain.app.Auth;
+import com.hyundaiuni.nxtims.domain.app.User;
+import com.hyundaiuni.nxtims.mapper.app.UsersMapper;
 
 @Service
 public class UsersService {

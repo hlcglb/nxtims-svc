@@ -1,4 +1,4 @@
-package com.hyundaiuni.nxtims.domain.framework;
+package com.hyundaiuni.nxtims.domain.app;
 
 import java.io.Serializable;
 

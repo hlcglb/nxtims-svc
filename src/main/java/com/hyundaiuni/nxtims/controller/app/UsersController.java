@@ -1,4 +1,4 @@
-package com.hyundaiuni.nxtims.controller.framework;
+package com.hyundaiuni.nxtims.controller.app;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.hyundaiuni.nxtims.service.framework.UsersService;
+import com.hyundaiuni.nxtims.service.app.UsersService;
 
 @RestController
 @RequestMapping("/api/v1/users")

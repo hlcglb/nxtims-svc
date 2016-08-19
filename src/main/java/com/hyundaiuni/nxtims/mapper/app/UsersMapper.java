@@ -1,9 +1,9 @@
-package com.hyundaiuni.nxtims.mapper.framework;
+package com.hyundaiuni.nxtims.mapper.app;
 
 import java.util.List;
 
-import com.hyundaiuni.nxtims.domain.framework.Auth;
-import com.hyundaiuni.nxtims.domain.framework.User;
+import com.hyundaiuni.nxtims.domain.app.Auth;
+import com.hyundaiuni.nxtims.domain.app.User;
 
 public interface UsersMapper {
     public User getUserById(String userId);
