@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class User implements Serializable {
-    private static final long serialVersionUID = -301129405625024445L;
+    private static final long serialVersionUID = 2053626949336009100L;
 
     @JsonProperty(value = "USER_ID")
     private String userId = null;
@@ -75,12 +75,7 @@ public class User implements Serializable {
     }
 
     public boolean isNonExpired() {
-        if("Y".equals(expiredYn)) {
-            return false;
-        }
-        else {
-            return true;
-        }
+        return "Y".equals(expiredYn) ? false : true;
     }
 
     public void setExpiredYn(String expiredYn) {
@@ -100,12 +95,7 @@ public class User implements Serializable {
     }
     
     public boolean isNonLocked() {
-        if("Y".equals(lockedYn)) {
-            return false;
-        }
-        else {
-            return true;
-        }
+        return "Y".equals(lockedYn) ? false : true;
     }    
 
     public void setLockedYn(String lockedYn) {
@@ -117,12 +107,7 @@ public class User implements Serializable {
     }
     
     public boolean isNonPwdExpired() {
-        if("Y".equals(pwdExpiredYn)) {
-            return false;
-        }
-        else {
-            return true;
-        }
+        return "Y".equals(pwdExpiredYn) ? false : true;
     }    
 
     public void setPwdExpiredYn(String pwdExpiredYn) {
@@ -142,12 +127,7 @@ public class User implements Serializable {
     }
     
     public boolean isUse() {
-        if("Y".equals(useYn)) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return "Y".equals(useYn) ? true : false;
     }     
 
     public void setUseYn(String useYn) {
@@ -176,5 +156,5 @@ public class User implements Serializable {
 
     public void setAuthList(List<Auth> authList) {
         this.authList = authList;
-    }    
+    }
 }
