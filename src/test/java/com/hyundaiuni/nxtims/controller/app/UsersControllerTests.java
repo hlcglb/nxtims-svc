@@ -1,4 +1,4 @@
-package com.hyundaiuni.nxtims.controller.framework;
+package com.hyundaiuni.nxtims.controller.app;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
