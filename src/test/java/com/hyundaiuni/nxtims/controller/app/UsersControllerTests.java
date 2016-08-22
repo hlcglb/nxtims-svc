@@ -32,8 +32,14 @@ public class UsersControllerTests {
     }
 
     @Test
-    public void testGet() throws Exception {
+    public void testGetUser() throws Exception {
         mvc.perform(get(URL + "/200065")).andDo(print()).andExpect(status().isOk()).andExpect(
             content().contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(jsonPath("$.USER_ID").value("200065"));
     }
+    
+    @Test
+    public void testGetMenuByUserId() throws Exception {
+        mvc.perform(get(URL + "/menus/200065")).andDo(print()).andExpect(status().isOk()).andExpect(
+            content().contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(jsonPath("$..RESOURCE_ID").isArray());
+    }    
 }

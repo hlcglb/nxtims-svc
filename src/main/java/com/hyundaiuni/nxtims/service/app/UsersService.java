@@ -9,6 +9,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
 import com.hyundaiuni.nxtims.domain.app.Auth;
+import com.hyundaiuni.nxtims.domain.app.Resource;
 import com.hyundaiuni.nxtims.domain.app.User;
 import com.hyundaiuni.nxtims.mapper.app.UsersMapper;
 
@@ -32,5 +33,14 @@ public class UsersService {
         }
 
         return user;
+    }
+
+    @Transactional(readOnly = true)
+    public List<Resource> getMenuByUserId(String userId) {
+        Assert.notNull(userId, "userId must not be null");
+
+        List<Resource> menuList = usersMapper.getMenuByUserId(userId);
+
+        return menuList;
     }
 }

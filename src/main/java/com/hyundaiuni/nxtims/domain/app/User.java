@@ -11,40 +11,40 @@ public class User implements Serializable {
     private static final long serialVersionUID = 2053626949336009100L;
 
     @JsonProperty(value = "USER_ID")
-    private String userId = null;
+    private String userId;
 
     @JsonProperty(value = "USER_NM")
-    private String userNm = null;
+    private String userNm;
 
     @JsonProperty(value = "USER_PWD")
-    private String userPwd = null;
+    private String userPwd;
 
     @JsonProperty(value = "EXPIRED_YN")
-    private String expiredYn = null;
+    private String expiredYn;
 
     @JsonProperty(value = "EXPIRED_YMD")
-    private String expiredYmd = null;
+    private String expiredYmd;
 
     @JsonProperty(value = "LOCKED_YN")
-    private String lockedYn = null;
+    private String lockedYn;
 
     @JsonProperty(value = "PWD_EXPIRED_YN")
-    private String pwdExpiredYn = null;
+    private String pwdExpiredYn;
 
     @JsonProperty(value = "PWD_EXPIRED_YMD")
-    private String pwdExpiredYmd = null;
+    private String pwdExpiredYmd;
 
     @JsonProperty(value = "USE_YN")
-    private String useYn = null;
+    private String useYn;
 
     @JsonProperty(value = "REG_USER_ID")
-    private String regUserId = null;
+    private String regUserId;
 
     @JsonProperty(value = "UPD_USER_ID")
-    private String updUserId = null;
+    private String updUserId;
 
     @JsonProperty(value = "AUTH_LIST")
-    private List<Auth> authList = null;
+    private List<Auth> authList;
 
     public String getUserId() {
         return userId;

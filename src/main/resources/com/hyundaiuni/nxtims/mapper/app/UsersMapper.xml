@@ -21,5 +21,32 @@
               FROM USER_AUTH
              WHERE USER_ID = #{userId}
         ]]>
+    </select>
+    
+    <select id="getMenuByUserId" parameterType="string" resultType="com.hyundaiuni.nxtims.domain.app.Resource">
+        <![CDATA[
+            SELECT LEVEL AS resourceLevel,
+                   A.RESOURCE_ID AS resourceId,
+                   A.RESOURCE_NM AS resourceNm,
+                   A.RESOURCE_URL AS resourceUrl,
+                   A.RESOURCE_TYPE AS resourceType
+              FROM ( SELECT D.RESOURCE_ID,
+                            D.RESOURCE_NM,
+                            D.RESOURCE_URL,
+                            D.RESOURCE_TYPE,
+                            D.LINK_RESOURCE_ID
+                       FROM USERS A,
+                            USER_AUTH B,
+                            AUTH_RESOURCE C,
+                            RESOURCES D
+                      WHERE A.USER_ID = #{userId}
+                        AND A.USER_ID = B.USER_ID
+                        AND B.AUTH_ID = C.AUTH_ID
+                        AND C.RESOURCE_ID = D.RESOURCE_ID
+                        AND D.RESOURCE_TYPE = '01'
+                        AND D.USE_YN = 'Y' ) A
+             START WITH A.RESOURCE_ID = '000000'    
+           CONNECT BY A.LINK_RESOURCE_ID = PRIOR A.RESOURCE_ID         
+        ]]>
     </select>    
 </mapper>

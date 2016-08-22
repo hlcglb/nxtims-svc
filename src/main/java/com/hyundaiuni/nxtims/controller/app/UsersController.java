@@ -21,7 +21,7 @@ public class UsersController {
     private UsersService usersService;
 
     @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
-    public ResponseEntity<?> get(@PathVariable("userId") String userId) {
+    public ResponseEntity<?> getUser(@PathVariable("userId") String userId) {
         Assert.notNull(userId, "userId must not be null");
         
         try {
@@ -35,4 +35,20 @@ public class UsersController {
             return new ResponseEntity<>(error,HttpStatus.BAD_REQUEST);
         }
     }
+    
+    @RequestMapping(value = "/menus/{userId}", method = RequestMethod.GET)
+    public ResponseEntity<?> getMenuByUserId(@PathVariable("userId") String userId) {
+        Assert.notNull(userId, "userId must not be null");
+        
+        try {
+            return new ResponseEntity<>(usersService.getMenuByUserId(userId), HttpStatus.OK);
+        }
+        catch(Exception e) {
+            Map<String,String> error = new HashMap<>();
+            error.put("CODE", "999");
+            error.put("MESSAGE", e.getMessage());
+            
+            return new ResponseEntity<>(error,HttpStatus.BAD_REQUEST);
+        }
+    }    
 }
