@@ -6,6 +6,4 @@
 [![Vulnerabilities](https://sonarqube.hlc.co.kr/api/badges/measure?key=nxtims-svc&metric=vulnerabilities)](https://sonarqube.hlc.co.kr/dashboard/index/nxtims-svc)
 [![Code Smells](https://sonarqube.hlc.co.kr/api/badges/measure?key=nxtims-svc&metric=code_smells)](https://sonarqube.hlc.co.kr/dashboard/index/nxtims-svc)
 [![Coverage](https://sonarqube.hlc.co.kr/api/badges/measure?key=nxtims-svc&metric=coverage)](https://sonarqube.hlc.co.kr/dashboard/index/nxtims-svc)
-
-<br>
-프로젝트 소개글을 등록하세요.
+# nxtims-svc
