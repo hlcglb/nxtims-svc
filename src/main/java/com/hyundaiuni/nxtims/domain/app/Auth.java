@@ -9,6 +9,9 @@ public class Auth implements Serializable {
     
     @JsonProperty(value = "AUTH_ID")
     private String authId;
+    
+    @JsonProperty(value = "AUTH_NM")
+    private String authNm;
 
     public String getAuthId() {
         return authId;
@@ -16,5 +19,13 @@ public class Auth implements Serializable {
 
     public void setAuthId(String authId) {
         this.authId = authId;
-    }    
+    }
+
+    public String getAuthNm() {
+        return authNm;
+    }
+
+    public void setAuthNm(String authNm) {
+        this.authNm = authNm;
+    }
 }

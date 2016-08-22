@@ -48,5 +48,5 @@
              START WITH A.RESOURCE_ID = '000000'    
            CONNECT BY A.LINK_RESOURCE_ID = PRIOR A.RESOURCE_ID         
         ]]>
-    </select>    
+    </select>
 </mapper>

@@ -2,13 +2,17 @@ package com.hyundaiuni.nxtims.domain.app;
 
 import java.io.Serializable;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class Resource implements Serializable {
-    private static final long serialVersionUID = -1061697241118943250L;
+public class AuthResource implements Serializable {
+    private static final long serialVersionUID = -6391138674183752385L;
 
+    @JsonProperty(value = "AUTH_ID")
+    private String authId;
+    
+    @JsonProperty(value = "AUTH_NM")
+    private String authNm;
+    
     @JsonProperty(value = "RESOURCE_LEVEL")
     private String resourceLevel;
     
@@ -28,10 +32,26 @@ public class Resource implements Serializable {
     private String httpMethod;
     
     @JsonProperty(value = "SORT_ORDER")
-    private int sortOrder;
+    private int sortOrder;    
 
     public String getResourceLevel() {
         return resourceLevel;
+    }    
+
+    public String getAuthId() {
+        return authId;
+    }
+
+    public void setAuthId(String authId) {
+        this.authId = authId;
+    }
+
+    public String getAuthNm() {
+        return authNm;
+    }
+
+    public void setAuthNm(String authNm) {
+        this.authNm = authNm;
     }
 
     public void setResourceLevel(String resourceLevel) {
@@ -77,12 +97,12 @@ public class Resource implements Serializable {
     public void setHttpMethod(String httpMethod) {
         this.httpMethod = httpMethod;
     }
-
+    
     public int getSortOrder() {
         return sortOrder;
     }
 
     public void setSortOrder(int sortOrder) {
         this.sortOrder = sortOrder;
-    }
+    }    
 }
