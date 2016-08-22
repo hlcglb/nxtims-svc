@@ -1,2 +1,2 @@
 # nxtims-svc
-The next intermodal System
+The next intermodal System - open api server
