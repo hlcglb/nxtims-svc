@@ -19,7 +19,6 @@ public class AuthResourceTest {
             
             authResource.setAuthId("ROLE_ADMIN");
             authResource.setResourceUrl("/api/v1/app/users/*");
-            authResource.setHttpMethod("GET");
 
             String json = mapper.writeValueAsString(authResource);
             

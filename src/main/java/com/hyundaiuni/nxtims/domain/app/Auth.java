@@ -2,8 +2,10 @@ package com.hyundaiuni.nxtims.domain.app;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Auth implements Serializable {
     private static final long serialVersionUID = -5088984642210923982L;
     

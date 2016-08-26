@@ -5,5 +5,5 @@ import java.util.List;
 import com.hyundaiuni.nxtims.domain.app.AuthResource;
 
 public interface ResourcesMapper {
-    public List<AuthResource> getResourceByType(String resourceType);
+    public List<AuthResource> getResources();
 }

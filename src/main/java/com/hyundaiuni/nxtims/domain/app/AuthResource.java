@@ -2,8 +2,10 @@ package com.hyundaiuni.nxtims.domain.app;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class AuthResource implements Serializable {
     private static final long serialVersionUID = -6391138674183752385L;
 
@@ -27,12 +29,6 @@ public class AuthResource implements Serializable {
     
     @JsonProperty(value = "RESOURCE_TYPE")
     private String resourceType;
-    
-    @JsonProperty(value = "HTTP_METHOD")
-    private String httpMethod;
-    
-    @JsonProperty(value = "SORT_ORDER")
-    private int sortOrder;    
 
     public String getResourceLevel() {
         return resourceLevel;
@@ -89,20 +85,4 @@ public class AuthResource implements Serializable {
     public void setResourceType(String resourceType) {
         this.resourceType = resourceType;
     }
-
-    public String getHttpMethod() {
-        return httpMethod;
-    }
-
-    public void setHttpMethod(String httpMethod) {
-        this.httpMethod = httpMethod;
-    }
-    
-    public int getSortOrder() {
-        return sortOrder;
-    }
-
-    public void setSortOrder(int sortOrder) {
-        this.sortOrder = sortOrder;
-    }    
 }

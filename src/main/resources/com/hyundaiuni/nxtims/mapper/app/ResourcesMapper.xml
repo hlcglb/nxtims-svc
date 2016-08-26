@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hyundaiuni.nxtims.mapper.app.ResourcesMapper">
-    <select id="getResourceByType" parameterType="string" resultType="com.hyundaiuni.nxtims.domain.app.AuthResource">
+    <select id="getResources" resultType="com.hyundaiuni.nxtims.domain.app.AuthResource">
         <![CDATA[
             SELECT B.AUTH_ID AS authId,
                    C.RESOURCE_ID AS resourceId,
                    C.RESOURCE_NM AS resourceNm,
                    C.RESOURCE_TYPE AS resourceType,
-                   C.RESOURCE_URL AS resourceUrl,
-                   C.HTTP_METHOD AS httpMethod,
-                   C.SORT_ORDER AS sortOrder
+                   C.RESOURCE_URL AS resourceUrl
               FROM AUTHORITIES A,
                    AUTH_RESOURCE B,
                    RESOURCES C
              WHERE A.AUTH_ID = B.AUTH_ID
                AND B.RESOURCE_ID = C.RESOURCE_ID
-               AND C.RESOURCE_TYPE = #{resourceType}
-             ORDER BY C.SORT_ORDER       
+               AND C.RESOURCE_TYPE IN ('01','02')
+               AND C.RESOURCE_URL IS NOT NULL
+             ORDER BY B.AUTH_ID, C.RESOURCE_URL DESC      
         ]]>
     </select> 
 </mapper>

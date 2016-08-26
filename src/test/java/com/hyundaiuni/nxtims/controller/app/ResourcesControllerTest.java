@@ -33,7 +33,7 @@ public class ResourcesControllerTest {
     
     @Test
     public void testGetResourceByType() throws Exception {
-        mvc.perform(get(URL+"?resourceType=02")).andDo(print()).andExpect(status().isOk()).andExpect(
+        mvc.perform(get(URL)).andDo(print()).andExpect(status().isOk()).andExpect(
             content().contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(jsonPath("$..AUTH_ID").isArray());
     }    
 }

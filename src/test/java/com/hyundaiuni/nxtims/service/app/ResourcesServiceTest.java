@@ -14,7 +14,7 @@ public class ResourcesServiceTest {
     private ResourcesService resourcesService;
     
     public void testGetResourceByType(){
-        List<AuthResource> authResourceList = resourcesService.getResourceByType("02");
+        List<AuthResource> authResourceList = resourcesService.getResources();
         
         if(CollectionUtils.isEmpty(authResourceList)){
             fail("");
