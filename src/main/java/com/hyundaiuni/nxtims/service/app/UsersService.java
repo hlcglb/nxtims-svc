@@ -1,6 +1,8 @@
 package com.hyundaiuni.nxtims.service.app;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,8 @@ import com.hyundaiuni.nxtims.mapper.app.UsersMapper;
 
 @Service
 public class UsersService {
+    private static final int LIMIT_AUTH_FAIL_CNT = 5;
+
     @Autowired
     private UsersMapper usersMapper;
 
@@ -42,5 +46,36 @@ public class UsersService {
         List<Resource> menuList = usersMapper.getMenuByUserId(userId);
 
         return menuList;
+    }
+
+    @Transactional
+    public void onAuthenticationSuccess(String userId, String sessionId) {
+        Assert.notNull(userId, "userId must not be null");
+        Assert.notNull(sessionId, "sessionId must not be null");
+
+        usersMapper.updateLastLoginDate(userId);
+
+        Map<String, Object> parameter = new HashMap<>();
+        parameter.put("userId", userId);
+        parameter.put("sessionId", sessionId);
+
+        usersMapper.updateLoginDate(parameter);
+    }
+
+    @Transactional
+    public void onAuthenticationFailure(String userId) {
+        Assert.notNull(userId, "userId must not be null");
+
+        usersMapper.updateAuthFailCnt(userId);
+
+        int authFailCnt = usersMapper.getAuthFailCnt(userId);
+
+        if(LIMIT_AUTH_FAIL_CNT == authFailCnt) {
+            Map<String, Object> parameter = new HashMap<>();
+            parameter.put("userId", userId);
+            parameter.put("lockedYn", "Y");
+
+            usersMapper.updateLockedYn(parameter);
+        }
     }
 }

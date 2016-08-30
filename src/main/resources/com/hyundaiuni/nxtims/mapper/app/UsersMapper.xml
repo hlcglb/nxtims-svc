@@ -49,4 +49,60 @@
            CONNECT BY A.LINK_RESOURCE_ID = PRIOR A.RESOURCE_ID         
         ]]>
     </select>
+    
+    <update id="updateLastLoginDate" parameterType="string">
+        <![CDATA[
+            UPDATE USERS
+               SET LAST_LOGIN_DATE = SYSDATE
+             WHERE USER_ID = #{userId}
+        ]]>
+    </update>
+    
+    <update id="updateLoginDate" parameterType="hashmap">
+        <![CDATA[
+            MERGE INTO USER_LOG
+            USING DUAL
+               ON (USER_ID = #{userId} AND SESSION_ID = #{sessionId}) 
+             WHEN MATCHED THEN
+                  UPDATE
+                     SET LOGIN_DATE = SYSDATE
+             WHEN NOT MATCHED THEN
+                  INSERT
+                  (
+                   USER_ID,
+                   SESSION_ID,
+                   LOGIN_DATE
+                  )
+                  VALUES
+                  (
+                   #{userId},
+                   #{sessionId},
+                   SYSDATE
+                  )
+        ]]>
+    </update>    
+    
+    <update id="updateAuthFailCnt" parameterType="string">
+        <![CDATA[
+            UPDATE USERS
+               SET AUTH_FAIL_CNT = NVL(AUTH_FAIL_CNT,0) + 1
+             WHERE USER_ID = #{userId}
+        ]]>
+    </update>
+    
+    <select id="getAuthFailCnt" parameterType="string" resultType="int">
+        <![CDATA[
+            SELECT AUTH_FAIL_CNT
+              FROM USERS
+             WHERE USER_ID = #{userId}
+        ]]>
+    </select>
+    
+    <update id="updateLockedYn" parameterType="hashmap">
+        <![CDATA[
+            UPDATE USERS
+               SET LOCKED_YN = #{lockedYn}
+             WHERE USER_ID = #{userId}
+        ]]>
+    </update>    
 </mapper>
