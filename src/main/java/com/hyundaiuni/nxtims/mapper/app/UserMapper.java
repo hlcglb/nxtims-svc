@@ -7,7 +7,7 @@ import com.hyundaiuni.nxtims.domain.app.Auth;
 import com.hyundaiuni.nxtims.domain.app.Resource;
 import com.hyundaiuni.nxtims.domain.app.User;
 
-public interface UsersMapper {
+public interface UserMapper {
     public User getUserById(String userId);
 
     public List<Auth> getAuthByUserId(String userId);

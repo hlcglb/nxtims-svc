@@ -7,16 +7,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.hyundaiuni.nxtims.domain.app.AuthResource;
-import com.hyundaiuni.nxtims.mapper.app.ResourcesMapper;
+import com.hyundaiuni.nxtims.mapper.app.ResourceMapper;
 
 @Service
-public class ResourcesService {
+public class ResourceService {
     @Autowired
-    private ResourcesMapper resourcesMapper;
+    private ResourceMapper resourceMapper;
     
     @Transactional(readOnly = true)
     public List<AuthResource> getResources() {
-        List<AuthResource> authResourceList = resourcesMapper.getResources();
+        List<AuthResource> authResourceList = resourceMapper.getResources();
 
         return authResourceList;
     }    

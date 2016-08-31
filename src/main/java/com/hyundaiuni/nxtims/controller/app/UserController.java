@@ -14,20 +14,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.hyundaiuni.nxtims.service.app.UsersService;
+import com.hyundaiuni.nxtims.service.app.UserService;
 
 @RestController
 @RequestMapping("/api/v1/users")
-public class UsersController {
+public class UserController {
     @Autowired
-    private UsersService usersService;
+    private UserService userService;
 
     @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
     public ResponseEntity<?> getUser(@PathVariable("userId") String userId) {
         Assert.notNull(userId, "userId must not be null");
 
         try {
-            return new ResponseEntity<>(usersService.getUser(userId), HttpStatus.OK);
+            return new ResponseEntity<>(userService.getUser(userId), HttpStatus.OK);
         }
         catch(Exception e) {
             Map<String, String> error = new HashMap<>();
@@ -43,7 +43,7 @@ public class UsersController {
         Assert.notNull(userId, "userId must not be null");
 
         try {
-            return new ResponseEntity<>(usersService.getMenuByUserId(userId), HttpStatus.OK);
+            return new ResponseEntity<>(userService.getMenuByUserId(userId), HttpStatus.OK);
         }
         catch(Exception e) {
             Map<String, String> error = new HashMap<>();
@@ -62,7 +62,7 @@ public class UsersController {
             String userId = MapUtils.getString(request, "USER_ID");
             String sessionId = MapUtils.getString(request, "SESSION_ID");
             
-            usersService.onAuthenticationSuccess(userId, sessionId);
+            userService.onAuthenticationSuccess(userId, sessionId);
             
             return new ResponseEntity<>(null, HttpStatus.OK);
         }
@@ -82,7 +82,7 @@ public class UsersController {
         try {
             String userId = MapUtils.getString(request, "USER_ID");
             
-            usersService.onAuthenticationFailure(userId);
+            userService.onAuthenticationFailure(userId);
             
             return new ResponseEntity<>(null, HttpStatus.OK);
         }
@@ -103,7 +103,7 @@ public class UsersController {
             String userId = MapUtils.getString(request, "USER_ID");
             String sessionId = MapUtils.getString(request, "SESSION_ID");
             
-            usersService.onLogout(userId, sessionId);
+            userService.onLogout(userId, sessionId);
             
             return new ResponseEntity<>(null, HttpStatus.OK);
         }

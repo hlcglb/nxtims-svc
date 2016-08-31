@@ -13,23 +13,23 @@ import org.springframework.util.CollectionUtils;
 import com.hyundaiuni.nxtims.domain.app.Auth;
 import com.hyundaiuni.nxtims.domain.app.Resource;
 import com.hyundaiuni.nxtims.domain.app.User;
-import com.hyundaiuni.nxtims.mapper.app.UsersMapper;
+import com.hyundaiuni.nxtims.mapper.app.UserMapper;
 
 @Service
-public class UsersService {
+public class UserService {
     private static final int LIMIT_AUTH_FAIL_CNT = 5;
 
     @Autowired
-    private UsersMapper usersMapper;
+    private UserMapper userMapper;
 
     @Transactional(readOnly = true)
     public User getUser(String userId) {
         Assert.notNull(userId, "userId must not be null");
 
-        User user = usersMapper.getUserById(userId);
+        User user = userMapper.getUserById(userId);
 
         if(user != null) {
-            List<Auth> authList = usersMapper.getAuthByUserId(userId);
+            List<Auth> authList = userMapper.getAuthByUserId(userId);
 
             if(!CollectionUtils.isEmpty(authList)) {
                 user.setAuthList(authList);
@@ -43,7 +43,7 @@ public class UsersService {
     public List<Resource> getMenuByUserId(String userId) {
         Assert.notNull(userId, "userId must not be null");
 
-        List<Resource> menuList = usersMapper.getMenuByUserId(userId);
+        List<Resource> menuList = userMapper.getMenuByUserId(userId);
 
         return menuList;
     }
@@ -53,29 +53,29 @@ public class UsersService {
         Assert.notNull(userId, "userId must not be null");
         Assert.notNull(sessionId, "sessionId must not be null");
 
-        usersMapper.updateLastLoginDate(userId);
+        userMapper.updateLastLoginDate(userId);
 
         Map<String, Object> parameter = new HashMap<>();
         parameter.put("userId", userId);
         parameter.put("sessionId", sessionId);
 
-        usersMapper.updateLoginDate(parameter);
+        userMapper.updateLoginDate(parameter);
     }
 
     @Transactional
     public void onAuthenticationFailure(String userId) {
         Assert.notNull(userId, "userId must not be null");
 
-        usersMapper.updateAuthFailCnt(userId);
+        userMapper.updateAuthFailCnt(userId);
 
-        int authFailCnt = usersMapper.getAuthFailCnt(userId);
+        int authFailCnt = userMapper.getAuthFailCnt(userId);
 
         if(LIMIT_AUTH_FAIL_CNT == authFailCnt) {
             Map<String, Object> parameter = new HashMap<>();
             parameter.put("userId", userId);
             parameter.put("lockedYn", "Y");
 
-            usersMapper.updateLockedYn(parameter);
+            userMapper.updateLockedYn(parameter);
         }
     }
     
@@ -88,6 +88,6 @@ public class UsersService {
         parameter.put("userId", userId);
         parameter.put("sessionId", sessionId);
 
-        usersMapper.updateLogoutDate(parameter);
+        userMapper.updateLogoutDate(parameter);
     }    
 }

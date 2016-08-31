@@ -19,7 +19,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class ResourcesControllerTest {
+public class ResourceControllerTest {
     private static final String URL = "/api/v1/resources";
 
     @Autowired

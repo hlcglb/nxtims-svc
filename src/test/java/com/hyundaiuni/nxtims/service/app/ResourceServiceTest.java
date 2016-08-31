@@ -9,12 +9,12 @@ import org.springframework.util.CollectionUtils;
 
 import com.hyundaiuni.nxtims.domain.app.AuthResource;
 
-public class ResourcesServiceTest {
+public class ResourceServiceTest {
     @Autowired
-    private ResourcesService resourcesService;
+    private ResourceService resourceService;
     
     public void testGetResourceByType(){
-        List<AuthResource> authResourceList = resourcesService.getResources();
+        List<AuthResource> authResourceList = resourceService.getResources();
         
         if(CollectionUtils.isEmpty(authResourceList)){
             fail("");

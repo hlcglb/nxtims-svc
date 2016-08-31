@@ -10,18 +10,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.hyundaiuni.nxtims.service.app.ResourcesService;
+import com.hyundaiuni.nxtims.service.app.ResourceService;
 
 @RestController
 @RequestMapping("/api/v1/resources")
-public class ResourcesController {
+public class ResourceController {
     @Autowired
-    private ResourcesService resourcesService;
+    private ResourceService resourceService;
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<?> getResources() {
         try {
-            return new ResponseEntity<>(resourcesService.getResources(), HttpStatus.OK);
+            return new ResponseEntity<>(resourceService.getResources(), HttpStatus.OK);
         }
         catch(Exception e) {
             Map<String, String> error = new HashMap<>();

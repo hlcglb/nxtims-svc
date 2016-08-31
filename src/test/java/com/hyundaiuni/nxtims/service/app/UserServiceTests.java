@@ -17,30 +17,30 @@ import com.hyundaiuni.nxtims.domain.app.User;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class UsersServiceTests {
+public class UserServiceTests {
     @Autowired
-    private UsersService usersService;
+    private UserService userService;
 
     @Test
     public void testGetUser() {
-        User user = usersService.getUser("20006X");
+        User user = userService.getUser("20006X");
 
         if(user != null) {
             fail("");
         }
 
-        assertThat(usersService.getUser("test")).isInstanceOf(User.class);
+        assertThat(userService.getUser("test")).isInstanceOf(User.class);
     }
 
     @Test
     public void testGetMenuByUserId() {
-        List<Resource> menuList = usersService.getMenuByUserId("20006X");
+        List<Resource> menuList = userService.getMenuByUserId("20006X");
 
         if(!CollectionUtils.isEmpty(menuList)) {
             fail("");
         }
 
-        menuList = usersService.getMenuByUserId("test");
+        menuList = userService.getMenuByUserId("test");
 
         if(CollectionUtils.isEmpty(menuList)) {
             fail("");
@@ -50,7 +50,7 @@ public class UsersServiceTests {
     @Test
     public void testOnAuthenticationSuccess() {
         try {
-            usersService.onAuthenticationSuccess("test", "DB18EBE12C90845710D544C7A15D7072");
+            userService.onAuthenticationSuccess("test", "DB18EBE12C90845710D544C7A15D7072");
         }
         catch(Exception e) {
             fail(e.getMessage());
@@ -60,7 +60,7 @@ public class UsersServiceTests {
     @Test
     public void testOnAuthenticationFailure() {
         try {
-            usersService.onAuthenticationFailure("test");
+            userService.onAuthenticationFailure("test");
         }
         catch(Exception e) {
             fail(e.getMessage());
@@ -70,7 +70,7 @@ public class UsersServiceTests {
     @Test
     public void testOnLogout() {
         try {
-            usersService.onLogout("test", "DB18EBE12C90845710D544C7A15D7072");
+            userService.onLogout("test", "DB18EBE12C90845710D544C7A15D7072");
         }
         catch(Exception e) {
             fail(e.getMessage());
