@@ -78,4 +78,16 @@ public class UsersService {
             usersMapper.updateLockedYn(parameter);
         }
     }
+    
+    @Transactional
+    public void onLogout(String userId, String sessionId) {
+        Assert.notNull(userId, "userId must not be null");
+        Assert.notNull(sessionId, "sessionId must not be null");
+
+        Map<String, Object> parameter = new HashMap<>();
+        parameter.put("userId", userId);
+        parameter.put("sessionId", sessionId);
+
+        usersMapper.updateLogoutDate(parameter);
+    }    
 }

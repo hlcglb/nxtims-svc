@@ -93,5 +93,26 @@ public class UsersController {
 
             return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
         }
+    }
+    
+    @RequestMapping(value = "/onLogout", method = RequestMethod.POST)
+    public ResponseEntity<?> onLogout(@RequestBody Map<String, Object> request) {
+        Assert.notNull(request, "request must not be null");
+
+        try {
+            String userId = MapUtils.getString(request, "USER_ID");
+            String sessionId = MapUtils.getString(request, "SESSION_ID");
+            
+            usersService.onLogout(userId, sessionId);
+            
+            return new ResponseEntity<>(null, HttpStatus.OK);
+        }
+        catch(Exception e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("CODE", "999");
+            error.put("MESSAGE", e.getMessage());
+
+            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        }
     }    
 }

@@ -65,5 +65,15 @@ public class UsersServiceTests {
         catch(Exception e) {
             fail(e.getMessage());
         }
+    }
+    
+    @Test
+    public void testOnLogout() {
+        try {
+            usersService.onLogout("test", "DB18EBE12C90845710D544C7A15D7072");
+        }
+        catch(Exception e) {
+            fail(e.getMessage());
+        }
     }    
 }

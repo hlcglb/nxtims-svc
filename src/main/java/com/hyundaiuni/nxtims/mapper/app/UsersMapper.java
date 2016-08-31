@@ -23,4 +23,6 @@ public interface UsersMapper {
     public int getAuthFailCnt(String userId);
     
     public void updateLockedYn(Map<String, Object> parameter);
+    
+    public void updateLogoutDate(Map<String, Object> parameter);
 }

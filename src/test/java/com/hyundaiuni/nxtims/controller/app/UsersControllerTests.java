@@ -67,4 +67,14 @@ public class UsersControllerTests {
         mvc.perform(post(URL + "/onAuthenticationFailure", parameter).contentType(MediaType.APPLICATION_JSON_UTF8).content(
             JSONObject.toJSONString(parameter))).andDo(print()).andExpect(status().isOk());
     }
+    
+    public void testOnLogout() throws Exception {
+        Map<String, Object> parameter = new HashMap<>();
+        parameter.put("USER_ID", "test");
+        parameter.put("SESSION_ID", "DB18EBE12C90845710D544C7A15D7072");
+
+        mvc.perform(
+            post(URL + "/onLogout", parameter).contentType(MediaType.APPLICATION_JSON_UTF8).content(
+                JSONObject.toJSONString(parameter))).andDo(print()).andExpect(status().isOk());
+    }    
 }
