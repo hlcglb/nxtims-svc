@@ -68,19 +68,23 @@ public class UserService {
     public void onAuthenticationFailure(String userId) {
         Assert.notNull(userId, "userId must not be null");
 
-        userMapper.updateAuthFailCnt(userId);
+        User user = userMapper.getUserById(userId);
 
-        int authFailCnt = userMapper.getAuthFailCnt(userId);
+        if(user != null) {
+            userMapper.updateAuthFailCnt(userId);
 
-        if(LIMIT_AUTH_FAIL_CNT == authFailCnt) {
-            Map<String, Object> parameter = new HashMap<>();
-            parameter.put("userId", userId);
-            parameter.put("lockedYn", "Y");
+            int authFailCnt = userMapper.getAuthFailCnt(userId);
 
-            userMapper.updateLockedYn(parameter);
+            if(LIMIT_AUTH_FAIL_CNT == authFailCnt) {
+                Map<String, Object> parameter = new HashMap<>();
+                parameter.put("userId", userId);
+                parameter.put("lockedYn", "Y");
+
+                userMapper.updateLockedYn(parameter);
+            }
         }
     }
-    
+
     @Transactional
     public void onLogout(String userId, String sessionId) {
         Assert.notNull(userId, "userId must not be null");
@@ -91,5 +95,5 @@ public class UserService {
         parameter.put("sessionId", sessionId);
 
         userMapper.updateLogoutDate(parameter);
-    }    
+    }
 }
