@@ -14,7 +14,7 @@ public interface UserMapper {
 
     public List<Resource> getMenuByUserId(String userId);
 
-    public void updateLastLoginDate(String userId);
+    public void updateLoginSuccess(String userId);
 
     public void updateLoginDate(Map<String, Object> parameter);
     

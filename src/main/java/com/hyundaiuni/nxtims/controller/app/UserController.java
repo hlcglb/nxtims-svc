@@ -61,8 +61,9 @@ public class UserController {
         try {
             String userId = MapUtils.getString(request, "USER_ID");
             String sessionId = MapUtils.getString(request, "SESSION_ID");
+            String accessIp = MapUtils.getString(request, "ACCESS_IP");
             
-            userService.onAuthenticationSuccess(userId, sessionId);
+            userService.onAuthenticationSuccess(userId, sessionId, accessIp);
             
             return new ResponseEntity<>(null, HttpStatus.OK);
         }

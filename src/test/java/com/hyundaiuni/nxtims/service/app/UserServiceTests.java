@@ -50,7 +50,7 @@ public class UserServiceTests {
     @Test
     public void testOnAuthenticationSuccess() {
         try {
-            userService.onAuthenticationSuccess("test", "DB18EBE12C90845710D544C7A15D7072");
+            userService.onAuthenticationSuccess("test", "DB18EBE12C90845710D544C7A15D7072", "1.1.1.1");
         }
         catch(Exception e) {
             fail(e.getMessage());

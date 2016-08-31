@@ -50,10 +50,11 @@
         ]]>
     </select>
     
-    <update id="updateLastLoginDate" parameterType="string">
+    <update id="updateLoginSuccess" parameterType="string">
         <![CDATA[
             UPDATE USERS
-               SET LAST_LOGIN_DATE = SYSDATE
+               SET LAST_LOGIN_DATE = SYSDATE,
+                   AUTH_FAIL_CNT = 0
              WHERE USER_ID = #{userId}
         ]]>
     </update>
@@ -65,18 +66,21 @@
                ON (USER_ID = #{userId} AND SESSION_ID = #{sessionId}) 
              WHEN MATCHED THEN
                   UPDATE
-                     SET LOGIN_DATE = SYSDATE
+                     SET ACCESS_IP = #{accessIp},
+                         LOGIN_DATE = SYSDATE
              WHEN NOT MATCHED THEN
                   INSERT
                   (
                    USER_ID,
                    SESSION_ID,
+                   ACCESS_IP,
                    LOGIN_DATE
                   )
                   VALUES
                   (
                    #{userId},
                    #{sessionId},
+                   #{accessIp},
                    SYSDATE
                   )
         ]]>

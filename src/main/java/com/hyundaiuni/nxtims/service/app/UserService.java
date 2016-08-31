@@ -49,15 +49,17 @@ public class UserService {
     }
 
     @Transactional
-    public void onAuthenticationSuccess(String userId, String sessionId) {
+    public void onAuthenticationSuccess(String userId, String sessionId, String accessIp) {
         Assert.notNull(userId, "userId must not be null");
         Assert.notNull(sessionId, "sessionId must not be null");
+        Assert.notNull(accessIp, "accessIp must not be null");
 
-        userMapper.updateLastLoginDate(userId);
+        userMapper.updateLoginSuccess(userId);
 
         Map<String, Object> parameter = new HashMap<>();
         parameter.put("userId", userId);
         parameter.put("sessionId", sessionId);
+        parameter.put("accessIp", accessIp);
 
         userMapper.updateLoginDate(parameter);
     }

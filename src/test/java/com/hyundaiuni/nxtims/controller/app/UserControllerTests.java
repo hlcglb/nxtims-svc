@@ -53,6 +53,7 @@ public class UserControllerTests {
         Map<String, Object> parameter = new HashMap<>();
         parameter.put("USER_ID", "test");
         parameter.put("SESSION_ID", "DB18EBE12C90845710D544C7A15D7072");
+        parameter.put("ACCESS_IP", "1.1.1.1");
 
         mvc.perform(
             post(URL + "/onAuthenticationSuccess", parameter).contentType(MediaType.APPLICATION_JSON_UTF8).content(
