@@ -34,9 +34,7 @@ public class UserTest {
 
             user.setAuthList(authList);
 
-            String json = mapper.writeValueAsString(user);
-            
-            System.out.println(json);
+            mapper.writeValueAsString(user);
             
             assertEquals(user.isUse(),true);
             assertEquals(user.isNonExpired(),true);
@@ -59,9 +57,7 @@ public class UserTest {
             
             String json = "{\"nonExpired\":true,\"nonLocked\":true,\"nonPwdExpired\":true,\"use\":true,\"USER_ID\":\"admin\",\"USER_NM\":null,\"USER_PWD\":\"8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918\",\"EXPIRED_YN\":\"N\",\"EXPIRED_YMD\":null,\"LOCKED_YN\":\"N\",\"PWD_EXPIRED_YN\":\"N\",\"PWD_EXPIRED_YMD\":null,\"USE_YN\":\"Y\",\"REG_USER_ID\":null,\"UPD_USER_ID\":null,\"AUTH_LIST\":[{\"AUTH_ID\":\"ROLE_ADMIN\"}]}";
             
-            User user = mapper.readValue(json,User.class);
-            
-            System.out.println(user.toString());
+            mapper.readValue(json,User.class);
         }
         catch(Exception e) {
             ex = e;

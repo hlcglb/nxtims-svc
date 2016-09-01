@@ -18,9 +18,7 @@ public class AuthTest {
             Auth auth = new Auth();
             auth.setAuthId("ROLE_ADMIN");
 
-            String json = mapper.writeValueAsString(auth);
-            
-            System.out.println(json);
+            mapper.writeValueAsString(auth);
         }
         catch(Exception e) {
             ex = e;
@@ -38,9 +36,7 @@ public class AuthTest {
             
             String json = "{\"AUTH_ID\":\"ROLE_ADMIN\"}";
             
-            Auth auth = mapper.readValue(json,Auth.class);
-            
-            System.out.println(auth.toString());
+            mapper.readValue(json,Auth.class);
         }
         catch(Exception e) {
             ex = e;

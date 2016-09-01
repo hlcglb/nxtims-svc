@@ -20,9 +20,7 @@ public class AuthResourceTest {
             authResource.setAuthId("ROLE_ADMIN");
             authResource.setResourceUrl("/api/v1/app/users/*");
 
-            String json = mapper.writeValueAsString(authResource);
-            
-            System.out.println(json);
+            mapper.writeValueAsString(authResource);
         }
         catch(Exception e) {
             ex = e;
@@ -40,9 +38,7 @@ public class AuthResourceTest {
             
             String json = "{\"AUTH_ID\":\"ROLE_ADMIN\",\"AUTH_NM\":null,\"RESOURCE_LEVEL\":null,\"RESOURCE_ID\":null,\"RESOURCE_NM\":null,\"RESOURCE_URL\":\"/api/v1/app/users/*\",\"RESOURCE_TYPE\":null,\"HTTP_METHOD\":\"GET\"}";
             
-            AuthResource authResource = mapper.readValue(json,AuthResource.class);
-            
-            System.out.println(authResource.toString());
+            mapper.readValue(json,AuthResource.class);
         }
         catch(Exception e) {
             ex = e;
