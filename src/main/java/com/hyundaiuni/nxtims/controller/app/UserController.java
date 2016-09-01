@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,8 @@ import com.hyundaiuni.nxtims.service.app.UserService;
 @RestController
 @RequestMapping("/api/v1/users")
 public class UserController {
+    private static final Log log = LogFactory.getLog(UserController.class);    
+    
     @Autowired
     private UserService userService;
 
@@ -30,6 +34,8 @@ public class UserController {
             return new ResponseEntity<>(userService.getUser(userId), HttpStatus.OK);
         }
         catch(Exception e) {
+            log.error(e.getMessage());
+            
             Map<String, String> error = new HashMap<>();
             error.put("CODE", "999");
             error.put("MESSAGE", e.getMessage());
@@ -46,6 +52,8 @@ public class UserController {
             return new ResponseEntity<>(userService.getMenuByUserId(userId), HttpStatus.OK);
         }
         catch(Exception e) {
+            log.error(e.getMessage());
+            
             Map<String, String> error = new HashMap<>();
             error.put("CODE", "999");
             error.put("MESSAGE", e.getMessage());
@@ -68,6 +76,8 @@ public class UserController {
             return new ResponseEntity<>(null, HttpStatus.OK);
         }
         catch(Exception e) {
+            log.error(e.getMessage());
+            
             Map<String, String> error = new HashMap<>();
             error.put("CODE", "999");
             error.put("MESSAGE", e.getMessage());
@@ -88,6 +98,8 @@ public class UserController {
             return new ResponseEntity<>(null, HttpStatus.OK);
         }
         catch(Exception e) {
+            log.error(e.getMessage());
+            
             Map<String, String> error = new HashMap<>();
             error.put("CODE", "999");
             error.put("MESSAGE", e.getMessage());
@@ -109,6 +121,8 @@ public class UserController {
             return new ResponseEntity<>(null, HttpStatus.OK);
         }
         catch(Exception e) {
+            log.error(e.getMessage());
+            
             Map<String, String> error = new HashMap<>();
             error.put("CODE", "999");
             error.put("MESSAGE", e.getMessage());

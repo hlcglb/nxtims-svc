@@ -3,7 +3,7 @@ package com.hyundaiuni.nxtims.exception;
 public class ServiceException extends RuntimeException {
     private static final long serialVersionUID = 7875484667863167912L;
 
-    private String code = null;
+    private final String code;
 
     public ServiceException(String code, String message) {
         this(code, message, null);

@@ -5,6 +5,8 @@ import static org.junit.Assert.fail;
 
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,8 @@ import com.hyundaiuni.nxtims.domain.app.User;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class UserServiceTests {
+    private static final Log log = LogFactory.getLog(UserServiceTests.class);
+    
     @Autowired
     private UserService userService;
 
@@ -63,6 +67,7 @@ public class UserServiceTests {
             userService.onAuthenticationFailure("test");
         }
         catch(Exception e) {
+            log.error(e.getMessage());
             fail(e.getMessage());
         }
     }
@@ -73,6 +78,7 @@ public class UserServiceTests {
             userService.onLogout("test", "DB18EBE12C90845710D544C7A15D7072");
         }
         catch(Exception e) {
+            log.error(e.getMessage());
             fail(e.getMessage());
         }
     }    
