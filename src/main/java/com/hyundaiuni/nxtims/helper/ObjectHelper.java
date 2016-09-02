@@ -15,7 +15,7 @@ public class ObjectHelper {
         int i = 0;
 
         while(i < len) {
-            builder.append("args[" + i + "]=" + Objects.toString(objs[i], nullDefault));
+            builder.append("obj[" + i + "]=" + Objects.toString(objs[i], nullDefault));
 
             if(i < len - 1) {
                 builder.append(",");
