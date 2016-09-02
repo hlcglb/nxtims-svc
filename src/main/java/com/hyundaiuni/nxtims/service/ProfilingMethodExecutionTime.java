@@ -27,7 +27,7 @@ public class ProfilingMethodExecutionTime {
     ProfilingMethodExecutionTimeTask profilingMethodExecutionTimeTask;
 
     @Around("execution(* com.hyundaiuni.nxtims.service..*Service.*(..))")
-    public Object doAround(final ProceedingJoinPoint joinPoint) throws Throwable {
+    public Object doAround(final ProceedingJoinPoint joinPoint) throws ServiceException{
         StopWatch stopWatch = new StopWatch();
         stopWatch.start(joinPoint.toShortString());
 
@@ -43,10 +43,10 @@ public class ProfilingMethodExecutionTime {
         catch(ServiceException e) {
             isExceptionThrown = true;
             errorMessage = e.getMessage();
-            
+
             throw e;
         }
-        catch(RuntimeException e) {
+        catch(Throwable e) {
             isExceptionThrown = true;
             errorMessage = e.getMessage();
 
@@ -62,8 +62,8 @@ public class ProfilingMethodExecutionTime {
                 if(args != null) {
                     final int len = args.length;
                     int i = 0;
-                    
-                    while (i < len) {
+
+                    while(i < len) {
                         if(args[i] != null) {
                             builder.append("args[" + i + "]=" + args[i].toString());
                         }
@@ -74,7 +74,7 @@ public class ProfilingMethodExecutionTime {
                         if(i < len - 1) {
                             builder.append(",");
                         }
-                        
+
                         i++;
                     }
                 }
