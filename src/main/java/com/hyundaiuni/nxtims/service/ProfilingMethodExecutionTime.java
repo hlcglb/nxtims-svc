@@ -40,16 +40,17 @@ public class ProfilingMethodExecutionTime {
         try {
             return joinPoint.proceed();
         }
+        catch(ServiceException e) {
+            isExceptionThrown = true;
+            errorMessage = e.getMessage();
+            
+            throw e;
+        }
         catch(RuntimeException e) {
             isExceptionThrown = true;
             errorMessage = e.getMessage();
 
-            if(e instanceof ServiceException) {
-                throw e;
-            }
-            else {
-                throw new ServiceException("UNDEFINED", e.getMessage(), e);
-            }
+            throw new ServiceException("UNDEFINED", e.getMessage(), e);
         }
         finally {
             stopWatch.stop();
