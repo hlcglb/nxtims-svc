@@ -1,6 +1,7 @@
 package com.hyundaiuni.nxtims.service.app;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import java.util.List;
@@ -54,7 +55,7 @@ public class UserServiceTests {
     @Test
     public void testOnAuthenticationSuccess() {
         try {
-            userService.onAuthenticationSuccess("test", "DB18EBE12C90845710D544C7A15D7072", "1.1.1.1");
+            userService.onAuthenticationSuccess("test", "DB18EBE12C90845710D544C7A15D7072", "localhost");
         }
         catch(Exception e) {
             fail(e.getMessage());
@@ -63,23 +64,31 @@ public class UserServiceTests {
     
     @Test
     public void testOnAuthenticationFailure() {
+        Exception ex = null;
+        
         try {
             userService.onAuthenticationFailure("test");
         }
         catch(Exception e) {
             log.error(e.getMessage());
-            fail(e.getMessage());
+            ex = e;
         }
+        
+        assertEquals(null, ex);
     }
     
     @Test
     public void testOnLogout() {
+        Exception ex = null;
+        
         try {
             userService.onLogout("test", "DB18EBE12C90845710D544C7A15D7072");
         }
         catch(Exception e) {
             log.error(e.getMessage());
-            fail(e.getMessage());
+            ex = e;
         }
+        
+        assertEquals(null, ex);
     }    
 }

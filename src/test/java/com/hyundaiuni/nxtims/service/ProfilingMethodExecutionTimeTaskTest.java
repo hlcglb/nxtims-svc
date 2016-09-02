@@ -1,6 +1,6 @@
 package com.hyundaiuni.nxtims.service;
 
-import static org.junit.Assert.fail;
+import static org.junit.Assert.assertEquals;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -20,12 +20,16 @@ public class ProfilingMethodExecutionTimeTaskTest {
 
     @Test
     public void createLog() {
+        Exception ex = null;
+        
         try {
             profilingMethodExecutionTimeService.profiling("TEST", "args[0]=1", "20160902131409", (long)0.004, null);
         }
         catch(Exception e) {
             log.error(e.getMessage());
-            fail(e.getMessage());
+            ex = e;
         }
+        
+        assertEquals(null, ex);
     }
 }
