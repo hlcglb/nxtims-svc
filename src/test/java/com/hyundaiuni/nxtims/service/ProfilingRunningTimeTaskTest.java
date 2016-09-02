@@ -2,6 +2,8 @@ package com.hyundaiuni.nxtims.service;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Date;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.Test;
@@ -12,18 +14,18 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class ProfilingMethodExecutionTimeTaskTest {
-    private static final Log log = LogFactory.getLog(ProfilingMethodExecutionTimeTaskTest.class);
+public class ProfilingRunningTimeTaskTest {
+    private static final Log log = LogFactory.getLog(ProfilingRunningTimeTaskTest.class);
 
     @Autowired
-    private ProfilingMethodExecutionTimeTask profilingMethodExecutionTimeService;
+    private ProfilingRunningTimeTask profilingRunningTimeTask;
 
     @Test
     public void createLog() {
         Exception ex = null;
         
         try {
-            profilingMethodExecutionTimeService.profiling("TEST", "args[0]=1", "20160902131409", (long)0.004, null);
+            profilingRunningTimeTask.profiling("TEST", "args[0]=1", new Date(), (long)0.004);
         }
         catch(Exception e) {
             log.error(e.getMessage());

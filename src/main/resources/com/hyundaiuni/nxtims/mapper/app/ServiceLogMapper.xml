@@ -7,18 +7,16 @@
             (
              SERVICE_ID,
              ARGUMENTS,
-             START_DATE_TIME,
+             START_DATE,
              TOTAL_RUNNING_TIME,
-             ERROR_MESSAGE,
              REG_DATE
             )
             VALUES
             (
              #{SERVICE_ID},
              #{ARGUMENTS},
-             #{START_DATE_TIME},
+             #{START_DATE},
              #{TOTAL_RUNNING_TIME},
-             #{ERROR_MESSAGE},
              SYSDATE
             )
         ]]>    

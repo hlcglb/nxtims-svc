@@ -28,9 +28,6 @@ system:
   task-executor:
     max-pool-size: 2
     queue-capacity: 2
-  service:
-    running-time:
-      timeout-second: 0.001
 ---
 spring:
   profiles: development
@@ -46,9 +43,6 @@ system:
   task-executor:
     max-pool-size: 10
     queue-capacity: 10
-  service:
-    running-time:
-      timeout-second: 300    
 ---
 spring:
   profiles: staging
@@ -64,9 +58,6 @@ system:
   task-executor:
     max-pool-size: 10
     queue-capacity: 10
-  service:
-    running-time:
-      timeout-second: 300        
 ---
 spring:
   profiles: production
@@ -81,7 +72,4 @@ server:
 system:
   task-executor:
     max-pool-size: 10
-    queue-capacity: 10
-  service:
-    running-time:
-      timeout-second: 300            
+    queue-capacity: 10         
