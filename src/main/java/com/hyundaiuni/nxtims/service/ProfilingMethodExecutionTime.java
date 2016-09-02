@@ -3,6 +3,7 @@ package com.hyundaiuni.nxtims.service;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -62,37 +63,10 @@ public class ProfilingMethodExecutionTime {
             }
 
             if(isProfiling) {
-                String arguments = argumentsToString(joinPoint.getArgs());
-
-                profilingMethodExecutionTimeTask.profiling(joinPoint.getSignature().toString(), arguments,
-                    startDateTime, stopWatch.getTotalTimeMillis(), errorMessage);
+                profilingMethodExecutionTimeTask.profiling(joinPoint.getSignature().toString(),
+                    Objects.toString(joinPoint.getArgs(), ""), startDateTime, stopWatch.getTotalTimeMillis(),
+                    errorMessage);
             }
         }
-    }
-
-    private String argumentsToString(Object[] args) {
-        StringBuilder builder = new StringBuilder();
-
-        if(args != null) {
-            final int len = args.length;
-            int i = 0;
-
-            while(i < len) {
-                if(args[i] != null) {
-                    builder.append("args[" + i + "]=" + args[i].toString());
-                }
-                else {
-                    builder.append("args[" + i + "]= null");
-                }
-
-                if(i < len - 1) {
-                    builder.append(",");
-                }
-
-                i++;
-            }
-        }
-
-        return builder.toString();
     }
 }
