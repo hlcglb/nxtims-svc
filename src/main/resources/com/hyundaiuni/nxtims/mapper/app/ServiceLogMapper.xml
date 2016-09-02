@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hyundaiuni.nxtims.mapper.app.ServiceLogMapper">
+    <insert id="createLog" parameterType="hashmap">
+        <![CDATA[
+            INSERT INTO SERVICE_LOG
+            (
+             SERVICE_ID,
+             ARGUMENTS,
+             START_DATE_TIME,
+             TOTAL_RUNNING_TIME,
+             ERROR_MESSAGE,
+             REG_DATE
+            )
+            VALUES
+            (
+             #{SERVICE_ID},
+             #{ARGUMENTS},
+             #{START_DATE_TIME},
+             #{TOTAL_RUNNING_TIME},
+             #{ERROR_MESSAGE},
+             SYSDATE
+            )
+        ]]>    
+    </insert>
+</mapper>

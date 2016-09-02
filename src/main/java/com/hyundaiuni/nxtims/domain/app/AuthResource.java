@@ -85,4 +85,11 @@ public class AuthResource implements Serializable {
     public void setResourceType(String resourceType) {
         this.resourceType = resourceType;
     }
+
+    @Override
+    public String toString() {
+        return "AuthResource [authId=" + authId + ", authNm=" + authNm + ", resourceLevel=" + resourceLevel
+               + ", resourceId=" + resourceId + ", resourceNm=" + resourceNm + ", resourceUrl=" + resourceUrl
+               + ", resourceType=" + resourceType + "]";
+    }
 }

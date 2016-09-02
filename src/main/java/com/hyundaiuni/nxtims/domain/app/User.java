@@ -157,4 +157,12 @@ public class User implements Serializable {
     public void setAuthList(List<Auth> authList) {
         this.authList = authList;
     }
+
+    @Override
+    public String toString() {
+        return "User [userId=" + userId + ", userNm=" + userNm + ", userPwd=" + userPwd + ", expiredYn=" + expiredYn
+               + ", expiredYmd=" + expiredYmd + ", lockedYn=" + lockedYn + ", pwdExpiredYn=" + pwdExpiredYn
+               + ", pwdExpiredYmd=" + pwdExpiredYmd + ", useYn=" + useYn + ", regUserId=" + regUserId + ", updUserId="
+               + updUserId + ", authList=" + authList + "]";
+    }
 }

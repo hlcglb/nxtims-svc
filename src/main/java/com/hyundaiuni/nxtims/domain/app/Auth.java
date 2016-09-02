@@ -30,4 +30,9 @@ public class Auth implements Serializable {
     public void setAuthNm(String authNm) {
         this.authNm = authNm;
     }
+
+    @Override
+    public String toString() {
+        return "Auth [authId=" + authId + ", authNm=" + authNm + "]";
+    }
 }

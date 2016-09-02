@@ -63,4 +63,10 @@ public class Resource implements Serializable {
     public void setResourceType(String resourceType) {
         this.resourceType = resourceType;
     }
+
+    @Override
+    public String toString() {
+        return "Resource [resourceLevel=" + resourceLevel + ", resourceId=" + resourceId + ", resourceNm=" + resourceNm
+               + ", resourceUrl=" + resourceUrl + ", resourceType=" + resourceType + "]";
+    }
 }

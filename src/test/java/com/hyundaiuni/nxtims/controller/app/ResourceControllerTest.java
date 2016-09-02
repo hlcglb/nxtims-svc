@@ -32,7 +32,7 @@ public class ResourceControllerTest {
     }
     
     @Test
-    public void testGetResourceByType() throws Exception {
+    public void testGetResources() throws Exception {
         mvc.perform(get(URL)).andDo(print()).andExpect(status().isOk()).andExpect(
             content().contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(jsonPath("$..AUTH_ID").isArray());
     }    

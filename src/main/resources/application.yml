@@ -24,6 +24,13 @@ logging:
     jdbc:
       sqltiming: INFO
       resultsettable: INFO
+system:
+  task-executor:
+    max-pool-size: 2
+    queue-capacity: 2
+  service:
+    running-time:
+      timeout-second: 0.001
 ---
 spring:
   profiles: development
@@ -35,6 +42,13 @@ server:
     port-header: X-Forwarded-Port
     protocol-header: X-Forwarded-Proto
     remote-ip-header: X-Forwarded-For
+system:
+  task-executor:
+    max-pool-size: 10
+    queue-capacity: 10
+  service:
+    running-time:
+      timeout-second: 300    
 ---
 spring:
   profiles: staging
@@ -46,6 +60,13 @@ server:
     port-header: X-Forwarded-Port
     protocol-header: X-Forwarded-Proto
     remote-ip-header: X-Forwarded-For
+system:
+  task-executor:
+    max-pool-size: 10
+    queue-capacity: 10
+  service:
+    running-time:
+      timeout-second: 300        
 ---
 spring:
   profiles: production
@@ -57,3 +78,10 @@ server:
     port-header: X-Forwarded-Port
     protocol-header: X-Forwarded-Proto
     remote-ip-header: X-Forwarded-For
+system:
+  task-executor:
+    max-pool-size: 10
+    queue-capacity: 10
+  service:
+    running-time:
+      timeout-second: 300            

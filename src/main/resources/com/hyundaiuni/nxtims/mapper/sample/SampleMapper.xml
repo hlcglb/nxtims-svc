@@ -11,9 +11,14 @@
 
     <insert id="insert">
         <![CDATA[
-            INSERT INTO REMARKS(
-                        REMARK)
-                 VALUES(#{REMARK})
+            INSERT INTO REMARKS
+            (
+             REMARK
+            )
+            VALUES
+            (
+             #{REMARK}
+            )
         ]]>
     </insert>
 </mapper>
