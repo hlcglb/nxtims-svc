@@ -14,13 +14,15 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
 
+import com.hyundaiuni.nxtims.exception.ServiceException;
+
 @Component
 @Aspect
 @Order(Ordered.LOWEST_PRECEDENCE)
 public class ProfilingMethodExecutionTime {
     @Value("${system.service.running-time.timeout-second}")
-    private double timeoutSecond;    
-    
+    private double timeoutSecond;
+
     @Autowired
     ProfilingMethodExecutionTimeTask profilingMethodExecutionTimeTask;
 
@@ -41,7 +43,13 @@ public class ProfilingMethodExecutionTime {
         catch(RuntimeException e) {
             isExceptionThrown = true;
             errorMessage = e.getMessage();
-            throw e;
+
+            if(e instanceof ServiceException) {
+                throw e;
+            }
+            else {
+                throw new ServiceException("UNDEFINED", e.getMessage(), e);
+            }
         }
         finally {
             stopWatch.stop();
