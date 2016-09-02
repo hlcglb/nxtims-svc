@@ -60,7 +60,10 @@ public class ProfilingMethodExecutionTime {
                 Object[] args = joinPoint.getArgs();
 
                 if(args != null) {
-                    for(int i = 0; i < args.length; i++) {
+                    final int len = args.length;
+                    int i = 0;
+                    
+                    while (i < len) {
                         if(args[i] != null) {
                             builder.append("args[" + i + "]=" + args[i].toString());
                         }
@@ -68,9 +71,11 @@ public class ProfilingMethodExecutionTime {
                             builder.append("args[" + i + "]= null");
                         }
 
-                        if(i < args.length - 1) {
+                        if(i < len - 1) {
                             builder.append(",");
                         }
+                        
+                        i++;
                     }
                 }
 
