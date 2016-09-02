@@ -3,7 +3,6 @@ package com.hyundaiuni.nxtims.service;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Objects;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -16,6 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
 
 import com.hyundaiuni.nxtims.exception.ServiceException;
+import com.hyundaiuni.nxtims.helper.ObjectHelper;
 
 @Component
 @Aspect
@@ -64,7 +64,7 @@ public class ProfilingMethodExecutionTime {
 
             if(isProfiling) {
                 profilingMethodExecutionTimeTask.profiling(joinPoint.getSignature().toString(),
-                    Objects.toString(joinPoint.getArgs(), ""), startDateTime, stopWatch.getTotalTimeMillis(),
+                    ObjectHelper.toString(joinPoint.getArgs(), ""), startDateTime, stopWatch.getTotalTimeMillis(),
                     errorMessage);
             }
         }
