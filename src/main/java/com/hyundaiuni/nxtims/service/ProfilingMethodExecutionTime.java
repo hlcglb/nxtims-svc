@@ -27,7 +27,7 @@ public class ProfilingMethodExecutionTime {
     ProfilingMethodExecutionTimeTask profilingMethodExecutionTimeTask;
 
     @Around("execution(* com.hyundaiuni.nxtims.service..*Service.*(..))")
-    public Object doAround(final ProceedingJoinPoint joinPoint) throws ServiceException{
+    public Object doAround(final ProceedingJoinPoint joinPoint) throws Throwable {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start(joinPoint.toShortString());
 
@@ -46,7 +46,7 @@ public class ProfilingMethodExecutionTime {
 
             throw e;
         }
-        catch(Throwable e) {
+        catch(RuntimeException e) {
             isExceptionThrown = true;
             errorMessage = e.getMessage();
 
@@ -55,33 +55,44 @@ public class ProfilingMethodExecutionTime {
         finally {
             stopWatch.stop();
 
+            boolean isProfiling = false;
+
             if(stopWatch.getTotalTimeSeconds() > timeoutSecond || isExceptionThrown) {
-                StringBuilder builder = new StringBuilder();
-                Object[] args = joinPoint.getArgs();
+                isProfiling = true;
+            }
 
-                if(args != null) {
-                    final int len = args.length;
-                    int i = 0;
+            if(isProfiling) {
+                String arguments = argumentsToString(joinPoint.getArgs());
 
-                    while(i < len) {
-                        if(args[i] != null) {
-                            builder.append("args[" + i + "]=" + args[i].toString());
-                        }
-                        else {
-                            builder.append("args[" + i + "]= null");
-                        }
-
-                        if(i < len - 1) {
-                            builder.append(",");
-                        }
-
-                        i++;
-                    }
-                }
-
-                profilingMethodExecutionTimeTask.profiling(joinPoint.getSignature().toString(), builder.toString(),
+                profilingMethodExecutionTimeTask.profiling(joinPoint.getSignature().toString(), arguments,
                     startDateTime, stopWatch.getTotalTimeMillis(), errorMessage);
             }
         }
+    }
+
+    private String argumentsToString(Object[] args) {
+        StringBuilder builder = new StringBuilder();
+
+        if(args != null) {
+            final int len = args.length;
+            int i = 0;
+
+            while(i < len) {
+                if(args[i] != null) {
+                    builder.append("args[" + i + "]=" + args[i].toString());
+                }
+                else {
+                    builder.append("args[" + i + "]= null");
+                }
+
+                if(i < len - 1) {
+                    builder.append(",");
+                }
+
+                i++;
+            }
+        }
+
+        return builder.toString();
     }
 }
