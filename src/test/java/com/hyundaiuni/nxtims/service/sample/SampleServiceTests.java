@@ -1,6 +1,7 @@
 package com.hyundaiuni.nxtims.service.sample;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.fail;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -12,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.hyundaiuni.nxtims.exception.ServiceException;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class SampleServiceTests {
@@ -19,9 +22,25 @@ public class SampleServiceTests {
     private SampleService sampleService;
 
     @Test
-    public void testGet() {
+    public void testGetOk() {
         assertThat(sampleService.get("test")).isNotEmpty();
     }
+    
+    @Test
+    public void testGetError() {
+        Exception ex = null;
+        
+        try {
+            sampleService.get("testx");
+        }
+        catch(Exception e) {
+            ex = e;
+        }
+        
+        if(!(ex instanceof ServiceException)){
+            fail("");
+        }
+    }    
 
     @Test
     public void testInsert() {

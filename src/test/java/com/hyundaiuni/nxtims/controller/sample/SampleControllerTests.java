@@ -38,10 +38,16 @@ public class SampleControllerTests {
     }
 
     @Test
-    public void testGet() throws Exception {
+    public void testGetOk() throws Exception {
         mvc.perform(get(URL + "/test")).andDo(print()).andExpect(status().isOk()).andExpect(
             content().contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(jsonPath("$.USER_ID").value("test"));
     }
+    
+    @Test
+    public void testGetError() throws Exception {
+        mvc.perform(get(URL + "/testx")).andDo(print()).andExpect(status().is4xxClientError()).andExpect(
+            content().contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(jsonPath("$.CODE").value("999"));
+    }    
 
     @Test
     public void testInsert() throws Exception {
