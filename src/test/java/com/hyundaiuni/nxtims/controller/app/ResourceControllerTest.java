@@ -32,7 +32,7 @@ public class ResourceControllerTest {
     private MockMvc mvc;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp(){
         Exception ex = null;
 
         try {
