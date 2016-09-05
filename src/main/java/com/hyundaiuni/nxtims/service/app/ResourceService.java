@@ -16,8 +16,6 @@ public class ResourceService {
     
     @Transactional(readOnly = true)
     public List<AuthResource> getResources() {
-        List<AuthResource> authResourceList = resourceMapper.getResources();
-
-        return authResourceList;
+        return resourceMapper.getResources();
     }    
 }

@@ -3,8 +3,6 @@ package com.hyundaiuni.nxtims.controller.app;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,13 +10,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hyundaiuni.nxtims.exception.ServiceException;
 import com.hyundaiuni.nxtims.service.app.ResourceService;
 
 @RestController
-@RequestMapping("/api/v1/resources")
+@RequestMapping("/api/v1/app/resources")
 public class ResourceController {
-    private static final Log log = LogFactory.getLog(ResourceController.class);
-    
     @Autowired
     private ResourceService resourceService;
 
@@ -27,9 +24,14 @@ public class ResourceController {
         try {
             return new ResponseEntity<>(resourceService.getResources(), HttpStatus.OK);
         }
+        catch(ServiceException e){
+            Map<String, String> error = new HashMap<>();
+            error.put("CODE", e.getCode());
+            error.put("MESSAGE", e.getMessage());
+
+            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);            
+        }
         catch(Exception e) {
-            log.error(e.getMessage());
-            
             Map<String, String> error = new HashMap<>();
             error.put("CODE", "999");
             error.put("MESSAGE", e.getMessage());

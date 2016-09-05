@@ -25,7 +25,7 @@ import org.springframework.web.context.WebApplicationContext;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class UserControllerTests {
-    private static final String URL = "/api/v1/users";
+    private static final String URL = "/api/v1/app/users";
 
     @Autowired
     private WebApplicationContext context;

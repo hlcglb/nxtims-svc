@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.collections4.MapUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,13 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hyundaiuni.nxtims.exception.ServiceException;
 import com.hyundaiuni.nxtims.service.app.UserService;
 
 @RestController
-@RequestMapping("/api/v1/users")
+@RequestMapping("/api/v1/app/users")
 public class UserController {
-    private static final Log log = LogFactory.getLog(UserController.class);    
-    
     @Autowired
     private UserService userService;
 
@@ -33,9 +30,14 @@ public class UserController {
         try {
             return new ResponseEntity<>(userService.getUser(userId), HttpStatus.OK);
         }
+        catch(ServiceException e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("CODE", e.getCode());
+            error.put("MESSAGE", e.getMessage());
+
+            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        }
         catch(Exception e) {
-            log.error(e.getMessage());
-            
             Map<String, String> error = new HashMap<>();
             error.put("CODE", "999");
             error.put("MESSAGE", e.getMessage());
@@ -51,9 +53,14 @@ public class UserController {
         try {
             return new ResponseEntity<>(userService.getMenuByUserId(userId), HttpStatus.OK);
         }
+        catch(ServiceException e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("CODE", e.getCode());
+            error.put("MESSAGE", e.getMessage());
+
+            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        }
         catch(Exception e) {
-            log.error(e.getMessage());
-            
             Map<String, String> error = new HashMap<>();
             error.put("CODE", "999");
             error.put("MESSAGE", e.getMessage());
@@ -70,14 +77,19 @@ public class UserController {
             String userId = MapUtils.getString(request, "USER_ID");
             String sessionId = MapUtils.getString(request, "SESSION_ID");
             String accessIp = MapUtils.getString(request, "ACCESS_IP");
-            
+
             userService.onAuthenticationSuccess(userId, sessionId, accessIp);
-            
+
             return new ResponseEntity<>(null, HttpStatus.OK);
         }
+        catch(ServiceException e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("CODE", e.getCode());
+            error.put("MESSAGE", e.getMessage());
+
+            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        }
         catch(Exception e) {
-            log.error(e.getMessage());
-            
             Map<String, String> error = new HashMap<>();
             error.put("CODE", "999");
             error.put("MESSAGE", e.getMessage());
@@ -85,21 +97,26 @@ public class UserController {
             return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
         }
     }
-    
+
     @RequestMapping(value = "/onAuthenticationFailure", method = RequestMethod.POST)
     public ResponseEntity<?> onAuthenticationFailure(@RequestBody Map<String, Object> request) {
         Assert.notNull(request, "request must not be null");
 
         try {
             String userId = MapUtils.getString(request, "USER_ID");
-            
+
             userService.onAuthenticationFailure(userId);
-            
+
             return new ResponseEntity<>(null, HttpStatus.OK);
         }
+        catch(ServiceException e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("CODE", e.getCode());
+            error.put("MESSAGE", e.getMessage());
+
+            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        }
         catch(Exception e) {
-            log.error(e.getMessage());
-            
             Map<String, String> error = new HashMap<>();
             error.put("CODE", "999");
             error.put("MESSAGE", e.getMessage());
@@ -107,7 +124,7 @@ public class UserController {
             return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
         }
     }
-    
+
     @RequestMapping(value = "/onLogout", method = RequestMethod.POST)
     public ResponseEntity<?> onLogout(@RequestBody Map<String, Object> request) {
         Assert.notNull(request, "request must not be null");
@@ -115,19 +132,24 @@ public class UserController {
         try {
             String userId = MapUtils.getString(request, "USER_ID");
             String sessionId = MapUtils.getString(request, "SESSION_ID");
-            
+
             userService.onLogout(userId, sessionId);
-            
+
             return new ResponseEntity<>(null, HttpStatus.OK);
         }
+        catch(ServiceException e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("CODE", e.getCode());
+            error.put("MESSAGE", e.getMessage());
+
+            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        }
         catch(Exception e) {
-            log.error(e.getMessage());
-            
             Map<String, String> error = new HashMap<>();
             error.put("CODE", "999");
             error.put("MESSAGE", e.getMessage());
 
             return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
         }
-    }    
+    }
 }
