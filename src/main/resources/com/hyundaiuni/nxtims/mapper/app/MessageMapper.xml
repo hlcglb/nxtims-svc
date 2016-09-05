@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hyundaiuni.nxtims.mapper.app.MessageMapper">
+    <select id="getMessagesByLanguageCode" parameterType="string" resultType="com.hyundaiuni.nxtims.domain.app.Message">
+        <![CDATA[
+            SELECT B.MSG_GRP_CD AS msgGrpCd,
+                   B.MSG_CD AS msgCd,
+                   B.LANG_CD AS langCd, 
+                   B.MSG_NM AS msgNm
+              FROM MESSAGES A,
+                   MESSAGE_LOCALE B
+             WHERE A.MSG_GRP_CD = B.MSG_GRP_CD
+               AND A.MSG_CD = B.MSG_CD
+               AND B.LANG_CD = #{langCd}
+        ]]>
+    </select> 
+</mapper>
