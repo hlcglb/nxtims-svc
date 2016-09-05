@@ -54,12 +54,17 @@ public class UserServiceTests {
 
     @Test
     public void testOnAuthenticationSuccess() {
+        Exception ex = null;
+        
         try {
             userService.onAuthenticationSuccess("test", "DB18EBE12C90845710D544C7A15D7072", "localhost");
         }
         catch(Exception e) {
-            fail(e.getMessage());
+            log.error(e.getMessage());
+            ex = e;
         }
+        
+        assertEquals(null, ex);
     }
     
     @Test
