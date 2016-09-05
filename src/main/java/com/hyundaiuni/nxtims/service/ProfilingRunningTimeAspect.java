@@ -11,7 +11,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
 
-import com.hyundaiuni.nxtims.helper.ObjectHelper;
+import com.hyundaiuni.nxtims.util.ObjectUtils;
 
 @Component
 @Aspect
@@ -34,7 +34,7 @@ public class ProfilingRunningTimeAspect {
             stopWatch.stop();
 
             profilingRunningTimeTask.profiling(joinPoint.getSignature().toString(),
-                ObjectHelper.toString(joinPoint.getArgs(), "null"), startDate, stopWatch.getTotalTimeMillis());
+                ObjectUtils.toString(joinPoint.getArgs(), "null"), startDate, stopWatch.getTotalTimeMillis());
         }
     }
 }

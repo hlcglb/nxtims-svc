@@ -1,9 +1,9 @@
-package com.hyundaiuni.nxtims.helper;
+package com.hyundaiuni.nxtims.util;
 
 import java.util.Objects;
 
-public class ObjectHelper {
-    private ObjectHelper() {}
+public class ObjectUtils extends org.apache.commons.lang3.ObjectUtils{
+    private ObjectUtils() {}
 
     public static String toString(Object[] objs, String nullDefault) {
         if(objs == null) {
