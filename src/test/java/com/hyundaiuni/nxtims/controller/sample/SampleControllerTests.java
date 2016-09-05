@@ -46,7 +46,7 @@ public class SampleControllerTests {
     @Test
     public void testGetError() throws Exception {
         mvc.perform(get(URL + "/testx")).andDo(print()).andExpect(status().is4xxClientError()).andExpect(
-            content().contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(jsonPath("$.CODE").value("999"));
+            content().contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(jsonPath("$.CODE").value("MSG.USER_NOT_FOUND"));
     }    
 
     @Test
