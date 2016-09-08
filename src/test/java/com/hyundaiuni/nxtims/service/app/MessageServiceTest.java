@@ -24,7 +24,7 @@ import com.hyundaiuni.nxtims.exception.ServiceException;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class MessageServiceTest {
-    private static final Log log = LogFactory.getLog(UserServiceTests.class);
+    private static final Log log = LogFactory.getLog(MessageServiceTest.class);
 
     @Autowired
     private MessageService messageService;
