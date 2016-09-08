@@ -2,6 +2,7 @@ package com.hyundaiuni.nxtims.util;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -9,6 +10,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.Assert;
 import org.springframework.web.util.CookieGenerator;
@@ -145,7 +148,7 @@ public class WebUtils extends org.springframework.web.util.WebUtils {
         cookieGenerator.setCookieName(cookieName);
         cookieGenerator.removeCookie(response);
     }
-    
+
     /**
      * 특정형식의 String을 Map으로 변환
      * 
@@ -153,9 +156,9 @@ public class WebUtils extends org.springframework.web.util.WebUtils {
      * @param paramSeparator parameter 구분자
      * @param keyValueSeparator key Value 구분자
      * @param enc character set
-     */       
-    public static Map<String, Object> requestParamtoMap(String query, char paramSeparator, char keyValueSeparator, String enc)
-        throws UnsupportedEncodingException {
+     */
+    public static Map<String, Object> requestParamtoMap(String query, char paramSeparator, char keyValueSeparator,
+        String enc) throws UnsupportedEncodingException {
         Map<String, Object> queryPairs = new LinkedHashMap<String, Object>();
 
         if(StringUtils.isEmpty(query)) {
@@ -171,5 +174,30 @@ public class WebUtils extends org.springframework.web.util.WebUtils {
         }
 
         return queryPairs;
-    }    
+    }
+
+    public static String mapToRequestParam(Map<String, Object> param, char paramSeparator, char keyValueSeparator, String enc)
+        throws UnsupportedEncodingException {
+        if(MapUtils.isNotEmpty(param)) {
+            StringBuilder stringBuiler = new StringBuilder();
+
+            int len = CollectionUtils.size(param.keySet());
+            int i = 0;
+
+            for(String key : param.keySet()) {
+                stringBuiler.append(key).append(keyValueSeparator).append(param.get(key));
+
+                i++;
+
+                if(len > i) {
+                    stringBuiler.append(paramSeparator);
+                }
+            }
+
+            return URLEncoder.encode(stringBuiler.toString(), enc);
+        }
+        else {
+            return "";
+        }
+    }
 }

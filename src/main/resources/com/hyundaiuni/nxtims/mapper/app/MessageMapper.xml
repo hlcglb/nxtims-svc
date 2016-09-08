@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hyundaiuni.nxtims.mapper.app.MessageMapper">
-    <select id="getMessagesByLanguageCode" parameterType="string" resultType="com.hyundaiuni.nxtims.domain.app.Message">
+    <select id="getMessageListByLanguageCode" parameterType="string" resultType="com.hyundaiuni.nxtims.domain.app.MessageLocale">
         <![CDATA[
             SELECT B.MSG_GRP_CD AS msgGrpCd,
                    B.MSG_CD AS msgCd,
@@ -13,5 +13,204 @@
                AND A.MSG_CD = B.MSG_CD
                AND B.LANG_CD = #{langCd}
         ]]>
-    </select> 
+    </select>
+    
+    <select id="getMessageListByParam" parameterType="hashmap" resultType="com.hyundaiuni.nxtims.domain.app.Message">
+        <![CDATA[
+            SELECT A.MSG_PK AS msgPk,
+                   A.MSG_GRP_CD AS msgGrpCd,
+                   A.MSG_CD AS msgCd,
+                   A.MSG_NM AS msgNm
+              FROM ( SELECT ROWNUM AS RNUM,
+                            A.*
+                       FROM ( SELECT MSG_PK,
+                                     MSG_GRP_CD,
+                                     MSG_CD,
+                                     MSG_NM
+                                FROM MESSAGES
+                               WHERE 1 = 1
+        ]]>                       
+        <if test="msgGrpCd != null">   
+                                 AND MSG_GRP_CD = #{msgGrpCd}
+        </if>
+        <if test="msgNm != null">   
+                                 AND MSG_NM = #{msgNm}
+        </if>
+        <if test="msgCdArray != null">
+                                 AND MSG_CD IN   
+            <foreach collection="msgCdArray" item="item" index="index" separator="," open="(" close=")">
+            
+                                 '${msgCdArray[index]}'
+            </foreach>
+        </if>
+        <![CDATA[                           
+                            ) A
+                      WHERE ROWNUM <= #{offset} + #{limit} ) A
+             WHERE RNUM > #{offset}
+        ]]>
+    </select>     
+
+    <select id="getMessageByMsgPk" parameterType="string" resultType="com.hyundaiuni.nxtims.domain.app.Message">
+        <![CDATA[
+            SELECT MSG_PK AS msgPk,
+                   MSG_GRP_CD AS msgGrpCd,
+                   MSG_CD AS msgCd,
+                   MSG_NM AS msgNm
+              FROM MESSAGES
+             WHERE MSG_PK = #{msgPk}
+        ]]>
+    </select>
+    
+    <select id="getMessageByParam" parameterType="hashmap" resultType="com.hyundaiuni.nxtims.domain.app.Message">
+        <![CDATA[
+            SELECT MSG_PK AS msgPk,
+                   MSG_GRP_CD AS msgGrpCd,
+                   MSG_CD AS msgCd,
+                   MSG_NM AS msgNm
+              FROM MESSAGES
+             WHERE MSG_GRP_CD = #{msgGrpCd}
+               AND MSG_CD = #{msgCd}
+        ]]>
+    </select>
+    
+    <select id="getMessageSequence" resultType="string">
+        <![CDATA[
+            SELECT TO_CHAR(MSG_PK_SEQ.NEXTVAL,'FM0000000000')
+              FROM DUAL
+        ]]>
+    </select>    
+
+    <insert id="insertMessage" parameterType="com.hyundaiuni.nxtims.domain.app.Message">
+        <![CDATA[
+            INSERT INTO MESSAGES
+            (
+             MSG_PK,
+             MSG_GRP_CD,
+             MSG_CD,
+             MSG_NM,
+             REG_DATE,
+             REG_USER_ID            
+            )
+            VALUES
+            (
+             #{msgPk},
+             #{msgGrpCd},
+             #{msgCd},
+             #{msgNm},
+             SYSDATE,
+             #{userId}
+            )
+        ]]>
+    </insert>
+    
+    <update id="updateMessage" parameterType="com.hyundaiuni.nxtims.domain.app.Message">
+        <![CDATA[
+            UPDATE MESSAGES
+               SET MSG_GRP_CD = #{msgGrpCd},
+                   MSG_CD = #{msgCd},
+                   MSG_NM = #{msgNm},
+                   UPD_DATE = SYSDATE,
+                   UPD_USER_ID = #{userId}
+             WHERE MSG_PK = #{msgPk}
+        ]]>
+    </update>
+    
+    <delete id="deleteMessageByMsgPk" parameterType="string">
+        <![CDATA[
+            DELETE MESSAGES
+             WHERE MSG_PK = #{msgPk}
+        ]]>
+    </delete>
+
+    <select id="getMessageLocaleByMsgLocPk" parameterType="string" resultType="com.hyundaiuni.nxtims.domain.app.MessageLocale">
+        <![CDATA[
+            SELECT MSG_LOC_PK AS msgLocPk,
+                   MSG_GRP_CD AS msgGrpCd,
+                   MSG_CD AS msgCd,
+                   LANG_CD AS langCd,
+                   MSG_NM AS msgNm
+              FROM MESSAGE_LOCALE
+             WHERE MSG_LOC_PK = #{msgLocPk}
+        ]]>
+    </select>
+    
+    <select id="getMessageLocaleByParam" parameterType="hashmap" resultType="com.hyundaiuni.nxtims.domain.app.MessageLocale">
+        <![CDATA[
+            SELECT MSG_LOC_PK AS msgLocPk,
+                   MSG_GRP_CD AS msgGrpCd,
+                   MSG_CD AS msgCd,
+                   LANG_CD AS langCd,
+                   MSG_NM AS msgNm
+              FROM MESSAGE_LOCALE
+             WHERE MSG_GRP_CD = #{msgGrpCd}
+               AND MSG_CD = #{msgCd}
+               AND LANG_CD = #{langCd}
+        ]]>
+    </select>    
+
+    <insert id="insertMessageLocale" parameterType="com.hyundaiuni.nxtims.domain.app.MessageLocale">
+        <![CDATA[
+            INSERT INTO MESSAGE_LOCALE
+            (
+             MSG_LOC_PK,
+             MSG_GRP_CD,
+             MSG_CD,
+             LANG_CD,
+             MSG_NM,
+             REG_DATE,
+             REG_USER_ID            
+            )
+            VALUES
+            (
+             TO_CHAR(MSG_LOC_PK_SEQ.NEXTVAL,'FM0000000000'),
+             #{msgGrpCd},
+             #{msgCd},
+             #{langCd},
+             #{msgNm},
+             SYSDATE,
+             #{userId}
+            )
+        ]]>
+    </insert>
+    
+    <update id="updateMessageLocale" parameterType="com.hyundaiuni.nxtims.domain.app.MessageLocale">
+        <![CDATA[
+            UPDATE MESSAGE_LOCALE
+               SET MSG_GRP_CD = #{msgGrpCd},
+                   MSG_CD = #{msgCd},
+                   LANG_CD = #{langCd},
+                   MSG_NM = #{msgNm},
+                   UPD_DATE = SYSDATE,
+                   UPD_USER_ID = #{userId}
+             WHERE MSG_LOC_PK = #{msgLocPk}
+        ]]>
+    </update>
+    
+    <delete id="deleteMessageLocaleByMsgLocPk" parameterType="string">
+        <![CDATA[
+            DELETE MESSAGE_LOCALE
+             WHERE MSG_LOC_PK = #{msgLocPk}
+        ]]>
+    </delete>
+    
+    <select id="getMessageLocaleListByParam" parameterType="hashmap" resultType="com.hyundaiuni.nxtims.domain.app.MessageLocale">
+        <![CDATA[
+            SELECT MSG_LOC_PK AS msgLocPk,
+                   MSG_GRP_CD AS msgGrpCd,
+                   MSG_CD AS msgCd,
+                   LANG_CD AS langCd,
+                   MSG_NM AS msgNm
+              FROM MESSAGE_LOCALE
+             WHERE MSG_GRP_CD = #{msgGrpCd}
+               AND MSG_CD = #{msgCd}
+        ]]>
+    </select>     
+    
+    <delete id="deleteMessageLocaleByParam" parameterType="hashmap">
+        <![CDATA[
+            DELETE MESSAGE_LOCALE
+             WHERE MSG_GRP_CD = #{msgGrpCd}
+               AND MSG_CD = #{msgCd}
+        ]]>
+    </delete>    
 </mapper>

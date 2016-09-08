@@ -1,39 +1,41 @@
 package com.hyundaiuni.nxtims.domain.app;
 
 import java.io.Serializable;
-import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Message implements Serializable {
+public class MessageLocale implements Serializable {
     private static final long serialVersionUID = 7135269501094652136L;
     
-    @JsonProperty(value = "MSG_PK")
-    private String msgPk;
+    @JsonProperty(value = "MSG_LOC_PK")
+    private String msgLocPk;
     
     @JsonProperty(value = "MSG_GRP_CD")
     private String msgGrpCd;
     
     @JsonProperty(value = "MSG_CD")
     private String msgCd;
+    
+    @JsonProperty(value = "LANG_CD")
+    private String langCd;    
         
     @JsonProperty(value = "MSG_NM")
     private String msgNm;
     
     @JsonProperty(value = "USER_ID")
     private String userId;
-
-    @JsonProperty(value = "MSG_LOC_LIST")
-    private List<MessageLocale> msgLocList;        
-
-    public String getMsgPk() {
-        return msgPk;
+    
+    @JsonProperty(value = "TRANSACTION_TYPE")
+    private String transactionType;      
+    
+    public String getMsgLocPk() {
+        return msgLocPk;
     }
 
-    public void setMsgPk(String msgPk) {
-        this.msgPk = msgPk;
+    public void setMsgLocPk(String msgLocPk) {
+        this.msgLocPk = msgLocPk;
     }
 
     public String getMsgGrpCd() {
@@ -52,6 +54,14 @@ public class Message implements Serializable {
         this.msgCd = msgCd;
     }
 
+    public String getLangCd() {
+        return langCd;
+    }
+
+    public void setLangCd(String langCd) {
+        this.langCd = langCd;
+    }
+
     public String getMsgNm() {
         return msgNm;
     }
@@ -59,26 +69,26 @@ public class Message implements Serializable {
     public void setMsgNm(String msgNm) {
         this.msgNm = msgNm;
     }
-
+    
     public String getUserId() {
         return userId;
     }
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }    
+
+    public String getTransactionType() {
+        return transactionType;
     }
 
-    public List<MessageLocale> getMsgLocList() {
-        return msgLocList;
-    }
-
-    public void setMsgLocList(List<MessageLocale> msgLocList) {
-        this.msgLocList = msgLocList;
+    public void setTransactionType(String transactionType) {
+        this.transactionType = transactionType;
     }
 
     @Override
     public String toString() {
-        return "Message [msgPk=" + msgPk + ", msgGrpCd=" + msgGrpCd + ", msgCd=" + msgCd + ", msgNm=" + msgNm
-               + ", userId=" + userId + ", msgLocList=" + msgLocList + "]";
+        return "MessageLocale [msgLocPk=" + msgLocPk + ", msgGrpCd=" + msgGrpCd + ", msgCd=" + msgCd + ", langCd="
+               + langCd + ", msgNm=" + msgNm + ", userId=" + userId + ", transactionType=" + transactionType + "]";
     }
 }
