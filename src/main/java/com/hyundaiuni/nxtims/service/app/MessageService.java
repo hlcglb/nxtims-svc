@@ -135,7 +135,7 @@ public class MessageService {
     }
 
     @Transactional
-    public Message updateMessage(String msgPk, Message message) {
+    public void updateMessage(String msgPk, Message message) {
         Message tempMessage = messageMapper.getMessageByMsgPk(msgPk);
 
         if(tempMessage == null) {
@@ -211,8 +211,6 @@ public class MessageService {
                 }
             }
         }
-        
-        return messageMapper.getMessageByMsgPk(msgPk);
     }
 
     @Transactional
