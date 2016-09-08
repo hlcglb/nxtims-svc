@@ -246,7 +246,7 @@ public class MessageServiceTest {
 
             List<MessageLocale> retrieveMsgLocList = retrieveMessage.getMsgLocList();
 
-            if(!CollectionUtils.isEmpty(retrieveMsgLocList)) {
+            if(CollectionUtils.isNotEmpty(retrieveMsgLocList)) {
                 for(MessageLocale retrieveMsg : retrieveMsgLocList) {
                     retrieveMsg.setTransactionType("U");
                 }

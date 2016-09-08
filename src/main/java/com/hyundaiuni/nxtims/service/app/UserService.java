@@ -4,11 +4,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
-import org.springframework.util.CollectionUtils;
 
 import com.hyundaiuni.nxtims.domain.app.Auth;
 import com.hyundaiuni.nxtims.domain.app.Resource;
@@ -31,7 +31,7 @@ public class UserService {
         if(user != null) {
             List<Auth> authList = userMapper.getAuthByUserId(userId);
 
-            if(!CollectionUtils.isEmpty(authList)) {
+            if(CollectionUtils.isNotEmpty(authList)) {
                 user.setAuthList(authList);
             }
         }

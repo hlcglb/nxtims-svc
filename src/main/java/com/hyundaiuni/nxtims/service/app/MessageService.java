@@ -5,12 +5,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
 import com.hyundaiuni.nxtims.domain.app.Message;
 import com.hyundaiuni.nxtims.domain.app.MessageLocale;
@@ -103,7 +103,7 @@ public class MessageService {
 
         List<MessageLocale> msgLocList = message.getMsgLocList();
 
-        if(!CollectionUtils.isEmpty(msgLocList)) {
+        if(CollectionUtils.isNotEmpty(msgLocList)) {
             for(MessageLocale messageLocale : msgLocList) {
                 if(StringUtils.isEmpty(messageLocale.getLangCd())) {
                     throw new ServiceException("MSG.MUST_NOT_NULL", "LANG_CD must not be null.");
@@ -160,7 +160,7 @@ public class MessageService {
         
         List<MessageLocale> tempMessageLocaleList = messageMapper.getMessageLocaleListByParam(parameter);
         
-        if(!CollectionUtils.isEmpty(tempMessageLocaleList)) {
+        if(CollectionUtils.isNotEmpty(tempMessageLocaleList)) {
             for(MessageLocale messageLocale : tempMessageLocaleList) {
                 messageLocale.setMsgGrpCd(message.getMsgGrpCd());
                 messageLocale.setMsgCd(message.getMsgCd());
@@ -173,7 +173,7 @@ public class MessageService {
 
         List<MessageLocale> msgLocList = message.getMsgLocList();
 
-        if(!CollectionUtils.isEmpty(msgLocList)) {
+        if(CollectionUtils.isNotEmpty(msgLocList)) {
             for(MessageLocale messageLocale : msgLocList) {
                 String messageLocaleTransactionType = messageLocale.getTransactionType();
 

@@ -6,6 +6,7 @@ import static org.junit.Assert.fail;
 
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.Test;
@@ -13,7 +14,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.util.CollectionUtils;
 
 import com.hyundaiuni.nxtims.domain.app.Resource;
 import com.hyundaiuni.nxtims.domain.app.User;
@@ -22,7 +22,7 @@ import com.hyundaiuni.nxtims.domain.app.User;
 @SpringBootTest
 public class UserServiceTests {
     private static final Log log = LogFactory.getLog(UserServiceTests.class);
-    
+
     @Autowired
     private UserService userService;
 
@@ -41,7 +41,7 @@ public class UserServiceTests {
     public void testGetMenuByUserId() {
         List<Resource> menuList = userService.getMenuByUserId("20006X");
 
-        if(!CollectionUtils.isEmpty(menuList)) {
+        if(CollectionUtils.isNotEmpty(menuList)) {
             fail("");
         }
 
@@ -55,7 +55,7 @@ public class UserServiceTests {
     @Test
     public void testOnAuthenticationSuccess() {
         Exception ex = null;
-        
+
         try {
             userService.onAuthenticationSuccess("test", "DB18EBE12C90845710D544C7A15D7072", "localhost");
         }
@@ -63,14 +63,14 @@ public class UserServiceTests {
             log.error(e.getMessage());
             ex = e;
         }
-        
+
         assertEquals(null, ex);
     }
-    
+
     @Test
     public void testOnAuthenticationFailure() {
         Exception ex = null;
-        
+
         try {
             userService.onAuthenticationFailure("test");
         }
@@ -78,14 +78,14 @@ public class UserServiceTests {
             log.error(e.getMessage());
             ex = e;
         }
-        
+
         assertEquals(null, ex);
     }
-    
+
     @Test
     public void testOnLogout() {
         Exception ex = null;
-        
+
         try {
             userService.onLogout("test", "DB18EBE12C90845710D544C7A15D7072");
         }
@@ -93,7 +93,7 @@ public class UserServiceTests {
             log.error(e.getMessage());
             ex = e;
         }
-        
+
         assertEquals(null, ex);
-    }    
+    }
 }
