@@ -46,7 +46,7 @@ public class MessageController {
             return new ResponseEntity<>(messageService.getMessageListByParam(parameter, offset, limit), HttpStatus.OK);
         }
         catch(UnsupportedEncodingException e) {
-            throw new ServiceException("ENCODE_NOT_SUPPORTED", e.getMessage(), e);
+            throw new ServiceException("ENCODE_NOT_SUPPORTED", e.getMessage(), null, e);
         }
     }
 

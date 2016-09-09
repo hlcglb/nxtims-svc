@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hyundaiuni.nxtims.mapper.app.ResourceMapper">
-    <select id="getResources" resultType="com.hyundaiuni.nxtims.domain.app.AuthResource">
+    <select id="getResourceAuthAll" resultType="com.hyundaiuni.nxtims.domain.app.AuthResource">
         <![CDATA[
             SELECT B.AUTH_ID AS authId,
                    C.RESOURCE_ID AS resourceId,
@@ -17,5 +17,114 @@
                AND C.RESOURCE_URL IS NOT NULL
              ORDER BY B.AUTH_ID, C.RESOURCE_URL DESC      
         ]]>
-    </select> 
+    </select>
+    
+    <select id="getResourceListByParam" parameterType="hashmap" resultType="com.hyundaiuni.nxtims.domain.app.Resource">
+        <![CDATA[
+            SELECT A.RESOURCE_ID AS resourceId,
+                   A.RESOURCE_NM AS resourceNm,
+                   A.RESOURCE_TYPE AS resourceType,
+                   A.RESOURCE_URL AS resourceUrl,
+                   A.LINK_RESOURCE_ID AS linkResourceId,
+                   A.USE_YN AS useYn
+              FROM ( SELECT ROWNUM AS RNUM,
+                            A.*
+                       FROM ( SELECT RESOURCE_ID,
+                                     RESOURCE_NM,
+                                     RESOURCE_TYPE,
+                                     RESOURCE_URL,
+                                     LINK_RESOURCE_ID,
+                                     USE_YN
+                                FROM RESOURCES
+                               WHERE 1 = 1
+        ]]>                       
+        <if test="resourceNm != null">   
+                                 AND RESOURCE_NM = #{resourceNm}
+        </if>
+        <if test="resourceType != null">   
+                                 AND RESOURCE_TYPE = #{resourceType}
+        </if>
+        <if test="resourceUrl != null">   
+                                 AND RESOURCE_URL LIKE #{resourceUrl}||'%'
+        </if>        
+        <if test="linkResourceId != null">   
+                                 AND LINK_RESOURCE_ID = #{linkResourceId}
+        </if>
+        <if test="useYn != null">   
+                                 AND USE_YN = #{useYn}
+        </if>        
+        <![CDATA[                           
+                            ) A
+                      WHERE ROWNUM <= #{offset} + #{limit} ) A
+             WHERE RNUM > #{offset}
+        ]]>  
+    </select>
+    
+    <select id="getResourceById" parameterType="string" resultType="com.hyundaiuni.nxtims.domain.app.Resource">
+        <![CDATA[
+            SELECT A.RESOURCE_ID AS resourceId,
+                   A.RESOURCE_NM AS resourceNm,
+                   A.RESOURCE_TYPE AS resourceType,
+                   A.RESOURCE_URL AS resourceUrl,
+                   A.LINK_RESOURCE_ID AS linkResourceId,
+                   A.USE_YN AS useYn
+              FROM RESOURCES A
+             WHERE A.RESOURCE_ID = #{resourceId}    
+        ]]>    
+    </select>    
+    
+    <select id="getResourceSequence" resultType="string">
+        <![CDATA[
+            SELECT TO_CHAR(RESOURCE_ID_SEQ.NEXTVAL,'FM000000')
+              FROM DUAL
+        ]]>
+    </select>    
+
+    <insert id="insertResource" parameterType="com.hyundaiuni.nxtims.domain.app.Resource">
+        <![CDATA[
+            INSERT INTO RESOURCES
+            (
+             RESOURCE_ID,
+             RESOURCE_NM,
+             RESOURCE_TYPE,
+             RESOURCE_URL,
+             LINK_RESOURCE_ID,
+             USE_YN,
+             REG_DATE,
+             REG_USER_ID            
+            )
+            VALUES
+            (
+             #{resourceId},
+             #{resourceNm},
+             #{resourceType},
+             #{resourceUrl},
+             #{linkResourceId},
+             #{useYn},
+             SYSDATE,
+             #{userId}
+            )
+        ]]>
+    </insert>
+    
+    <update id="updateResource" parameterType="com.hyundaiuni.nxtims.domain.app.Resource">
+        <![CDATA[
+            UPDATE RESOURCES
+               SET RESOURCE_NM = #{resourceNm},
+                   RESOURCE_TYPE = #{resourceType},
+                   RESOURCE_URL = #{resourceUrl},
+                   LINK_RESOURCE_ID = #{linkResourceId},
+                   USE_YN = #{useYn},
+                   UPD_DATE = SYSDATE,
+                   UPD_USER_ID = #{userId}
+             WHERE RESOURCE_ID = #{resourceId}   
+        ]]>
+    </update>
+    
+    <delete id="deleteResourceById" parameterType="string">
+        <![CDATA[
+            DELETE RESOURCES
+             WHERE RESOURCE_ID = #{resourceId}
+        ]]>
+    </delete>        
 </mapper>

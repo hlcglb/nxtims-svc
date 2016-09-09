@@ -18,11 +18,20 @@ public class Resource implements Serializable {
     @JsonProperty(value = "RESOURCE_NM")
     private String resourceNm;
     
+    @JsonProperty(value = "RESOURCE_TYPE")
+    private String resourceType;    
+    
     @JsonProperty(value = "RESOURCE_URL")
     private String resourceUrl;
+
+    @JsonProperty(value = "LINK_RESOURCE_ID")
+    private String linkResourceId;
     
-    @JsonProperty(value = "RESOURCE_TYPE")
-    private String resourceType;
+    @JsonProperty(value = "USE_YN")
+    private String useYn;
+    
+    @JsonProperty(value = "USER_ID")
+    private String userId;    
 
     public String getResourceLevel() {
         return resourceLevel;
@@ -48,14 +57,6 @@ public class Resource implements Serializable {
         this.resourceNm = resourceNm;
     }
 
-    public String getResourceUrl() {
-        return resourceUrl;
-    }
-
-    public void setResourceUrl(String resourceUrl) {
-        this.resourceUrl = resourceUrl;
-    }
-
     public String getResourceType() {
         return resourceType;
     }
@@ -64,9 +65,43 @@ public class Resource implements Serializable {
         this.resourceType = resourceType;
     }
 
+    public String getResourceUrl() {
+        return resourceUrl;
+    }
+
+    public void setResourceUrl(String resourceUrl) {
+        this.resourceUrl = resourceUrl;
+    }
+
+    public String getLinkResourceId() {
+        return linkResourceId;
+    }
+
+    public void setLinkResourceId(String linkResourceId) {
+        this.linkResourceId = linkResourceId;
+    }
+
+    public String getUseYn() {
+        return useYn;
+    }
+
+    public void setUseYn(String useYn) {
+        this.useYn = useYn;
+    }
+    
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
     @Override
     public String toString() {
         return "Resource [resourceLevel=" + resourceLevel + ", resourceId=" + resourceId + ", resourceNm=" + resourceNm
-               + ", resourceUrl=" + resourceUrl + ", resourceType=" + resourceType + "]";
+               + ", resourceType=" + resourceType + ", resourceUrl=" + resourceUrl + ", linkResourceId="
+               + linkResourceId + ", useYn=" + useYn + ", userId=" + userId + "]";
     }
 }

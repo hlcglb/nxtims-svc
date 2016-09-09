@@ -20,7 +20,7 @@ public class SampleService {
         Map<String, Object> map = sampleMapper.get(id);
         
         if(MapUtils.isEmpty(map)){
-            throw new ServiceException("MSG.USER_NOT_FOUND", id + " not found.");
+            throw new ServiceException("MSG.USER_NOT_FOUND", id + " not found.", null);
         }
         
         return map;

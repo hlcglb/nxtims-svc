@@ -1,10 +1,12 @@
 package com.hyundaiuni.nxtims.handler;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -28,6 +30,7 @@ public class RestApiExceptionHandler {
 
         error.put("CODE", e.getCode());
         error.put("MESSAGE", e.getMessage());
+        error.put("ARGS", StringUtils.collectionToDelimitedString(Arrays.asList(e.getArgs()), "^"));
 
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
