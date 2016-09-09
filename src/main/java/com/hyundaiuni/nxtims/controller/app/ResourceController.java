@@ -25,8 +25,8 @@ public class ResourceController {
     @Autowired
     private ResourceService resourceService;
 
-    @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<?> getResources() {
+    @RequestMapping(params = "inquiry=getResourceAuthAll", method = RequestMethod.GET)
+    public ResponseEntity<?> getResourceAuthAll() {
         return new ResponseEntity<>(resourceService.getResourceAuthAll(), HttpStatus.OK);
     }
 

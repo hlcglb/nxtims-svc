@@ -64,7 +64,7 @@ public class ResourceControllerTest {
         Exception ex = null;
 
         try {
-            mvc.perform(get(URL)).andDo(print()).andExpect(status().isOk()).andExpect(
+            mvc.perform(get(URL + "?inquiry=getResourceAuthAll")).andDo(print()).andExpect(status().isOk()).andExpect(
                 content().contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(jsonPath("$..AUTH_ID").isArray());
         }
         catch(Exception e) {
