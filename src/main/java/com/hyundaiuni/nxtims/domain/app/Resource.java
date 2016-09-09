@@ -27,6 +27,9 @@ public class Resource implements Serializable {
     @JsonProperty(value = "LINK_RESOURCE_ID")
     private String linkResourceId;
     
+    @JsonProperty(value = "LINK_RESOURCE_SEQ")
+    private int linkResourceSeq;
+    
     @JsonProperty(value = "USE_YN")
     private String useYn;
     
@@ -88,7 +91,6 @@ public class Resource implements Serializable {
     public void setUseYn(String useYn) {
         this.useYn = useYn;
     }
-    
 
     public String getUserId() {
         return userId;
@@ -98,10 +100,19 @@ public class Resource implements Serializable {
         this.userId = userId;
     }
 
+    public int getLinkResourceSeq() {
+        return linkResourceSeq;
+    }
+
+    public void setLinkResourceSeq(int linkResourceSeq) {
+        this.linkResourceSeq = linkResourceSeq;
+    }
+
     @Override
     public String toString() {
         return "Resource [resourceLevel=" + resourceLevel + ", resourceId=" + resourceId + ", resourceNm=" + resourceNm
                + ", resourceType=" + resourceType + ", resourceUrl=" + resourceUrl + ", linkResourceId="
-               + linkResourceId + ", useYn=" + useYn + ", userId=" + userId + "]";
+               + linkResourceId + ", linkResourceSeq=" + linkResourceSeq + ", useYn=" + useYn + ", userId=" + userId
+               + "]";
     }
 }

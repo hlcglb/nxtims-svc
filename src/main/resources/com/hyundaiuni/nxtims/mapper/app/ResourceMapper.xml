@@ -26,6 +26,7 @@
                    A.RESOURCE_TYPE AS resourceType,
                    A.RESOURCE_URL AS resourceUrl,
                    A.LINK_RESOURCE_ID AS linkResourceId,
+                   A.LINK_RESOURCE_SEQ AS linkResourceSeq,
                    A.USE_YN AS useYn
               FROM ( SELECT ROWNUM AS RNUM,
                             A.*
@@ -34,6 +35,7 @@
                                      RESOURCE_TYPE,
                                      RESOURCE_URL,
                                      LINK_RESOURCE_ID,
+                                     LINK_RESOURCE_SEQ,
                                      USE_YN
                                 FROM RESOURCES
                                WHERE 1 = 1
@@ -67,6 +69,7 @@
                    A.RESOURCE_TYPE AS resourceType,
                    A.RESOURCE_URL AS resourceUrl,
                    A.LINK_RESOURCE_ID AS linkResourceId,
+                   A.LINK_RESOURCE_SEQ AS linkResourceSeq,
                    A.USE_YN AS useYn
               FROM RESOURCES A
              WHERE A.RESOURCE_ID = #{resourceId}    
@@ -89,6 +92,7 @@
              RESOURCE_TYPE,
              RESOURCE_URL,
              LINK_RESOURCE_ID,
+             LINK_RESOURCE_SEQ,
              USE_YN,
              REG_DATE,
              REG_USER_ID            
@@ -100,6 +104,7 @@
              #{resourceType},
              #{resourceUrl},
              #{linkResourceId},
+             #{linkResourceSeq},
              #{useYn},
              SYSDATE,
              #{userId}
@@ -114,6 +119,7 @@
                    RESOURCE_TYPE = #{resourceType},
                    RESOURCE_URL = #{resourceUrl},
                    LINK_RESOURCE_ID = #{linkResourceId},
+                   LINK_RESOURCE_SEQ = #{linkResourceSeq},
                    USE_YN = #{useYn},
                    UPD_DATE = SYSDATE,
                    UPD_USER_ID = #{userId}

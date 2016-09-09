@@ -34,7 +34,8 @@
                             D.RESOURCE_NM,
                             D.RESOURCE_URL,
                             D.RESOURCE_TYPE,
-                            D.LINK_RESOURCE_ID
+                            D.LINK_RESOURCE_ID,
+                            D.LINK_RESOURCE_SEQ
                        FROM USERS A,
                             USER_AUTH B,
                             AUTH_RESOURCE C,
@@ -46,7 +47,8 @@
                         AND D.RESOURCE_TYPE = '01'
                         AND D.USE_YN = 'Y' ) A
              START WITH A.RESOURCE_ID = '000000'    
-           CONNECT BY A.LINK_RESOURCE_ID = PRIOR A.RESOURCE_ID         
+           CONNECT BY A.LINK_RESOURCE_ID = PRIOR A.RESOURCE_ID
+             ORDER SIBLINGS BY A.LINK_RESOURCE_SEQ
         ]]>
     </select>
     
