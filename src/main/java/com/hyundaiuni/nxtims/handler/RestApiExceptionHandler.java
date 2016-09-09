@@ -30,7 +30,7 @@ public class RestApiExceptionHandler {
 
         error.put("CODE", e.getCode());
         error.put("MESSAGE", e.getMessage());
-        error.put("ARGS", StringUtils.collectionToDelimitedString(Arrays.asList(e.getArgs()), "^"));
+        error.put("ARGUMENTS", StringUtils.collectionToDelimitedString(Arrays.asList(e.getArgs()), "^"));
 
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
