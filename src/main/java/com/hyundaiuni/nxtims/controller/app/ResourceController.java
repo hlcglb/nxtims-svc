@@ -31,7 +31,7 @@ public class ResourceController {
     }
 
     @RequestMapping(params = "inquiry=getResourceListByParam", method = RequestMethod.GET)
-    public ResponseEntity<?> getMessageListByParam(@RequestParam("q") String query, @RequestParam("offset") int offset,
+    public ResponseEntity<?> getResourceListByParam(@RequestParam("q") String query, @RequestParam("offset") int offset,
         @RequestParam("limit") int limit) {
         Assert.notNull(query, "query must not be null");
         Assert.notNull(offset, "offset must not be null");
