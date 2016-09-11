@@ -11,7 +11,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
@@ -74,9 +76,9 @@ public class ResourceControllerTest {
 
         assertEquals(null, ex);
     }
-    
+
     @Test
-    public void testGetResourceListByParam(){
+    public void testGetResourceListByParam() {
         Exception ex = null;
 
         try {
@@ -87,7 +89,8 @@ public class ResourceControllerTest {
 
             mvc.perform(get(URL + "?inquiry=getResourceListByParam&q=" + query + "&offset=0&limit=10")).andDo(
                 print()).andExpect(status().isOk()).andExpect(
-                    content().contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(jsonPath("$..RESOURCE_NM").isArray());
+                    content().contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(
+                        jsonPath("$..RESOURCE_NM").isArray());
         }
         catch(Exception e) {
             log.error(e.getMessage());
@@ -98,7 +101,7 @@ public class ResourceControllerTest {
     }
 
     @Test
-    public void testGetResourceById(){
+    public void testGetResourceById() {
         Exception ex = null;
 
         try {
@@ -115,7 +118,7 @@ public class ResourceControllerTest {
     }
 
     @Test
-    public void testSaveResource() {
+    public void testCUDResource() {
         Exception ex = null;
 
         try {
@@ -142,12 +145,42 @@ public class ResourceControllerTest {
 
             String resourceId = retrieveResource.getResourceId();
 
-            resource.setResourceNm("TEST1");;
+            resource.setResourceNm("TEST1");
+            ;
 
             mvc.perform(put(URL + "/{resourceId}", resourceId).contentType(MediaType.APPLICATION_JSON_UTF8).content(
                 jsonStringFromObject(retrieveResource))).andDo(print()).andExpect(status().isOk());
 
             mvc.perform(delete(URL + "/{resourceId}", resourceId)).andDo(print()).andExpect(status().isOk());
+        }
+        catch(Exception e) {
+            log.error(e.getMessage());
+            ex = e;
+        }
+
+        assertEquals(null, ex);
+    }
+
+    @Test
+    public void testSaveResource() {
+        Exception ex = null;
+
+        try {
+            List<Resource> resourceList = new ArrayList<>();
+
+            Resource updateResource = new Resource();
+
+            updateResource.setResourceId("000007");
+            updateResource.setResourceNm("SAMPLE");
+            updateResource.setResourceType("02");
+            updateResource.setResourceUrl("/sample/***");
+            updateResource.setUseYn("Y");
+            updateResource.setTransactionType("U");
+
+            resourceList.add(updateResource);
+
+            mvc.perform(post(URL + "/save").contentType(MediaType.APPLICATION_JSON_UTF8).content(
+                jsonStringFromObject(resourceList))).andDo(print()).andExpect(status().isOk());
         }
         catch(Exception e) {
             log.error(e.getMessage());

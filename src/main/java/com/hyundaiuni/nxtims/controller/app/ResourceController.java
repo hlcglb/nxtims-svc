@@ -1,6 +1,7 @@
 package com.hyundaiuni.nxtims.controller.app;
 
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,4 +75,11 @@ public class ResourceController {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
+    
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    public ResponseEntity<?> saveResource(@RequestBody List<Resource> resourceList) {
+        resourceService.saveResource(resourceList);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }    
 }

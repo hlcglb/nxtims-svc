@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -90,7 +91,7 @@ public class ResourceServiceTest {
         try {
             Resource resource = new Resource();
 
-            resource.setResourceNm("TEST");
+            resource.setResourceNm("TEST1");
             resource.setResourceType("03");
             resource.setResourceUrl("---");
             resource.setUseYn("Y");
@@ -114,14 +115,14 @@ public class ResourceServiceTest {
         try {
             Resource resource = new Resource();
 
-            resource.setResourceNm("TEST");
+            resource.setResourceNm("TEST2");
             resource.setResourceType("03");
             resource.setResourceUrl("---");
             resource.setUseYn("Y");
 
             resource = resourceService.insertResource(resource);
 
-            resource.setResourceNm("TEST1");
+            resource.setResourceNm("TEST3");
 
             resourceService.updateResource(resource.getResourceId(), resource);
 
@@ -134,4 +135,32 @@ public class ResourceServiceTest {
 
         assertEquals(null, ex);
     }
+    
+    @Test
+    public void testSaveResource() {
+        Exception ex = null;
+
+        try {
+            List<Resource> resourceList = new ArrayList<>();
+            
+            Resource updateResource = new Resource();
+
+            updateResource.setResourceId("000007");
+            updateResource.setResourceNm("SAMPLE");
+            updateResource.setResourceType("02");
+            updateResource.setResourceUrl("/sample/**");
+            updateResource.setUseYn("Y");
+            updateResource.setTransactionType("U");
+            
+            resourceList.add(updateResource);
+            
+            resourceService.saveResource(resourceList);
+        }
+        catch(Exception e) {
+            log.error(e.getMessage());
+            ex = e;
+        }
+
+        assertEquals(null, ex);
+    }    
 }

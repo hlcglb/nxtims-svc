@@ -34,7 +34,10 @@ public class Resource implements Serializable {
     private String useYn;
     
     @JsonProperty(value = "USER_ID")
-    private String userId;    
+    private String userId;
+    
+    @JsonProperty(value = "TRANSACTION_TYPE")
+    private String transactionType;
 
     public String getResourceLevel() {
         return resourceLevel;
@@ -108,11 +111,19 @@ public class Resource implements Serializable {
         this.linkResourceSeq = linkResourceSeq;
     }
 
+    public String getTransactionType() {
+        return transactionType;
+    }
+
+    public void setTransactionType(String transactionType) {
+        this.transactionType = transactionType;
+    }
+
     @Override
     public String toString() {
         return "Resource [resourceLevel=" + resourceLevel + ", resourceId=" + resourceId + ", resourceNm=" + resourceNm
                + ", resourceType=" + resourceType + ", resourceUrl=" + resourceUrl + ", linkResourceId="
                + linkResourceId + ", linkResourceSeq=" + linkResourceSeq + ", useYn=" + useYn + ", userId=" + userId
-               + "]";
+               + ", transactionType=" + transactionType + "]";
     }
 }

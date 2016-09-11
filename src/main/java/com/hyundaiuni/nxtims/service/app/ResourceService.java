@@ -3,6 +3,7 @@ package com.hyundaiuni.nxtims.service.app;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -53,6 +54,13 @@ public class ResourceService {
                 new String[] {"RESOURCE_TYPE"});
         }
 
+        if("02".equals(resource.getResourceType())) {
+            if(StringUtils.isEmpty(resource.getResourceUrl())) {
+                throw new ServiceException("MSG.MUST_NOT_NULL", "RESOURCE_URL must not be null.",
+                    new String[] {"RESOURCE_URL"});
+            }
+        }
+
         if(StringUtils.isEmpty(resource.getUseYn())) {
             throw new ServiceException("MSG.MUST_NOT_NULL", "USE_YN must not be null.", new String[] {"USE_YN"});
         }
@@ -101,6 +109,13 @@ public class ResourceService {
                 new String[] {"RESOURCE_TYPE"});
         }
 
+        if("02".equals(resource.getResourceType())) {
+            if(StringUtils.isEmpty(resource.getResourceUrl())) {
+                throw new ServiceException("MSG.MUST_NOT_NULL", "RESOURCE_URL must not be null.",
+                    new String[] {"RESOURCE_URL"});
+            }
+        }
+
         if(StringUtils.isEmpty(resource.getUseYn())) {
             throw new ServiceException("MSG.MUST_NOT_NULL", "USE_YN must not be null.", new String[] {"USE_YN"});
         }
@@ -131,5 +146,26 @@ public class ResourceService {
         }
 
         resourceMapper.deleteResourceById(resourceId);
+    }
+
+    public void saveResource(List<Resource> resourceList) {
+        if(CollectionUtils.isNotEmpty(resourceList)) {
+            for(Resource resource : resourceList) {
+                if("C".equals(resource.getTransactionType())) {
+                    insertResource(resource);
+                }
+                else if("U".equals(resource.getTransactionType())) {
+                    updateResource(resource.getResourceId(), resource);
+                }
+                else if("D".equals(resource.getTransactionType())) {
+                    deleteResourceById(resource.getResourceId());
+                }
+                else {
+                    throw new ServiceException("MSG.TRANSACTION_TYPE_NOT_SUPPORTED",
+                        resource.getTransactionType() + " does not supported.",
+                        new String[] {resource.getTransactionType()});
+                }
+            }
+        }
     }
 }
