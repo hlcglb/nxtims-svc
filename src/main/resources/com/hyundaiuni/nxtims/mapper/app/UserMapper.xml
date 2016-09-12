@@ -29,7 +29,8 @@
                    A.RESOURCE_ID AS resourceId,
                    A.RESOURCE_NM AS resourceNm,
                    A.RESOURCE_URL AS resourceUrl,
-                   A.RESOURCE_TYPE AS resourceType
+                   A.RESOURCE_TYPE AS resourceType,
+                   A.LINK_RESOURCE_ID AS linkResourceId
               FROM ( SELECT D.RESOURCE_ID,
                             D.RESOURCE_NM,
                             D.RESOURCE_URL,
