@@ -154,7 +154,7 @@ public class ResourceServiceTest {
             
             resourceList.add(updateResource);
             
-            resourceService.saveResource(resourceList);
+            resourceService.saveResources(resourceList);
         }
         catch(Exception e) {
             log.error(e.getMessage());

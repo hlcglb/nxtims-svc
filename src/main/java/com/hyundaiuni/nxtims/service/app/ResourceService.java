@@ -148,7 +148,7 @@ public class ResourceService {
         resourceMapper.deleteResourceById(resourceId);
     }
 
-    public void saveResource(List<Resource> resourceList) {
+    public void saveResources(List<Resource> resourceList) {
         if(CollectionUtils.isNotEmpty(resourceList)) {
             for(Resource resource : resourceList) {
                 if("C".equals(resource.getTransactionType())) {

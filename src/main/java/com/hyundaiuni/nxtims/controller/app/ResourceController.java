@@ -77,8 +77,8 @@ public class ResourceController {
     }
     
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public ResponseEntity<?> saveResource(@RequestBody List<Resource> resourceList) {
-        resourceService.saveResource(resourceList);
+    public ResponseEntity<?> saveResources(@RequestBody List<Resource> resourceList) {
+        resourceService.saveResources(resourceList);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }    
