@@ -29,10 +29,9 @@ public class AuthResource implements Serializable {
     
     @JsonProperty(value = "RESOURCE_TYPE")
     private String resourceType;
-
-    public String getResourceLevel() {
-        return resourceLevel;
-    }    
+    
+    @JsonProperty(value = "HTTP_METHOD")
+    private int httpMethod;
 
     public String getAuthId() {
         return authId;
@@ -48,6 +47,10 @@ public class AuthResource implements Serializable {
 
     public void setAuthNm(String authNm) {
         this.authNm = authNm;
+    }
+
+    public String getResourceLevel() {
+        return resourceLevel;
     }
 
     public void setResourceLevel(String resourceLevel) {
@@ -86,10 +89,18 @@ public class AuthResource implements Serializable {
         this.resourceType = resourceType;
     }
 
+    public int getHttpMethod() {
+        return httpMethod;
+    }
+
+    public void setHttpMethod(int httpMethod) {
+        this.httpMethod = httpMethod;
+    }
+
     @Override
     public String toString() {
         return "AuthResource [authId=" + authId + ", authNm=" + authNm + ", resourceLevel=" + resourceLevel
                + ", resourceId=" + resourceId + ", resourceNm=" + resourceNm + ", resourceUrl=" + resourceUrl
-               + ", resourceType=" + resourceType + "]";
+               + ", resourceType=" + resourceType + ", httpMethod=" + httpMethod + "]";
     }
 }

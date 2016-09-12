@@ -8,7 +8,6 @@
                    C.RESOURCE_NM AS resourceNm,
                    C.RESOURCE_TYPE AS resourceType,
                    C.RESOURCE_URL AS resourceUrl,
-                   C.LINK_RESOURCE_SEQ AS linkResourceSeq,
                    C.HTTP_METHOD AS httpMethod
               FROM AUTHORITIES A,
                    AUTH_RESOURCE B,
