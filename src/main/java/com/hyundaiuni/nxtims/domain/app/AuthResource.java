@@ -31,7 +31,7 @@ public class AuthResource implements Serializable {
     private String resourceType;
     
     @JsonProperty(value = "HTTP_METHOD")
-    private int httpMethod;
+    private String httpMethod;
 
     public String getAuthId() {
         return authId;
@@ -89,11 +89,11 @@ public class AuthResource implements Serializable {
         this.resourceType = resourceType;
     }
 
-    public int getHttpMethod() {
+    public String getHttpMethod() {
         return httpMethod;
     }
 
-    public void setHttpMethod(int httpMethod) {
+    public void setHttpMethod(String httpMethod) {
         this.httpMethod = httpMethod;
     }
 

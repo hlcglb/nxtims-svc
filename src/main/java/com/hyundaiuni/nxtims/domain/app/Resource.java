@@ -31,7 +31,7 @@ public class Resource implements Serializable {
     private int linkResourceSeq;
     
     @JsonProperty(value = "HTTP_METHOD")
-    private int httpMethod;    
+    private String httpMethod;    
     
     @JsonProperty(value = "USE_YN")
     private String useYn;
@@ -98,11 +98,11 @@ public class Resource implements Serializable {
         this.useYn = useYn;
     }
 
-    public int getHttpMethod() {
+    public String getHttpMethod() {
         return httpMethod;
     }
 
-    public void setHttpMethod(int httpMethod) {
+    public void setHttpMethod(String httpMethod) {
         this.httpMethod = httpMethod;
     }
 
