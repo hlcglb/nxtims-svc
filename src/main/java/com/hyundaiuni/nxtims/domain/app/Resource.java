@@ -30,6 +30,9 @@ public class Resource implements Serializable {
     @JsonProperty(value = "LINK_RESOURCE_SEQ")
     private int linkResourceSeq;
     
+    @JsonProperty(value = "HTTP_METHOD")
+    private int httpMethod;    
+    
     @JsonProperty(value = "USE_YN")
     private String useYn;
     
@@ -95,6 +98,14 @@ public class Resource implements Serializable {
         this.useYn = useYn;
     }
 
+    public int getHttpMethod() {
+        return httpMethod;
+    }
+
+    public void setHttpMethod(int httpMethod) {
+        this.httpMethod = httpMethod;
+    }
+
     public String getUserId() {
         return userId;
     }
@@ -123,7 +134,7 @@ public class Resource implements Serializable {
     public String toString() {
         return "Resource [resourceLevel=" + resourceLevel + ", resourceId=" + resourceId + ", resourceNm=" + resourceNm
                + ", resourceType=" + resourceType + ", resourceUrl=" + resourceUrl + ", linkResourceId="
-               + linkResourceId + ", linkResourceSeq=" + linkResourceSeq + ", useYn=" + useYn + ", userId=" + userId
-               + ", transactionType=" + transactionType + "]";
+               + linkResourceId + ", linkResourceSeq=" + linkResourceSeq + ", httpMethod=" + httpMethod + ", useYn="
+               + useYn + ", userId=" + userId + ", transactionType=" + transactionType + "]";
     }
 }

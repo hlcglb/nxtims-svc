@@ -7,7 +7,9 @@
                    C.RESOURCE_ID AS resourceId,
                    C.RESOURCE_NM AS resourceNm,
                    C.RESOURCE_TYPE AS resourceType,
-                   C.RESOURCE_URL AS resourceUrl
+                   C.RESOURCE_URL AS resourceUrl,
+                   C.LINK_RESOURCE_SEQ AS linkResourceSeq,
+                   C.HTTP_METHOD AS httpMethod
               FROM AUTHORITIES A,
                    AUTH_RESOURCE B,
                    RESOURCES C
@@ -15,7 +17,7 @@
                AND B.RESOURCE_ID = C.RESOURCE_ID
                AND C.RESOURCE_TYPE IN ('01','02')
                AND C.RESOURCE_URL IS NOT NULL
-             ORDER BY B.AUTH_ID, C.RESOURCE_URL DESC      
+             ORDER BY B.AUTH_ID, C.RESOURCE_URL DESC
         ]]>
     </select>
     
