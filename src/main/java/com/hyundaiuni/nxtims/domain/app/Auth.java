@@ -1,6 +1,7 @@
 package com.hyundaiuni.nxtims.domain.app;
 
 import java.io.Serializable;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -14,6 +15,12 @@ public class Auth implements Serializable {
     
     @JsonProperty(value = "AUTH_NM")
     private String authNm;
+    
+    @JsonProperty(value = "USER_ID")
+    private String userId;
+    
+    @JsonProperty(value = "AUTH_RESOURCE_LIST")
+    private List<AuthResource> authResourceList;       
 
     public String getAuthId() {
         return authId;
@@ -31,8 +38,25 @@ public class Auth implements Serializable {
         this.authNm = authNm;
     }
 
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public List<AuthResource> getAuthResourceList() {
+        return authResourceList;
+    }
+
+    public void setAuthResourceList(List<AuthResource> authResourceList) {
+        this.authResourceList = authResourceList;
+    }
+
     @Override
     public String toString() {
-        return "Auth [authId=" + authId + ", authNm=" + authNm + "]";
+        return "Auth [authId=" + authId + ", authNm=" + authNm + ", userId=" + userId + ", authResourceList="
+               + authResourceList + "]";
     }
 }

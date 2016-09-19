@@ -83,7 +83,7 @@ public class ResourceControllerTest {
 
         try {
             Map<String, Object> parameter = new HashMap<>();
-            parameter.put("resourceNm", "SAMPLE");
+            parameter.put("resourceNm", "컨테이너운송");
 
             String query = WebUtils.mapToRequestParam(parameter, ',', '=', "UTF-8");
 
@@ -146,7 +146,6 @@ public class ResourceControllerTest {
             String resourceId = retrieveResource.getResourceId();
 
             resource.setResourceNm("TEST1");
-            ;
 
             mvc.perform(put(URL + "/{resourceId}", resourceId).contentType(MediaType.APPLICATION_JSON_UTF8).content(
                 jsonStringFromObject(retrieveResource))).andDo(print()).andExpect(status().isOk());
@@ -170,10 +169,10 @@ public class ResourceControllerTest {
 
             Resource updateResource = new Resource();
 
-            updateResource.setResourceId("000007");
-            updateResource.setResourceNm("SAMPLE");
-            updateResource.setResourceType("02");
-            updateResource.setResourceUrl("/sample/***");
+            updateResource.setResourceId("000000");
+            updateResource.setResourceNm("컨테이너운송");
+            updateResource.setResourceType("01");
+            updateResource.setResourceUrl("");
             updateResource.setUseYn("Y");
             updateResource.setTransactionType("U");
 

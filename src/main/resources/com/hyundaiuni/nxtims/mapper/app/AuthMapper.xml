@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hyundaiuni.nxtims.mapper.app.AuthMapper">
+    <select id="getAuthListByParam" parameterType="hashmap" resultType="com.hyundaiuni.nxtims.domain.app.Auth">
+        <![CDATA[
+            SELECT A.AUTH_ID AS authId,
+                   A.AUTH_NM AS authNm
+              FROM ( SELECT ROWNUM AS RNUM,
+                            A.*
+                       FROM ( SELECT AUTH_ID,
+                                     AUTH_NM
+                                FROM AUTHORITIES
+                               WHERE 1 = 1
+        ]]>                       
+        <if test="authId != null">   
+                                 AND AUTH_ID = #{authId}
+        </if>
+        <if test="authNm != null">   
+                                 AND AUTH_NM = #{authNm}
+        </if>
+        <![CDATA[                           
+                            ) A
+                      WHERE ROWNUM <= #{offset} + #{limit} ) A
+             WHERE RNUM > #{offset}
+        ]]>
+    </select>
+    
+    <select id="getAuthByAuthId" parameterType="string" resultType="com.hyundaiuni.nxtims.domain.app.Auth">
+        <![CDATA[
+            SELECT AUTH_ID AS authId,
+                   AUTH_NM AS authNm
+              FROM AUTHORITIES
+             WHERE AUTH_ID = #{authId}
+        ]]>
+    </select>
+    
+    <insert id="insertAuth" parameterType="com.hyundaiuni.nxtims.domain.app.Auth">
+        <![CDATA[
+            INSERT INTO AUTHORITIES
+            (
+             AUTH_ID,
+             AUTH_NM,
+             REG_DATE,
+             REG_USER_ID            
+            )
+            VALUES
+            (
+             #{authId},
+             #{authNm},
+             SYSDATE,
+             #{userId}
+            )
+        ]]>
+    </insert>
+    
+    <update id="updateAuth" parameterType="com.hyundaiuni.nxtims.domain.app.Auth">
+        <![CDATA[
+            UPDATE AUTHORITIES
+               SET AUTH_NM = #{authNm},
+                   UPD_DATE = SYSDATE,
+                   UPD_USER_ID = #{userId}
+             WHERE AUTH_ID = #{authId}
+        ]]>
+    </update>
+    
+    <delete id="deleteAuthByAuthId" parameterType="string">
+        <![CDATA[
+            DELETE AUTHORITIES
+             WHERE AUTH_ID = #{authId}
+        ]]>
+    </delete>
+    
+    <select id="getUserRowCountByAuthId" parameterType="string" resultType="int">
+        <![CDATA[
+            SELECT COUNT(1)
+              FROM USER_AUTH
+             WHERE AUTH_ID = #{authId}
+        ]]>        
+    </select>
+    
+    <select id="getAuthResourceByPk" parameterType="com.hyundaiuni.nxtims.domain.app.AuthResource" resultType="com.hyundaiuni.nxtims.domain.app.AuthResource">
+        <![CDATA[
+            SELECT AUTH_ID AS authId,
+                   RESOURCE_ID AS resourceId
+              FROM AUTH_RESOURCE
+             WHERE AUTH_ID = #{authId}
+               AND RESOURCE_ID = #{resourceId}
+        ]]>
+    </select>     
+
+    <insert id="insertAuthResource" parameterType="com.hyundaiuni.nxtims.domain.app.AuthResource">
+        <![CDATA[
+            INSERT INTO AUTH_RESOURCE
+            (
+             AUTH_ID,
+             RESOURCE_ID,
+             REG_DATE,
+             REG_USER_ID
+            )
+            VALUES
+            (
+             #{authId},
+             #{resourceId},
+             SYSDATE,
+             #{userId}
+            )
+        ]]>
+    </insert>
+
+    <delete id="deleteAuthResourceByPk" parameterType="com.hyundaiuni.nxtims.domain.app.AuthResource">
+        <![CDATA[
+            DELETE AUTH_RESOURCE
+             WHERE AUTH_ID = #{authId}
+               AND RESOURCE_ID = #{resourceId}
+        ]]>
+    </delete>
+
+    <select id="getAuthResourceListByAuthId" parameterType="string" resultType="com.hyundaiuni.nxtims.domain.app.AuthResource">
+        <![CDATA[
+            SELECT A.AUTH_ID AS authId,
+                   A.RESOURCE_ID AS resourceId,
+                   B.RESOURCE_NM AS resourceNm
+              FROM AUTH_RESOURCE A,
+                   RESOURCES B
+             WHERE A.AUTH_ID = #{authId}
+               AND A.RESOURCE_ID = B.RESOURCE_ID
+        ]]>
+    </select>
+    
+    <select id="getNotExistsAuthResourceListByAuthId" parameterType="string" resultType="com.hyundaiuni.nxtims.domain.app.Resource">
+        <![CDATA[
+            SELECT A.RESOURCE_ID AS resourceId,
+                   A.RESOURCE_NM AS resourceNm
+              FROM RESOURCES A
+             WHERE NOT EXISTS (SELECT 1 
+                                 FROM AUTH_RESOURCE B 
+                                WHERE A.RESOURCE_ID = B.RESOURCE_ID
+                                  AND AUTH_ID = 'EMPLOYEE') 
+               AND A.RESOURCE_TYPE = '01'
+        ]]>
+    </select>    
+
+    <delete id="deleteAuthResourceByAuthId" parameterType="string">
+        <![CDATA[
+            DELETE AUTH_RESOURCE
+             WHERE AUTH_ID = #{authId}
+        ]]>
+    </delete>    
+</mapper>

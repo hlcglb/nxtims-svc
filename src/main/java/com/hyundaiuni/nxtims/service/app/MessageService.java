@@ -145,7 +145,7 @@ public class MessageService {
             }
         }
 
-        return messageMapper.getMessageByMsgPk(msgPk);
+        return getMessageByMsgPk(msgPk);
     }
 
     @Transactional
