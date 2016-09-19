@@ -123,7 +123,7 @@ public class AuthControllerTest {
         Exception ex = null;
 
         try {
-            mvc.perform(get(URL + "?inquiry=getNotExistsAuthResourceListByAuthId&authId=ADMIN")).andDo(
+            mvc.perform(get(URL + "?inquiry=getNotExistsAuthResourceListByAuthId&authId=ANONYMOUS")).andDo(
                 print()).andExpect(status().isOk()).andExpect(
                     content().contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(
                         jsonPath("$..RESOURCE_ID").isArray());
