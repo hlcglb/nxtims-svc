@@ -80,11 +80,17 @@
     
     <select id="getAuthResourceByPk" parameterType="com.hyundaiuni.nxtims.domain.app.AuthResource" resultType="com.hyundaiuni.nxtims.domain.app.AuthResource">
         <![CDATA[
-            SELECT AUTH_ID AS authId,
-                   RESOURCE_ID AS resourceId
-              FROM AUTH_RESOURCE
-             WHERE AUTH_ID = #{authId}
-               AND RESOURCE_ID = #{resourceId}
+            SELECT A.AUTH_ID AS authId,
+                   A.RESOURCE_ID AS resourceId,
+                   B.RESOURCE_NM AS resourceNm,
+                   B.RESOURCE_TYPE AS resourceType,
+                   B.RESOURCE_URL AS resourceUrl,
+                   B.HTTP_METHOD AS httpMethod 
+              FROM AUTH_RESOURCE A,
+                   RESOURCES B
+             WHERE A.AUTH_ID = #{authId}
+               AND A.RESOURCE_ID = #{resourceId}
+               AND A.RESOURCE_ID = B.RESOURCE_ID
         ]]>
     </select>     
 
@@ -119,7 +125,10 @@
         <![CDATA[
             SELECT A.AUTH_ID AS authId,
                    A.RESOURCE_ID AS resourceId,
-                   B.RESOURCE_NM AS resourceNm
+                   B.RESOURCE_NM AS resourceNm,
+                   B.RESOURCE_TYPE AS resourceType,
+                   B.RESOURCE_URL AS resourceUrl,
+                   B.HTTP_METHOD AS httpMethod                  
               FROM AUTH_RESOURCE A,
                    RESOURCES B
              WHERE A.AUTH_ID = #{authId}
@@ -130,13 +139,15 @@
     <select id="getNotExistsAuthResourceListByAuthId" parameterType="string" resultType="com.hyundaiuni.nxtims.domain.app.Resource">
         <![CDATA[
             SELECT A.RESOURCE_ID AS resourceId,
-                   A.RESOURCE_NM AS resourceNm
+                   A.RESOURCE_NM AS resourceNm,
+                   A.RESOURCE_TYPE AS resourceType,
+                   A.RESOURCE_URL AS resourceUrl,
+                   A.HTTP_METHOD AS httpMethod
               FROM RESOURCES A
              WHERE NOT EXISTS (SELECT 1 
                                  FROM AUTH_RESOURCE B 
                                 WHERE A.RESOURCE_ID = B.RESOURCE_ID
-                                  AND AUTH_ID = 'EMPLOYEE') 
-               AND A.RESOURCE_TYPE = '01'
+                                  AND AUTH_ID = #{authId})
         ]]>
     </select>    
 
