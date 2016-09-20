@@ -22,8 +22,8 @@ public class Message implements Serializable {
     @JsonProperty(value = "MSG_NM")
     private String msgNm;
     
-    @JsonProperty(value = "USER_ID")
-    private String userId;
+    @JsonProperty(value = "SESSION_USER_ID")
+    private String sessionUserId;
 
     @JsonProperty(value = "MSG_LOC_LIST")
     private List<MessageLocale> msgLocList;        
@@ -60,12 +60,12 @@ public class Message implements Serializable {
         this.msgNm = msgNm;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getSessionUserId() {
+        return sessionUserId;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setSessionUserId(String sessionUserId) {
+        this.sessionUserId = sessionUserId;
     }
 
     public List<MessageLocale> getMsgLocList() {
@@ -79,6 +79,6 @@ public class Message implements Serializable {
     @Override
     public String toString() {
         return "Message [msgPk=" + msgPk + ", msgGrpCd=" + msgGrpCd + ", msgCd=" + msgCd + ", msgNm=" + msgNm
-               + ", userId=" + userId + ", msgLocList=" + msgLocList + "]";
+               + ", sessionUserId=" + sessionUserId + ", msgLocList=" + msgLocList + "]";
     }
 }

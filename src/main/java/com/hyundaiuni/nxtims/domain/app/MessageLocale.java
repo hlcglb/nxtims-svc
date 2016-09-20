@@ -24,8 +24,8 @@ public class MessageLocale implements Serializable {
     @JsonProperty(value = "MSG_NM")
     private String msgNm;
     
-    @JsonProperty(value = "USER_ID")
-    private String userId;
+    @JsonProperty(value = "SESSION_USER_ID")
+    private String sessionUserId;
     
     @JsonProperty(value = "TRANSACTION_TYPE")
     private String transactionType;      
@@ -70,13 +70,13 @@ public class MessageLocale implements Serializable {
         this.msgNm = msgNm;
     }
     
-    public String getUserId() {
-        return userId;
+    public String getSessionUserId() {
+        return sessionUserId;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }    
+    public void setSessionUserId(String sessionUserId) {
+        this.sessionUserId = sessionUserId;
+    }   
 
     public String getTransactionType() {
         return transactionType;
@@ -89,6 +89,6 @@ public class MessageLocale implements Serializable {
     @Override
     public String toString() {
         return "MessageLocale [msgLocPk=" + msgLocPk + ", msgGrpCd=" + msgGrpCd + ", msgCd=" + msgCd + ", langCd="
-               + langCd + ", msgNm=" + msgNm + ", userId=" + userId + ", transactionType=" + transactionType + "]";
+               + langCd + ", msgNm=" + msgNm + ", sessionUserId=" + sessionUserId + ", transactionType=" + transactionType + "]";
     }
 }

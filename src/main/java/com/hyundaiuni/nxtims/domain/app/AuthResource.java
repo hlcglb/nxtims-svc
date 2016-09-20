@@ -33,8 +33,8 @@ public class AuthResource implements Serializable {
     @JsonProperty(value = "HTTP_METHOD")
     private String httpMethod;
     
-    @JsonProperty(value = "USER_ID")
-    private String userId;
+    @JsonProperty(value = "SESSION_USER_ID")
+    private String sessionUserId;
     
     @JsonProperty(value = "TRANSACTION_TYPE")
     private String transactionType;    
@@ -103,12 +103,12 @@ public class AuthResource implements Serializable {
         this.httpMethod = httpMethod;
     }
     
-    public String getUserId() {
-        return userId;
+    public String getSessionUserId() {
+        return sessionUserId;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setSessionUserId(String sessionUserId) {
+        this.sessionUserId = sessionUserId;
     }
 
     public String getTransactionType() {
@@ -123,7 +123,7 @@ public class AuthResource implements Serializable {
     public String toString() {
         return "AuthResource [authId=" + authId + ", authNm=" + authNm + ", resourceLevel=" + resourceLevel
                + ", resourceId=" + resourceId + ", resourceNm=" + resourceNm + ", resourceUrl=" + resourceUrl
-               + ", resourceType=" + resourceType + ", httpMethod=" + httpMethod + ", userId=" + userId
+               + ", resourceType=" + resourceType + ", httpMethod=" + httpMethod + ", sessionUserId=" + sessionUserId
                + ", transactionType=" + transactionType + "]";
     }
 }

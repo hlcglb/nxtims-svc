@@ -54,8 +54,8 @@ public class CodeDetail implements Serializable {
     @JsonProperty(value = "REF_NM4")
     private String refNm4;
 
-    @JsonProperty(value = "USER_ID")
-    private String userId;
+    @JsonProperty(value = "SESSION_USER_ID")
+    private String sessionUserId;
 
     @JsonProperty(value = "TRANSACTION_TYPE")
     private String transactionType;
@@ -180,12 +180,12 @@ public class CodeDetail implements Serializable {
         this.refNm4 = refNm4;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getSessionUserId() {
+        return sessionUserId;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setSessionUserId(String sessionUserId) {
+        this.sessionUserId = sessionUserId;
     }
 
     public String getTransactionType() {
@@ -201,7 +201,7 @@ public class CodeDetail implements Serializable {
         return "CodeDetail [codeMstCd=" + codeMstCd + ", codeDtlCd=" + codeDtlCd + ", codeDtlNm=" + codeDtlNm
                + ", msgGrpCd=" + msgGrpCd + ", msgCd=" + msgCd + ", sortSeq=" + sortSeq + ", useYn=" + useYn
                + ", refCd1=" + refCd1 + ", refNm1=" + refNm1 + ", refCd2=" + refCd2 + ", refNm2=" + refNm2 + ", refCd3="
-               + refCd3 + ", refNm3=" + refNm3 + ", refCd4=" + refCd4 + ", refNm4=" + refNm4 + ", userId=" + userId
+               + refCd3 + ", refNm3=" + refNm3 + ", refCd4=" + refCd4 + ", refNm4=" + refNm4 + ", sessionUserId=" + sessionUserId
                + ", transactionType=" + transactionType + "]";
     }
 }

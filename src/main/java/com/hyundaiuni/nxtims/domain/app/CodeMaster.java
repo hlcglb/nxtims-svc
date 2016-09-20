@@ -16,8 +16,8 @@ public class CodeMaster implements Serializable {
     @JsonProperty(value = "CODE_MST_NM")
     private String codeMstNm;
     
-    @JsonProperty(value = "USER_ID")
-    private String userId;
+    @JsonProperty(value = "SESSION_USER_ID")
+    private String sessionUserId;
     
     @JsonProperty(value = "CODE_DETAIL_LIST")
     private List<CodeDetail> codeDetaileList;
@@ -38,12 +38,12 @@ public class CodeMaster implements Serializable {
         this.codeMstNm = codeMstNm;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getSessionUserId() {
+        return sessionUserId;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setSessionUserId(String sessionUserId) {
+        this.sessionUserId = sessionUserId;
     }
 
     public List<CodeDetail> getCodeDetaileList() {
@@ -56,7 +56,7 @@ public class CodeMaster implements Serializable {
 
     @Override
     public String toString() {
-        return "CodeMaster [codeMstCd=" + codeMstCd + ", codeMstNm=" + codeMstNm + ", userId=" + userId
+        return "CodeMaster [codeMstCd=" + codeMstCd + ", codeMstNm=" + codeMstNm + ", sessionUserId=" + sessionUserId
                + ", codeDetaileList=" + codeDetaileList + "]";
     }
 }

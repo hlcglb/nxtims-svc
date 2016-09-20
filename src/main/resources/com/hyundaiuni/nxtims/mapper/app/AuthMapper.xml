@@ -48,7 +48,7 @@
              #{authId},
              #{authNm},
              SYSDATE,
-             #{userId}
+             #{sessionUserId}
             )
         ]]>
     </insert>
@@ -58,7 +58,7 @@
             UPDATE AUTHORITIES
                SET AUTH_NM = #{authNm},
                    UPD_DATE = SYSDATE,
-                   UPD_USER_ID = #{userId}
+                   UPD_USER_ID = #{sessionUserId}
              WHERE AUTH_ID = #{authId}
         ]]>
     </update>
@@ -108,7 +108,7 @@
              #{authId},
              #{resourceId},
              SYSDATE,
-             #{userId}
+             #{sessionUserId}
             )
         ]]>
     </insert>

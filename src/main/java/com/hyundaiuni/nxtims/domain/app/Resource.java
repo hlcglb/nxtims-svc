@@ -36,8 +36,8 @@ public class Resource implements Serializable {
     @JsonProperty(value = "USE_YN")
     private String useYn;
     
-    @JsonProperty(value = "USER_ID")
-    private String userId;
+    @JsonProperty(value = "SESSION_USER_ID")
+    private String sessionUserId;
     
     @JsonProperty(value = "TRANSACTION_TYPE")
     private String transactionType;
@@ -106,12 +106,12 @@ public class Resource implements Serializable {
         this.httpMethod = httpMethod;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getSessionUserId() {
+        return sessionUserId;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setSessionUserId(String sessionUserId) {
+        this.sessionUserId = sessionUserId;
     }
 
     public int getLinkResourceSeq() {
@@ -135,6 +135,6 @@ public class Resource implements Serializable {
         return "Resource [resourceLevel=" + resourceLevel + ", resourceId=" + resourceId + ", resourceNm=" + resourceNm
                + ", resourceType=" + resourceType + ", resourceUrl=" + resourceUrl + ", linkResourceId="
                + linkResourceId + ", linkResourceSeq=" + linkResourceSeq + ", httpMethod=" + httpMethod + ", useYn="
-               + useYn + ", userId=" + userId + ", transactionType=" + transactionType + "]";
+               + useYn + ", sessionUserId=" + sessionUserId + ", transactionType=" + transactionType + "]";
     }
 }

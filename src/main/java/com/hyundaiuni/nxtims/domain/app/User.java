@@ -19,6 +19,36 @@ public class User implements Serializable {
     @JsonProperty(value = "USER_PWD")
     private String userPwd;
 
+    @JsonProperty(value = "TEL_NO")
+    private String telNo;
+
+    @JsonProperty(value = "EMAIL")
+    private String email;
+
+    @JsonProperty(value = "USER_CL")
+    private String userCl;
+
+    @JsonProperty(value = "DEPT_CD")
+    private String deptCd;
+
+    @JsonProperty(value = "EMP_NO")
+    private String empNo;
+
+    @JsonProperty(value = "GRADE_CD")
+    private String gradeCd;
+
+    @JsonProperty(value = "CUST_CD")
+    private String custCd;
+
+    @JsonProperty(value = "APPROVE_GRADE")
+    private String approveGrade;
+
+    @JsonProperty(value = "APPROVE_SEQ")
+    private String approveSeq;
+
+    @JsonProperty(value = "APPROVE_TAG")
+    private String approveTag;
+
     @JsonProperty(value = "EXPIRED_YN")
     private String expiredYn;
 
@@ -37,11 +67,8 @@ public class User implements Serializable {
     @JsonProperty(value = "USE_YN")
     private String useYn;
 
-    @JsonProperty(value = "REG_USER_ID")
-    private String regUserId;
-
-    @JsonProperty(value = "UPD_USER_ID")
-    private String updUserId;
+    @JsonProperty(value = "SESSION_USER_ID")
+    private String sessionUserId;
 
     @JsonProperty(value = "AUTH_LIST")
     private List<Auth> authList;
@@ -70,12 +97,88 @@ public class User implements Serializable {
         this.userPwd = userPwd;
     }
 
-    public String getExpiredYn() {
-        return expiredYn;
+    public String getTelNo() {
+        return telNo;
     }
 
-    public boolean isNonExpired() {
-        return "Y".equals(expiredYn) ? false : true;
+    public void setTelNo(String telNo) {
+        this.telNo = telNo;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getUserCl() {
+        return userCl;
+    }
+
+    public void setUserCl(String userCl) {
+        this.userCl = userCl;
+    }
+
+    public String getDeptCd() {
+        return deptCd;
+    }
+
+    public void setDeptCd(String deptCd) {
+        this.deptCd = deptCd;
+    }
+
+    public String getEmpNo() {
+        return empNo;
+    }
+
+    public void setEmpNo(String empNo) {
+        this.empNo = empNo;
+    }
+
+    public String getGradeCd() {
+        return gradeCd;
+    }
+
+    public void setGradeCd(String gradeCd) {
+        this.gradeCd = gradeCd;
+    }
+
+    public String getCustCd() {
+        return custCd;
+    }
+
+    public void setCustCd(String custCd) {
+        this.custCd = custCd;
+    }
+
+    public String getApproveGrade() {
+        return approveGrade;
+    }
+
+    public void setApproveGrade(String approveGrade) {
+        this.approveGrade = approveGrade;
+    }
+
+    public String getApproveSeq() {
+        return approveSeq;
+    }
+
+    public void setApproveSeq(String approveSeq) {
+        this.approveSeq = approveSeq;
+    }
+
+    public String getApproveTag() {
+        return approveTag;
+    }
+
+    public void setApproveTag(String approveTag) {
+        this.approveTag = approveTag;
+    }
+
+    public String getExpiredYn() {
+        return expiredYn;
     }
 
     public void setExpiredYn(String expiredYn) {
@@ -93,10 +196,6 @@ public class User implements Serializable {
     public String getLockedYn() {
         return lockedYn;
     }
-    
-    public boolean isNonLocked() {
-        return "Y".equals(lockedYn) ? false : true;
-    }    
 
     public void setLockedYn(String lockedYn) {
         this.lockedYn = lockedYn;
@@ -105,10 +204,6 @@ public class User implements Serializable {
     public String getPwdExpiredYn() {
         return pwdExpiredYn;
     }
-    
-    public boolean isNonPwdExpired() {
-        return "Y".equals(pwdExpiredYn) ? false : true;
-    }    
 
     public void setPwdExpiredYn(String pwdExpiredYn) {
         this.pwdExpiredYn = pwdExpiredYn;
@@ -125,29 +220,17 @@ public class User implements Serializable {
     public String getUseYn() {
         return useYn;
     }
-    
-    public boolean isUse() {
-        return "Y".equals(useYn) ? true : false;
-    }     
 
     public void setUseYn(String useYn) {
         this.useYn = useYn;
     }
 
-    public String getRegUserId() {
-        return regUserId;
+    public String getSessionUserId() {
+        return sessionUserId;
     }
 
-    public void setRegUserId(String regUserId) {
-        this.regUserId = regUserId;
-    }
-
-    public String getUpdUserId() {
-        return updUserId;
-    }
-
-    public void setUpdUserId(String updUserId) {
-        this.updUserId = updUserId;
+    public void setSessionUserId(String sessionUserId) {
+        this.sessionUserId = sessionUserId;
     }
 
     public List<Auth> getAuthList() {
@@ -157,12 +240,31 @@ public class User implements Serializable {
     public void setAuthList(List<Auth> authList) {
         this.authList = authList;
     }
+    
+    public boolean isUse() {
+        return "Y".equals(useYn) ? true : false;
+    }
+    
+    public boolean isNonExpired() {
+        return "Y".equals(expiredYn) ? false : true;
+    }    
+    
+    public boolean isNonPwdExpired() {
+        return "Y".equals(pwdExpiredYn) ? false : true;
+    }
+    
+    public boolean isNonLocked() {
+        return "Y".equals(lockedYn) ? false : true;
+    }
 
     @Override
     public String toString() {
-        return "User [userId=" + userId + ", userNm=" + userNm + ", userPwd=" + userPwd + ", expiredYn=" + expiredYn
-               + ", expiredYmd=" + expiredYmd + ", lockedYn=" + lockedYn + ", pwdExpiredYn=" + pwdExpiredYn
-               + ", pwdExpiredYmd=" + pwdExpiredYmd + ", useYn=" + useYn + ", regUserId=" + regUserId + ", updUserId="
-               + updUserId + ", authList=" + authList + "]";
+        return "User [userId=" + userId + ", userNm=" + userNm + ", userPwd=" + userPwd + ", telNo=" + telNo
+               + ", email=" + email + ", userCl=" + userCl + ", deptCd=" + deptCd + ", empNo=" + empNo + ", gradeCd="
+               + gradeCd + ", custCd=" + custCd + ", approveGrade=" + approveGrade + ", approveSeq=" + approveSeq
+               + ", approveTag=" + approveTag + ", expiredYn=" + expiredYn + ", expiredYmd=" + expiredYmd
+               + ", lockedYn=" + lockedYn + ", pwdExpiredYn=" + pwdExpiredYn + ", pwdExpiredYmd=" + pwdExpiredYmd
+               + ", useYn=" + useYn + ", sessionUserId=" + sessionUserId + ", authList=" + authList
+               + "]";
     }
 }

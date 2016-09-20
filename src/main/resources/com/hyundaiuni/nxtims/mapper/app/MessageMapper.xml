@@ -98,7 +98,7 @@
              #{msgCd},
              #{msgNm},
              SYSDATE,
-             #{userId}
+             #{sessionUserId}
             )
         ]]>
     </insert>
@@ -110,7 +110,7 @@
                    MSG_CD = #{msgCd},
                    MSG_NM = #{msgNm},
                    UPD_DATE = SYSDATE,
-                   UPD_USER_ID = #{userId}
+                   UPD_USER_ID = #{sessionUserId}
              WHERE MSG_PK = #{msgPk}
         ]]>
     </update>
@@ -168,7 +168,7 @@
              #{langCd},
              #{msgNm},
              SYSDATE,
-             #{userId}
+             #{sessionUserId}
             )
         ]]>
     </insert>
@@ -181,7 +181,7 @@
                    LANG_CD = #{langCd},
                    MSG_NM = #{msgNm},
                    UPD_DATE = SYSDATE,
-                   UPD_USER_ID = #{userId}
+                   UPD_USER_ID = #{sessionUserId}
              WHERE MSG_LOC_PK = #{msgLocPk}
         ]]>
     </update>

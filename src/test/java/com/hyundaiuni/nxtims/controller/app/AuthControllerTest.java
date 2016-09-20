@@ -145,7 +145,7 @@ public class AuthControllerTest {
 
             auth.setAuthId("TEST");
             auth.setAuthNm("TEST");
-            auth.setUserId("200065");
+            auth.setSessionUserId("200065");
 
             AuthResource authResource1 = new AuthResource();
 

@@ -16,11 +16,11 @@ public class Auth implements Serializable {
     @JsonProperty(value = "AUTH_NM")
     private String authNm;
     
-    @JsonProperty(value = "USER_ID")
-    private String userId;
+    @JsonProperty(value = "SESSION_USER_ID")
+    private String sessionUserId;
     
     @JsonProperty(value = "AUTH_RESOURCE_LIST")
-    private List<AuthResource> authResourceList;       
+    private List<AuthResource> authResourceList;
 
     public String getAuthId() {
         return authId;
@@ -38,12 +38,12 @@ public class Auth implements Serializable {
         this.authNm = authNm;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getSessionUserId() {
+        return sessionUserId;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setSessionUserId(String sessionUserId) {
+        this.sessionUserId = sessionUserId;
     }
 
     public List<AuthResource> getAuthResourceList() {
@@ -56,7 +56,7 @@ public class Auth implements Serializable {
 
     @Override
     public String toString() {
-        return "Auth [authId=" + authId + ", authNm=" + authNm + ", userId=" + userId + ", authResourceList="
-               + authResourceList + "]";
-    }
+        return "Auth [authId=" + authId + ", authNm=" + authNm + ", sessionUserId=" + sessionUserId
+               + ", authResourceList=" + authResourceList + "]";
+    }       
 }

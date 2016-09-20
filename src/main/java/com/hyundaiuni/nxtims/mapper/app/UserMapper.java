@@ -8,7 +8,15 @@ import com.hyundaiuni.nxtims.domain.app.Resource;
 import com.hyundaiuni.nxtims.domain.app.User;
 
 public interface UserMapper {
+    public List<User> getUserListByParam(Map<String, Object> parameter);
+    
     public User getUserById(String userId);
+    
+    public void insertUser(User user);
+    
+    public void updateUser(User user);
+    
+    public void deleteUserByUserId(String userId);
 
     public List<Auth> getAuthByUserId(String userId);
 

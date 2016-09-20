@@ -1,11 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hyundaiuni.nxtims.mapper.app.UserMapper">
+    <select id="getUserListByParam" parameterType="hashmap" resultType="com.hyundaiuni.nxtims.domain.app.User">
+        <![CDATA[
+            SELECT A.USER_ID AS userId,
+                   A.USER_NM AS userNm,
+                   A.USER_PWD AS userPwd,
+                   A.TEL_NO AS telNo,
+                   A.EMAIL AS email,
+                   A.USER_CL AS userCl,
+                   A.DEPT_CD AS deptCd,
+                   A.EMP_NO AS empNo,
+                   A.GRADE_CD AS gradeCd,
+                   A.CUST_CD AS custCd,
+                   A.APPROVE_GRADE AS approveGrade,
+                   A.APPROVE_SEQ AS approveSeq,
+                   A.APPROVE_TAG AS approveTag,                   
+                   A.EXPIRED_YN AS expiredYn,
+                   A.LOCKED_YN AS lockedYn,
+                   A.PWD_EXPIRED_YN AS pwdExpiredYn,
+                   A.USE_YN AS useYn
+              FROM ( SELECT ROWNUM AS RNUM,
+                            A.*
+                       FROM ( SELECT USER_ID,
+                                     USER_NM,
+                                     USER_PWD,
+                                     TEL_NO,
+                                     EMAIL,
+                                     USER_CL,
+                                     DEPT_CD,
+                                     EMP_NO,
+                                     GRADE_CD,
+                                     CUST_CD,
+                                     APPROVE_GRADE,
+                                     APPROVE_SEQ,
+                                     APPROVE_TAG,                   
+                                     DECODE(SIGN(TO_DATE(EXPIRED_YMD,'YYYYMMDD')-TRUNC(SYSDATE)),-1,'Y','N') AS EXPIRED_YN,
+                                     NVL(LOCKED_YN,'N') AS LOCKED_YN,
+                                     DECODE(SIGN(TO_DATE(PWD_EXPIRED_YMD,'YYYYMMDD')-TRUNC(SYSDATE)),-1,'Y','N') AS PWD_EXPIRED_YN,
+                                     USE_YN
+                                FROM USERS
+                               WHERE 1 = 1
+        ]]>                       
+        <if test="userId != null">   
+                                 AND USER_ID LIKE '%'||#{userId}||'%'
+        </if>
+        <if test="userNm != null">   
+                                 AND USER_NM LIKE '%'||#{userNm}||'%'
+        </if>
+        <if test="userCl != null">   
+                                 AND USER_CL = #{userCl}
+        </if>
+        <if test="useYn != null">   
+                                 AND USE_YN = #{useYn}
+        </if>         
+        <![CDATA[                           
+                            ) A
+                      WHERE ROWNUM <= #{offset} + #{limit} ) A
+             WHERE RNUM > #{offset}
+        ]]>    
+    </select>    
+
     <select id="getUserById" parameterType="string" resultType="com.hyundaiuni.nxtims.domain.app.User">
         <![CDATA[
             SELECT USER_ID AS userId,
                    USER_NM AS userNm,
                    USER_PWD AS userPwd,
+                   TEL_NO AS telNo,
+                   EMAIL AS email,
+                   USER_CL AS userCl,
+                   DEPT_CD AS deptCd,
+                   EMP_NO AS empNo,
+                   GRADE_CD AS gradeCd,
+                   CUST_CD AS custCd,
+                   APPROVE_GRADE AS approveGrade,
+                   APPROVE_SEQ AS approveSeq,
+                   APPROVE_TAG AS approveTag,                   
                    DECODE(SIGN(TO_DATE(EXPIRED_YMD,'YYYYMMDD')-TRUNC(SYSDATE)),-1,'Y','N') AS expiredYn,
                    NVL(LOCKED_YN,'N') AS lockedYn,
                    DECODE(SIGN(TO_DATE(PWD_EXPIRED_YMD,'YYYYMMDD')-TRUNC(SYSDATE)),-1,'Y','N') AS pwdExpiredYn,
@@ -14,6 +84,87 @@
              WHERE USER_ID = #{userId}
         ]]>
     </select>
+    
+    <insert id="insertUser" parameterType="com.hyundaiuni.nxtims.domain.app.User">
+        <![CDATA[
+            INSERT INTO USERS
+            (
+             USER_ID,
+             USER_NM,
+             USER_PWD,
+             TEL_NO,
+             EMAIL,
+             USER_CL,
+             DEPT_CD,
+             EMP_NO,
+             GRADE_CD,
+             CUST_CD,
+             APPROVE_GRADE,
+             APPROVE_SEQ,
+             APPROVE_TAG,
+             EXPIRED_YMD,
+             LOCKED_YN,
+             PWD_EXPIRED_YMD,
+             USE_YN,
+             REG_DATE,
+             REG_USER_ID           
+            )
+            VALUES
+            (
+             #{userId},
+             #{userNm},
+             #{userPwd},
+             #{telNo},
+             #{email},
+             #{userCl},
+             #{deptCd},
+             #{empNo},
+             #{gradeCd},
+             #{custCd},
+             #{approveGrade},
+             #{approveSeq},
+             #{approveTag},
+             #{expiredYmd},
+             #{lockedYn},
+             #{pwdExpiredYmd},
+             #{useYn},
+             SYSDATE,
+             #{sessionUserId}
+            )
+        ]]>
+    </insert>
+    
+    <update id="updateUser" parameterType="com.hyundaiuni.nxtims.domain.app.User">
+        <![CDATA[
+            UPDATE USERS
+               SET USER_NM = #{user_nm},
+                   USER_PWD = #{user_pwd},
+                   TEL_NO = #{telNo},
+                   EMAIL = #{email},
+                   USER_CL = #{userCl},
+                   DEPT_CD = #{deptCd},
+                   EMP_NO = #{empNo},
+                   GRADE_CD = #{gradeCd},
+                   CUST_CD = #{custCd},
+                   APPROVE_GRADE = #{approveGrade},
+                   APPROVE_SEQ = #{approveSeq},
+                   APPROVE_TAG = #{approveTag},
+                   EXPIRED_YMD = #{expiredYmd},
+                   LOCKED_YN = #{lockedYn},
+                   PWD_EXPIRED_YMD = #{pwdExpiredYmd},
+                   USE_YN = #{useYn},
+                   UPD_DATE = SYSDATE,
+                   UPD_USER_ID = #{sessionUserId}
+             WHERE USER_ID = #{userId}
+        ]]>
+    </update>    
+    
+    <delete id="deleteUserByUserId" parameterType="string">
+        <![CDATA[
+            DELETE USERS
+             WHERE USER_ID = #{userId}
+        ]]>
+    </delete>    
     
     <select id="getAuthByUserId" parameterType="string" resultType="com.hyundaiuni.nxtims.domain.app.Auth">
         <![CDATA[
