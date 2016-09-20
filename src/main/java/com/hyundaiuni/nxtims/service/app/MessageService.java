@@ -63,7 +63,7 @@ public class MessageService {
     }
 
     @Transactional(readOnly = true)
-    public Message getMessageByMsgPk(String msgPk) {
+    public Message getMessage(String msgPk) {
         Assert.notNull(msgPk, "msgPk must not be null");
 
         Message message = messageMapper.getMessageByMsgPk(msgPk);
@@ -145,7 +145,7 @@ public class MessageService {
             }
         }
 
-        return getMessageByMsgPk(msgPk);
+        return getMessage(msgPk);
     }
 
     @Transactional
@@ -256,7 +256,7 @@ public class MessageService {
     }
 
     @Transactional
-    public void deleteMessageByMsgPk(String msgPk) {
+    public void deleteMessage(String msgPk) {
         Assert.notNull(msgPk, "msgPk must not be null");
 
         Message message = messageMapper.getMessageByMsgPk(msgPk);

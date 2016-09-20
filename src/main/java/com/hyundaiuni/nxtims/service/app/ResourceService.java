@@ -37,7 +37,7 @@ public class ResourceService {
     }
 
     @Transactional(readOnly = true)
-    public Resource getResourceById(String resourceId) {
+    public Resource getResource(String resourceId) {
         Assert.notNull(resourceId, "resourceId must not be null");
 
         return resourceMapper.getResourceById(resourceId);
@@ -84,7 +84,7 @@ public class ResourceService {
 
         resourceMapper.insertResource(resource);
 
-        return getResourceById(resourceId);
+        return getResource(resourceId);
     }
 
     public void updateResource(String resourceId, Resource resource) {
@@ -136,7 +136,7 @@ public class ResourceService {
         resourceMapper.updateResource(resource);
     }
 
-    public void deleteResourceById(String resourceId) {
+    public void deleteResource(String resourceId) {
         Resource resource = resourceMapper.getResourceById(resourceId);
 
         if(resource == null) {
@@ -156,7 +156,7 @@ public class ResourceService {
                     updateResource(resource.getResourceId(), resource);
                 }
                 else if("D".equals(resource.getTransactionType())) {
-                    deleteResourceById(resource.getResourceId());
+                    deleteResource(resource.getResourceId());
                 }
                 else {
                     throw new ServiceException("MSG.TRANSACTION_TYPE_NOT_SUPPORTED",

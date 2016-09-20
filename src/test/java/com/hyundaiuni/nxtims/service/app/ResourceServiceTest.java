@@ -62,7 +62,7 @@ public class ResourceServiceTest {
         Exception ex = null;
 
         try {
-            resourceService.getResourceById("000000");
+            resourceService.getResource("000000");
         }
         catch(Exception e) {
             log.error(e.getMessage());
@@ -98,7 +98,7 @@ public class ResourceServiceTest {
 
             resource = resourceService.insertResource(resource);
 
-            resourceService.deleteResourceById(resource.getResourceId());
+            resourceService.deleteResource(resource.getResourceId());
         }
         catch(Exception e) {
             log.error(e.getMessage());
@@ -126,7 +126,7 @@ public class ResourceServiceTest {
 
             resourceService.updateResource(resource.getResourceId(), resource);
 
-            resourceService.deleteResourceById(resource.getResourceId());
+            resourceService.deleteResource(resource.getResourceId());
         }
         catch(Exception e) {
             log.error(e.getMessage());

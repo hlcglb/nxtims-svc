@@ -40,7 +40,7 @@ public class CodeService {
     }
 
     @Transactional(readOnly = true)
-    public CodeMaster getCodeByCodeMstCd(String codeMstCd) {
+    public CodeMaster getCode(String codeMstCd) {
         Assert.notNull(codeMstCd, "codeMstCd must not be null");
 
         CodeMaster codeMaster = codeMapper.getCodeMasterByCodeMstCd(codeMstCd);
@@ -108,7 +108,7 @@ public class CodeService {
             }
         }
 
-        return getCodeByCodeMstCd(codeMaster.getCodeMstCd());
+        return getCode(codeMaster.getCodeMstCd());
     }
 
     @Transactional
@@ -193,7 +193,7 @@ public class CodeService {
     }
 
     @Transactional
-    public void deleteCodeByCodeMst(String codeMstCd) {
+    public void deleteCode(String codeMstCd) {
         Assert.notNull(codeMstCd, "codeMstCd must not be null");
 
         CodeMaster codeMaster = codeMapper.getCodeMasterByCodeMstCd(codeMstCd);

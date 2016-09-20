@@ -64,10 +64,10 @@ public class MessageController {
     }
 
     @RequestMapping(value = "/{msgPk}", method = RequestMethod.GET)
-    public ResponseEntity<?> getMessageByMsgPk(@PathVariable("msgPk") String msgPk) {
+    public ResponseEntity<?> getMessage(@PathVariable("msgPk") String msgPk) {
         Assert.notNull(msgPk, "msgPk must not be null");
 
-        return new ResponseEntity<>(messageService.getMessageByMsgPk(msgPk), HttpStatus.OK);
+        return new ResponseEntity<>(messageService.getMessage(msgPk), HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.POST)
@@ -83,8 +83,8 @@ public class MessageController {
     }
 
     @RequestMapping(value = "/{msgPk}", method = RequestMethod.DELETE)
-    public ResponseEntity<?> deleteMessageByMsgPk(@PathVariable("msgPk") String msgPk) {
-        messageService.deleteMessageByMsgPk(msgPk);
+    public ResponseEntity<?> deleteMessage(@PathVariable("msgPk") String msgPk) {
+        messageService.deleteMessage(msgPk);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

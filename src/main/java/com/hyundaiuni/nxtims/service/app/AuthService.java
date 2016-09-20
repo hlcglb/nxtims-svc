@@ -39,9 +39,16 @@ public class AuthService {
 
         return authMapper.getAuthResourceListByAuthId(authId);
     }
+    
+    @Transactional(readOnly = true)
+    public List<Resource> getNotExistsAuthResourceListByAuthId(String authId) {
+        Assert.notNull(authId, "authId must not be null");
+
+        return authMapper.getNotExistsAuthResourceListByAuthId(authId);
+    }    
 
     @Transactional(readOnly = true)
-    public Auth getAuthByAuthId(String authId) {
+    public Auth getAuth(String authId) {
         Assert.notNull(authId, "authId must not be null");
 
         Auth auth = authMapper.getAuthByAuthId(authId);
@@ -55,13 +62,6 @@ public class AuthService {
         auth.setAuthResourceList(authResourceList);
 
         return auth;
-    }
-
-    @Transactional(readOnly = true)
-    public List<Resource> getNotExistsAuthResourceListByAuthId(String authId) {
-        Assert.notNull(authId, "authId must not be null");
-
-        return authMapper.getNotExistsAuthResourceListByAuthId(authId);
     }
 
     @Transactional
@@ -110,7 +110,7 @@ public class AuthService {
             }
         }
 
-        return getAuthByAuthId(auth.getAuthId());
+        return getAuth(auth.getAuthId());
     }
 
     @Transactional
@@ -180,7 +180,7 @@ public class AuthService {
     }
 
     @Transactional
-    public void deleteAuthByAuthId(String authId) {
+    public void deleteAuth(String authId) {
         Assert.notNull(authId, "authId must not be null");
 
         Auth auth = authMapper.getAuthByAuthId(authId);

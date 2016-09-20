@@ -48,19 +48,19 @@ public class AuthController {
 
         return new ResponseEntity<>(authService.getAuthResourceListByAuthId(authId), HttpStatus.OK);
     }
-
-    @RequestMapping(value = "/{authId}", method = RequestMethod.GET)
-    public ResponseEntity<?> getAuthByAuthId(@PathVariable("authId") String authId) {
-        Assert.notNull(authId, "authId must not be null");
-
-        return new ResponseEntity<>(authService.getAuthByAuthId(authId), HttpStatus.OK);
-    }
-
+    
     @RequestMapping(params = "inquiry=getNotExistsAuthResourceListByAuthId", method = RequestMethod.GET)
     public ResponseEntity<?> getNotExistsAuthResourceListByAuthId(@RequestParam("authId") String authId) {
         Assert.notNull(authId, "authId must not be null");
 
         return new ResponseEntity<>(authService.getNotExistsAuthResourceListByAuthId(authId), HttpStatus.OK);
+    }    
+
+    @RequestMapping(value = "/{authId}", method = RequestMethod.GET)
+    public ResponseEntity<?> getAuth(@PathVariable("authId") String authId) {
+        Assert.notNull(authId, "authId must not be null");
+
+        return new ResponseEntity<>(authService.getAuth(authId), HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.POST)
@@ -76,8 +76,8 @@ public class AuthController {
     }
 
     @RequestMapping(value = "/{authId}", method = RequestMethod.DELETE)
-    public ResponseEntity<?> deleteAuthByAuthId(@PathVariable("authId") String authId) {
-        authService.deleteAuthByAuthId(authId);
+    public ResponseEntity<?> deleteAuth(@PathVariable("authId") String authId) {
+        authService.deleteAuth(authId);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

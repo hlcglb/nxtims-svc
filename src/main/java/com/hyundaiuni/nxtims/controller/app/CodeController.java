@@ -50,19 +50,19 @@ public class CodeController {
     }
 
     @RequestMapping(value = "/{codeMstCd}", method = RequestMethod.GET)
-    public ResponseEntity<?> getCodeMasterByCodeMstCd(@PathVariable("codeMstCd") String codeMstCd) {
+    public ResponseEntity<?> getCode(@PathVariable("codeMstCd") String codeMstCd) {
         Assert.notNull(codeMstCd, "codeMstCd must not be null");
 
-        return new ResponseEntity<>(codeService.getCodeByCodeMstCd(codeMstCd), HttpStatus.OK);
+        return new ResponseEntity<>(codeService.getCode(codeMstCd), HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<?> insertCodeMaster(@RequestBody CodeMaster codeMaster) {
+    public ResponseEntity<?> insertCode(@RequestBody CodeMaster codeMaster) {
         return new ResponseEntity<>(codeService.insertCode(codeMaster), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{codeMstCd}", method = RequestMethod.PUT)
-    public ResponseEntity<?> updateCodeMaster(@PathVariable("codeMstCd") String codeMstCd,
+    public ResponseEntity<?> updateCode(@PathVariable("codeMstCd") String codeMstCd,
         @RequestBody CodeMaster codeMaster) {
         codeService.updateCode(codeMstCd, codeMaster);
 
@@ -70,8 +70,8 @@ public class CodeController {
     }
 
     @RequestMapping(value = "/{codeMstCd}", method = RequestMethod.DELETE)
-    public ResponseEntity<?> deleteCodeByCodeMst(@PathVariable("codeMstCd") String codeMstCd) {
-        codeService.deleteCodeByCodeMst(codeMstCd);
+    public ResponseEntity<?> deleteCode(@PathVariable("codeMstCd") String codeMstCd) {
+        codeService.deleteCode(codeMstCd);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

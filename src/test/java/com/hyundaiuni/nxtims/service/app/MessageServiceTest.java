@@ -102,7 +102,7 @@ public class MessageServiceTest {
         Exception ex = null;
 
         try {
-            messageService.getMessageByMsgPk("0000000013");
+            messageService.getMessage("0000000013");
         }
         catch(Exception e) {
             log.error(e.getMessage());
@@ -146,7 +146,7 @@ public class MessageServiceTest {
 
             Message retrieveMessage = messageService.insertMessage(message);
 
-            messageService.deleteMessageByMsgPk(retrieveMessage.getMsgPk());
+            messageService.deleteMessage(retrieveMessage.getMsgPk());
         }
         catch(Exception e) {
             log.error(e.getMessage());
@@ -253,7 +253,7 @@ public class MessageServiceTest {
             }
 
             messageService.updateMessage(retrieveMessage.getMsgPk(), retrieveMessage);
-            messageService.deleteMessageByMsgPk(retrieveMessage.getMsgPk());
+            messageService.deleteMessage(retrieveMessage.getMsgPk());
         }
         catch(Exception e) {
             log.error(e.getMessage());
