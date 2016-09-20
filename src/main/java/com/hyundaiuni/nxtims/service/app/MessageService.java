@@ -256,7 +256,7 @@ public class MessageService {
     }
 
     @Transactional
-    public void deleteMessage(String msgPk) {
+    public void deleteMessageByMsgPk(String msgPk) {
         Assert.notNull(msgPk, "msgPk must not be null");
 
         Message message = messageMapper.getMessageByMsgPk(msgPk);

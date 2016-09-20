@@ -76,7 +76,7 @@ public class AuthController {
     }
 
     @RequestMapping(value = "/{authId}", method = RequestMethod.DELETE)
-    public ResponseEntity<?> deleteAuth(@PathVariable("authId") String authId) {
+    public ResponseEntity<?> deleteAuthByAuthId(@PathVariable("authId") String authId) {
         authService.deleteAuthByAuthId(authId);
 
         return new ResponseEntity<>(HttpStatus.OK);

@@ -146,7 +146,7 @@ public class MessageServiceTest {
 
             Message retrieveMessage = messageService.insertMessage(message);
 
-            messageService.deleteMessage(retrieveMessage.getMsgPk());
+            messageService.deleteMessageByMsgPk(retrieveMessage.getMsgPk());
         }
         catch(Exception e) {
             log.error(e.getMessage());
@@ -253,7 +253,7 @@ public class MessageServiceTest {
             }
 
             messageService.updateMessage(retrieveMessage.getMsgPk(), retrieveMessage);
-            messageService.deleteMessage(retrieveMessage.getMsgPk());
+            messageService.deleteMessageByMsgPk(retrieveMessage.getMsgPk());
         }
         catch(Exception e) {
             log.error(e.getMessage());

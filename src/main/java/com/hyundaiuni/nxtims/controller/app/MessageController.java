@@ -83,8 +83,8 @@ public class MessageController {
     }
 
     @RequestMapping(value = "/{msgPk}", method = RequestMethod.DELETE)
-    public ResponseEntity<?> deleteMessage(@PathVariable("msgPk") String msgPk) {
-        messageService.deleteMessage(msgPk);
+    public ResponseEntity<?> deleteMessageByMsgPk(@PathVariable("msgPk") String msgPk) {
+        messageService.deleteMessageByMsgPk(msgPk);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

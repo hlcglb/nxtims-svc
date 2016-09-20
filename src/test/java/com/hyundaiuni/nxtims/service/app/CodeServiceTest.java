@@ -66,7 +66,7 @@ public class CodeServiceTest {
         Exception ex = null;
 
         try {
-            codeService.getCodeMasterByCodeMstCd("RESOURCE_TYPE");
+            codeService.getCodeByCodeMstCd("RESOURCE_TYPE");
         }
         catch(Exception e) {
             log.error(e.getMessage());
@@ -76,7 +76,7 @@ public class CodeServiceTest {
         assertEquals(null, ex);
 
         try {
-            codeService.getCodeMasterByCodeMstCd("XXXXXX");
+            codeService.getCodeByCodeMstCd("XXXXXX");
         }
         catch(Exception e) {
             log.error(e.getMessage());
@@ -109,9 +109,9 @@ public class CodeServiceTest {
 
             codeMaster.setCodeDetaileList(codeDetaileList);
 
-            CodeMaster tempCodeMaster = codeService.insertCodeMaster(codeMaster);
+            CodeMaster tempCodeMaster = codeService.insertCode(codeMaster);
 
-            codeService.deleteCodeMaster(tempCodeMaster.getCodeMstCd());
+            codeService.deleteCodeByCodeMst(tempCodeMaster.getCodeMstCd());
         }
         catch(Exception e) {
             log.error(e.getMessage());
@@ -146,7 +146,7 @@ public class CodeServiceTest {
 
             codeMaster.setCodeDetaileList(codeDetaileList);
 
-            CodeMaster tempCodeMaster = codeService.insertCodeMaster(codeMaster);
+            CodeMaster tempCodeMaster = codeService.insertCode(codeMaster);
 
             codeDetaileList = tempCodeMaster.getCodeDetaileList();
 
@@ -156,8 +156,8 @@ public class CodeServiceTest {
                 }
             }
 
-            codeService.updateCodeMaster(tempCodeMaster.getCodeMstCd(), tempCodeMaster);
-            codeService.deleteCodeMaster(tempCodeMaster.getCodeMstCd());
+            codeService.updateCode(tempCodeMaster.getCodeMstCd(), tempCodeMaster);
+            codeService.deleteCodeByCodeMst(tempCodeMaster.getCodeMstCd());
         }
         catch(Exception e) {
             log.error(e.getMessage());
