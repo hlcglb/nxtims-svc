@@ -64,7 +64,7 @@
     
     <update id="updateLoginDate" parameterType="hashmap">
         <![CDATA[
-            MERGE INTO USER_LOG
+            MERGE INTO USER_ACCESS_LOG
             USING DUAL
                ON (USER_ID = #{userId} AND SESSION_ID = #{sessionId}) 
              WHEN MATCHED THEN
@@ -115,7 +115,7 @@
     
     <update id="updateLogoutDate" parameterType="hashmap">
         <![CDATA[
-            MERGE INTO USER_LOG
+            MERGE INTO USER_ACCESS_LOG
             USING DUAL
                ON (USER_ID = #{userId} AND SESSION_ID = #{sessionId}) 
              WHEN MATCHED THEN
