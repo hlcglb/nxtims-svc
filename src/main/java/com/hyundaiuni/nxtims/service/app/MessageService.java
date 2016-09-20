@@ -217,6 +217,27 @@ public class MessageService {
                     }
                 }
 
+                parameter = new HashMap<>();
+                parameter.put("msgGrpCd", messageLocale.getMsgGrpCd());
+                parameter.put("msgCd", messageLocale.getMsgCd());
+                parameter.put("langCd", messageLocale.getLangCd());
+
+                if("C".equals(messageLocaleTransactionType)) {
+                    MessageLocale tempMessageLocale = messageMapper.getMessageLocaleByParam(parameter);
+
+                    if(tempMessageLocale != null) {
+                        throw new ServiceException("MSG.DUPLICATED", tempMessageLocale.toString() + " was duplicated.",
+                            null);
+                    }
+                }
+                else if("U".equals(messageLocaleTransactionType) || "D".equals(messageLocaleTransactionType)) {
+                    MessageLocale tempMessageLocale = messageMapper.getMessageLocaleByParam(parameter);
+
+                    if(tempMessageLocale == null) {
+                        throw new ServiceException("MSG.NO_DATA_FOUND", parameter.toString() + " not found.", null);
+                    }
+                }
+
                 if("C".equals(messageLocaleTransactionType)) {
                     messageMapper.insertMessageLocale(messageLocale);
                 }

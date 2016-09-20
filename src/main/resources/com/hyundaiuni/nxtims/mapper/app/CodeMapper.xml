@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hyundaiuni.nxtims.mapper.app.CodeMapper">
+    <select id="getCodeMasterListByParam" parameterType="hashmap" resultType="com.hyundaiuni.nxtims.domain.app.CodeMaster">
+        <![CDATA[
+            SELECT A.CODE_MST_CD AS codeMstCd,
+                   A.CODE_MST_NM AS codeMstNm
+              FROM ( SELECT ROWNUM AS RNUM,
+                            A.*
+                       FROM ( SELECT CODE_MST_CD,
+                                     CODE_MST_NM
+                                FROM CODE_MASTER
+                               WHERE 1 = 1
+        ]]>                       
+        <if test="codeMstCd != null">   
+                                 AND CODE_MST_CD = #{codeMstCd}
+        </if>
+        <if test="codeMstNm != null">   
+                                 AND CODE_MST_NM = #{codeMstNm}
+        </if>
+        <![CDATA[                           
+                            ) A
+                      WHERE ROWNUM <= #{offset} + #{limit} ) A
+             WHERE RNUM > #{offset}
+        ]]>
+    </select>
+    
+    <select id="getCodeDetailListByCodeMstCd" parameterType="string" resultType="com.hyundaiuni.nxtims.domain.app.CodeDetail">
+        <![CDATA[
+            SELECT A.CODE_MST_CD AS codeMstCd,
+                   A.CODE_DTL_CD AS codeDtlCd,
+                   A.CODE_DTL_NM AS codeDtlNm,
+                   A.MSG_GRP_CD AS msgGrpCd,
+                   A.MSG_CD AS msgCd,
+                   A.SORT_SEQ AS sortSeq,
+                   A.USE_YN AS useYn,
+                   A.REF_CD1 AS refCd1,
+                   A.REF_NM1 AS refNm1,
+                   A.REF_CD2 AS refCd2,
+                   A.REF_NM2 AS refNm2,
+                   A.REF_CD3 AS refCd3,
+                   A.REF_NM3 AS refNm3,
+                   A.REF_CD4 AS refCd4,
+                   A.REF_NM4 AS refNm4                
+              FROM CODE_DETAIL A
+             WHERE A.CODE_MST_CD = #{codeMstCd}
+        ]]>
+    </select>    
+    
+    <select id="getCodeMasterByCodeMstCd" parameterType="string" resultType="com.hyundaiuni.nxtims.domain.app.CodeMaster">
+        <![CDATA[
+            SELECT CODE_MST_CD AS codeMstCd,
+                   CODE_MST_NM AS codeMstNm
+              FROM CODE_MASTER
+             WHERE CODE_MST_CD = #{codeMstCd}
+        ]]>
+    </select>
+    
+    <insert id="insertCodeMaster" parameterType="com.hyundaiuni.nxtims.domain.app.CodeMaster">
+        <![CDATA[
+            INSERT INTO CODE_MASTER
+            (
+             CODE_MST_CD,
+             CODE_MST_NM,
+             REG_DATE,
+             REG_USER_ID            
+            )
+            VALUES
+            (
+             #{codeMstCd},
+             #{codeMstNm},
+             SYSDATE,
+             #{userId}
+            )
+        ]]>
+    </insert>
+    
+    <update id="updateCodeMaster" parameterType="com.hyundaiuni.nxtims.domain.app.CodeMaster">
+        <![CDATA[
+            UPDATE CODE_MASTER
+               SET CODE_MST_NM = #{codeMstNm},
+                   UPD_DATE = SYSDATE,
+                   UPD_USER_ID = #{userId}
+             WHERE CODE_MST_CD = #{codeMstCd}
+        ]]>
+    </update>
+    
+    <delete id="deleteCodeMasterByCodeMstCd" parameterType="string">
+        <![CDATA[
+            DELETE CODE_MASTER
+             WHERE CODE_MST_CD = #{codeMstCd}
+        ]]>
+    </delete>
+    
+    <delete id="deleteCodeDetailByCodeMstCd" parameterType="string">
+        <![CDATA[
+            DELETE CODE_DETAIL
+             WHERE CODE_MST_CD = #{codeMstCd}
+        ]]>
+    </delete>      
+    
+    <select id="getCodeDetailByPk" parameterType="hashmap" resultType="com.hyundaiuni.nxtims.domain.app.CodeDetail">
+        <![CDATA[
+            SELECT A.CODE_MST_CD AS codeMstCd,
+                   A.CODE_DTL_CD AS codeDtlCd,
+                   A.CODE_DTL_NM AS codeDtlNm,
+                   A.MSG_GRP_CD AS msgGrpCd,
+                   A.MSG_CD AS msgCd,
+                   A.SORT_SEQ AS sortSeq,
+                   A.USE_YN AS useYn,
+                   A.REF_CD1 AS refCd1,
+                   A.REF_NM1 AS refNm1,
+                   A.REF_CD2 AS refCd2,
+                   A.REF_NM2 AS refNm2,
+                   A.REF_CD3 AS refCd3,
+                   A.REF_NM3 AS refNm3,
+                   A.REF_CD4 AS refCd4,
+                   A.REF_NM4 AS refNm4                
+              FROM CODE_DETAIL A
+             WHERE A.CODE_MST_CD = #{codeMstCd}
+               AND A.CODE_DTL_CD = #{codeDtlCd}
+             ORDER BY SORT_SEQ
+        ]]>
+    </select>     
+
+    <insert id="insertCodeDetail" parameterType="com.hyundaiuni.nxtims.domain.app.CodeDetail">
+        <![CDATA[
+            INSERT INTO CODE_DETAIL
+            (
+             CODE_MST_CD,
+             CODE_DTL_CD,
+             CODE_DTL_NM,
+             MSG_GRP_CD,
+             MSG_CD,
+             SORT_SEQ,
+             USE_YN,
+             REF_CD1,
+             REF_NM1,
+             REF_CD2,
+             REF_NM2,
+             REF_CD3,
+             REF_NM3,
+             REF_CD4,
+             REF_NM4,
+             REG_DATE,
+             REG_USER_ID
+            )
+            VALUES
+            (
+             #{codeMstCd},
+             #{codeDtlCd},
+             #{codeDtlNm},
+             #{msgGrpCd},
+             #{msgCd},
+             #{sortSeq},
+             #{useYn},
+             #{refCd1},
+             #{refNm1},
+             #{refCd2},
+             #{refNm2},
+             #{refCd3},
+             #{refNm3},
+             #{refCd4},
+             #{refNm4},             
+             SYSDATE,
+             #{userId}
+            )
+        ]]>
+    </insert>
+    
+    <update id="updateCodeDetail" parameterType="com.hyundaiuni.nxtims.domain.app.CodeDetail">
+        <![CDATA[
+            UPDATE CODE_DETAIL
+               SET CODE_DTL_NM = #{codeDtlNm},
+                   MSG_GRP_CD = #{msgGrpCd},
+                   MSG_CD = #{msgCd},
+                   SORT_SEQ = #{sortSeq},
+                   USE_YN = #{useYn},
+                   REF_CD1 = #{refCd1},
+                   REF_NM1 = #{refNm1},
+                   REF_CD2 = #{refCd2},
+                   REF_NM2 = #{refNm2},
+                   REF_CD3 = #{refCd3},
+                   REF_NM3 = #{refNm3},
+                   REF_CD4 = #{refCd4},
+                   REF_NM4 = #{refNm4},
+                   UPD_DATE = SYSDATE,
+                   UPD_USER_ID = #{userId}
+             WHERE CODE_MST_CD = #{codeMstCd}
+               AND CODE_DTL_CD = #{codeDtlCd}            
+        ]]>
+    </update>
+
+    <delete id="deleteCodeDetailByPk" parameterType="hashmap">
+        <![CDATA[
+            DELETE CODE_DETAIL
+             WHERE CODE_MST_CD = #{codeMstCd}
+               AND CODE_DTL_CD = #{codeDtlCd}
+        ]]>
+    </delete>
+</mapper>

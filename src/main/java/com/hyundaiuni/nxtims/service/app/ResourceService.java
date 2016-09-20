@@ -84,10 +84,10 @@ public class ResourceService {
 
         resourceMapper.insertResource(resource);
 
-        return resourceMapper.getResourceById(resourceId);
+        return getResourceById(resourceId);
     }
 
-    public Resource updateResource(String resourceId, Resource resource) {
+    public void updateResource(String resourceId, Resource resource) {
         Resource tempResource = resourceMapper.getResourceById(resourceId);
 
         if(tempResource == null) {
@@ -134,8 +134,6 @@ public class ResourceService {
         }
 
         resourceMapper.updateResource(resource);
-
-        return resourceMapper.getResourceById(resource.getResourceId());
     }
 
     public void deleteResourceById(String resourceId) {

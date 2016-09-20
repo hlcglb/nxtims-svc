@@ -1,5 +1,6 @@
 package com.hyundaiuni.nxtims.service.app;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -87,14 +88,18 @@ public class AuthService {
 
         if(CollectionUtils.isNotEmpty(authResourceList)) {
             for(AuthResource authResource : authResourceList) {
+                authResource.setAuthId(auth.getAuthId());
+
                 if(StringUtils.isEmpty(authResource.getResourceId())) {
                     throw new ServiceException("MSG.MUST_NOT_NULL", "RESOURCE_ID must not be null.",
                         new String[] {"RESOURCE_ID"});
                 }
 
-                authResource.setAuthId(auth.getAuthId());
+                Map<String, Object> parameter = new HashMap<>();
+                parameter.put("authId", authResource.getAuthId());
+                parameter.put("resourceId", authResource.getResourceId());
 
-                AuthResource tempAuthResource = authMapper.getAuthResourceByPk(authResource);
+                AuthResource tempAuthResource = authMapper.getAuthResourceByPk(parameter);
 
                 if(tempAuthResource != null) {
                     throw new ServiceException("MSG.DUPLICATED", tempAuthResource.toString() + " was duplicated.",
@@ -138,11 +143,33 @@ public class AuthService {
                     }
                 }
 
+                authResource.setAuthId(auth.getAuthId());
+
+                Map<String, Object> parameter = new HashMap<>();
+                parameter.put("authId", authResource.getAuthId());
+                parameter.put("resourceId", authResource.getResourceId());
+
+                if("C".equals(authResourceTransactionType)) {
+                    AuthResource tempAuthResource = authMapper.getAuthResourceByPk(parameter);
+
+                    if(tempAuthResource != null) {
+                        throw new ServiceException("MSG.DUPLICATED", tempAuthResource.toString() + " was duplicated.",
+                            null);
+                    }
+                }
+                else if("D".equals(authResourceTransactionType)) {
+                    AuthResource tempAuthResource = authMapper.getAuthResourceByPk(parameter);
+
+                    if(tempAuthResource == null) {
+                        throw new ServiceException("MSG.NO_DATA_FOUND", parameter.toString() + " not found.", null);
+                    }
+                }
+
                 if("C".equals(authResourceTransactionType)) {
                     authMapper.insertAuthResource(authResource);
                 }
                 else if("D".equals(authResourceTransactionType)) {
-                    authMapper.deleteAuthResourceByPk(authResource);
+                    authMapper.deleteAuthResourceByPk(parameter);
                 }
                 else {
                     throw new ServiceException("MSG.TRANSACTION_TYPE_NOT_SUPPORTED",

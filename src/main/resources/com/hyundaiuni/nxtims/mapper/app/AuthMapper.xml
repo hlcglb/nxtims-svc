@@ -78,7 +78,7 @@
         ]]>        
     </select>
     
-    <select id="getAuthResourceByPk" parameterType="com.hyundaiuni.nxtims.domain.app.AuthResource" resultType="com.hyundaiuni.nxtims.domain.app.AuthResource">
+    <select id="getAuthResourceByPk" parameterType="hashmap" resultType="com.hyundaiuni.nxtims.domain.app.AuthResource">
         <![CDATA[
             SELECT A.AUTH_ID AS authId,
                    A.RESOURCE_ID AS resourceId,
@@ -113,7 +113,7 @@
         ]]>
     </insert>
 
-    <delete id="deleteAuthResourceByPk" parameterType="com.hyundaiuni.nxtims.domain.app.AuthResource">
+    <delete id="deleteAuthResourceByPk" parameterType="hashmap">
         <![CDATA[
             DELETE AUTH_RESOURCE
              WHERE AUTH_ID = #{authId}

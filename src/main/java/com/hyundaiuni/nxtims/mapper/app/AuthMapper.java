@@ -20,11 +20,11 @@ public interface AuthMapper {
     
     public int getUserRowCountByAuthId(String authId);
     
-    public AuthResource getAuthResourceByPk(AuthResource authResource);
+    public AuthResource getAuthResourceByPk(Map<String, Object> parameter);
     
     public void insertAuthResource(AuthResource authResource);
     
-    public void deleteAuthResourceByPk(AuthResource authResource);
+    public void deleteAuthResourceByPk(Map<String, Object> parameter);
     
     public List<AuthResource> getAuthResourceListByAuthId(String authId);
     
