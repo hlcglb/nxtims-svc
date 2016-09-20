@@ -1,6 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hyundaiuni.nxtims.mapper.app.CodeMapper">
+    <select id="getCodeDetailAll" resultType="com.hyundaiuni.nxtims.domain.app.CodeDetail">
+        <![CDATA[
+            SELECT A.CODE_MST_CD AS codeMstCd,
+                   A.CODE_DTL_CD AS codeDtlCd,
+                   A.CODE_DTL_NM AS codeDtlNm,
+                   A.MSG_GRP_CD AS msgGrpCd,
+                   A.MSG_CD AS msgCd,
+                   A.SORT_SEQ AS sortSeq,
+                   A.USE_YN AS useYn,
+                   A.REF_CD1 AS refCd1,
+                   A.REF_NM1 AS refNm1,
+                   A.REF_CD2 AS refCd2,
+                   A.REF_NM2 AS refNm2,
+                   A.REF_CD3 AS refCd3,
+                   A.REF_NM3 AS refNm3,
+                   A.REF_CD4 AS refCd4,
+                   A.REF_NM4 AS refNm4                
+              FROM CODE_DETAIL A,
+                   CODE_MASTER B
+             WHERE A.CODE_MST_CD = B.CODE_MST_CD
+        ]]>
+    </select>    
+
     <select id="getCodeMasterListByParam" parameterType="hashmap" resultType="com.hyundaiuni.nxtims.domain.app.CodeMaster">
         <![CDATA[
             SELECT A.CODE_MST_CD AS codeMstCd,

@@ -28,6 +28,21 @@ public class CodeServiceTest {
 
     @Autowired
     private CodeService codeService;
+    
+    @Test
+    public void testGetCodeDetailAll() {
+        Exception ex = null;
+
+        try {
+            codeService.getCodeDetailAll();
+        }
+        catch(Exception e) {
+            log.error(e.getMessage());
+            ex = e;
+        }
+
+        assertEquals(null, ex);
+    }    
 
     @Test
     public void testGetCodeMasterListByParam() {

@@ -24,6 +24,11 @@ import com.hyundaiuni.nxtims.util.WebUtils;
 public class CodeController {
     @Autowired
     private CodeService codeService;
+    
+    @RequestMapping(params = "inquiry=getCodeDetailAll", method = RequestMethod.GET)
+    public ResponseEntity<?> getCodeDetailAll() {
+        return new ResponseEntity<>(codeService.getCodeDetailAll(), HttpStatus.OK);
+    }    
 
     @RequestMapping(params = "inquiry=getCodeMasterListByParam", method = RequestMethod.GET)
     public ResponseEntity<?> getCodeMasterListByParam(@RequestParam("q") String query,

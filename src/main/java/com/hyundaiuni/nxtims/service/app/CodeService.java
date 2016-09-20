@@ -20,6 +20,11 @@ import com.hyundaiuni.nxtims.mapper.app.CodeMapper;
 public class CodeService {
     @Autowired
     private CodeMapper codeMapper;
+    
+    @Transactional(readOnly = true)
+    public List<CodeDetail> getCodeDetailAll() {
+        return codeMapper.getCodeDetailAll();
+    }    
 
     @Transactional(readOnly = true)
     public List<CodeMaster> getCodeMasterListByParam(Map<String, Object> parameter, int offset, int limit) {
