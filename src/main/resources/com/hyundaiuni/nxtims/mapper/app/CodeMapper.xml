@@ -21,6 +21,7 @@
               FROM CODE_DETAIL A,
                    CODE_MASTER B
              WHERE A.CODE_MST_CD = B.CODE_MST_CD
+               AND A.USE_YN = 'Y'
         ]]>
     </select>    
 
