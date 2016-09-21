@@ -30,7 +30,7 @@ public class PasswordUtils {
 
         secureRandom = SecureRandom.getInstance("SHA1PRNG");
 
-        StringBuffer candidateAll = new StringBuffer();
+        StringBuilder candidateAll = new StringBuilder();
 
         int watermark = 0;
 
