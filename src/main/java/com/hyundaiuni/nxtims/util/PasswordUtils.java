@@ -9,8 +9,8 @@ import com.hyundaiuni.nxtims.exception.MessageDigestException;
 public class PasswordUtils {
     private PasswordUtils() {}
     
-    private static final String PASSWORD_REGEX = "^.*(?=.{10,})(?=.*[0-9])(?=.*[a-zA-Z])(?=[\\S]+$).*$";
-    private static final int PASSWORD_LENGTH = 10;
+    private static final String REGEX = "^.*(?=.{10,})(?=.*[0-9])(?=.*[a-zA-Z])(?=[\\S]+$).*$";
+    private static final int MIN_LENGTH = 10;
     private static final String[] CANDIDATES = new String[] {"abcdefghijklmnopqrstuvwxyz", "0123456789"};
 
     public static String getMessageDigest(String password, String algorithm, String charsetName) throws MessageDigestException{
@@ -18,7 +18,7 @@ public class PasswordUtils {
     }
 
     public static boolean patternCheck(String password) {
-        if(Pattern.matches(PASSWORD_REGEX, password)) {
+        if(Pattern.matches(REGEX, password)) {
             return true;
         }
         else {
@@ -27,7 +27,7 @@ public class PasswordUtils {
     }
 
     public static String getRandomPassword() throws NoSuchAlgorithmException {
-        char[] generated = new char[PASSWORD_LENGTH];
+        char[] generated = new char[MIN_LENGTH];
         SecureRandom secureRandom;
 
         secureRandom = SecureRandom.getInstance("SHA1PRNG");
@@ -43,13 +43,13 @@ public class PasswordUtils {
             }
         }
 
-        for(int i = watermark; i < PASSWORD_LENGTH; i++) {
+        for(int i = watermark; i < MIN_LENGTH; i++) {
             generated[i] = candidateAll.toString().charAt(secureRandom.nextInt(candidateAll.length()));
         }
 
         for(int i = 100000; i >= 0; i--) {
-            int x = secureRandom.nextInt(PASSWORD_LENGTH);
-            int y = secureRandom.nextInt(PASSWORD_LENGTH);
+            int x = secureRandom.nextInt(MIN_LENGTH);
+            int y = secureRandom.nextInt(MIN_LENGTH);
             char tmp = generated[x];
             generated[x] = generated[y];
             generated[y] = tmp;
