@@ -44,6 +44,7 @@ public class ResourceService {
         return resourceMapper.getResourceById(resourceId);
     }
 
+    @Transactional
     public Resource insertResource(Resource resource) {
         Assert.notNull(resource, "resource must not be null");
 
@@ -56,6 +57,7 @@ public class ResourceService {
         return getResource(resource.getResourceId());
     }
 
+    @Transactional
     public void updateResource(Resource resource) {
         Assert.notNull(resource, "resource must not be null");
 
@@ -73,6 +75,7 @@ public class ResourceService {
         resourceMapper.updateResource(resource);
     }
 
+    @Transactional
     public void deleteResource(String resourceId) {
         Assert.notNull(resourceId, "resourceId must not be null");
 
@@ -83,6 +86,7 @@ public class ResourceService {
         resourceMapper.deleteResourceById(resourceId);
     }
 
+    @Transactional
     public void saveResources(List<Resource> resourceList) {
         if(CollectionUtils.isNotEmpty(resourceList)) {
             for(Resource resource : resourceList) {

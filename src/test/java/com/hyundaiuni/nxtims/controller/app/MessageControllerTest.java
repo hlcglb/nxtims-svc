@@ -1,16 +1,15 @@
 package com.hyundaiuni.nxtims.controller.app;
 
 import static org.junit.Assert.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,8 +30,6 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hyundaiuni.nxtims.domain.app.Message;
 import com.hyundaiuni.nxtims.domain.app.MessageLocale;
 import com.hyundaiuni.nxtims.util.WebUtils;
@@ -199,7 +196,7 @@ public class MessageControllerTest {
             message.setMsgLocList(msgLocList);
 
             MvcResult result = mvc.perform(
-                post(URL).contentType(MediaType.APPLICATION_JSON_UTF8).content(jsonStringFromObject(message))).andDo(
+                post(URL).contentType(MediaType.APPLICATION_JSON_UTF8).content(JsonTestUtils.jsonStringFromObject(message))).andDo(
                     print()).andExpect(status().isOk()).andExpect(
                         content().contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(
                             jsonPath("$.MSG_CD").value("JUNIT")).andReturn();
@@ -208,7 +205,7 @@ public class MessageControllerTest {
 
             String query = result.getResponse().getContentAsString();
 
-            Message retrieveMessage = jsonStringToObject(query, Message.class);
+            Message retrieveMessage = JsonTestUtils.jsonStringToObject(query, Message.class);
 
             log.info(retrieveMessage.getMsgPk());
 
@@ -225,7 +222,7 @@ public class MessageControllerTest {
             }
 
             mvc.perform(put(URL + "/{msgPk}", msgPk).contentType(MediaType.APPLICATION_JSON_UTF8).content(
-                jsonStringFromObject(retrieveMessage))).andDo(print()).andExpect(status().isOk());
+                JsonTestUtils.jsonStringFromObject(retrieveMessage))).andDo(print()).andExpect(status().isOk());
 
             mvc.perform(delete(URL + "/{msgPk}", msgPk)).andDo(print()).andExpect(status().isOk());
         }
@@ -236,15 +233,4 @@ public class MessageControllerTest {
 
         assertEquals(null, ex);
     }
-
-    private String jsonStringFromObject(Object object) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.writeValueAsString(object);
-    }
-
-    private <T> T jsonStringToObject(String result, Class<T> valueType) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(result, valueType);
-    }
-
 }

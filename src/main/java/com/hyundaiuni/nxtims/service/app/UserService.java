@@ -16,6 +16,7 @@ import com.hyundaiuni.nxtims.domain.app.Resource;
 import com.hyundaiuni.nxtims.domain.app.User;
 import com.hyundaiuni.nxtims.exception.MessageDigestException;
 import com.hyundaiuni.nxtims.exception.ServiceException;
+import com.hyundaiuni.nxtims.mapper.app.AuthMapper;
 import com.hyundaiuni.nxtims.mapper.app.UserMapper;
 import com.hyundaiuni.nxtims.util.MessageDigestUtils;
 import com.hyundaiuni.nxtims.util.PasswordUtils;
@@ -25,10 +26,13 @@ public class UserService {
     private static final int LIMIT_AUTH_FAIL_CNT = 5;
     private static final String ALGORITHM = "SHA-256";
     private static final String CHARSET_NAME = "UTF-8";
-    private static final int EXISTING_PASSWORD_LIMIT = 3;
+    private static final int LIMIT_EXISTING_PASSWORD = 3;
 
     @Autowired
     private UserMapper userMapper;
+    
+    @Autowired
+    private AuthMapper authMapper;
 
     @Transactional(readOnly = true)
     public List<User> getUserListByParam(Map<String, Object> parameter, int offset, int limit) {
@@ -59,18 +63,30 @@ public class UserService {
         return user;
     }
 
+    @Transactional
     public User insertUser(User user) {
         Assert.notNull(user, "user must not be null");
 
         checkMandatoryUser(user);
-        
-        if(!PasswordUtils.patternCheck(user.getUserPwd())) {
-            throw new ServiceException("MSG.INVALID_PASSWORD", "Invalid Password.", null);
-        }
 
         if(userMapper.getUserById(user.getUserId()) != null) {
             throw new ServiceException("MSG.DUPLICATED", user.toString() + " was duplicated.", null);
         }
+        
+        if(!PasswordUtils.patternCheck(user.getUserPwd())) {
+            throw new ServiceException("MSG.INVALID_PASSWORD", "Invalid Password.", null);
+        }        
+        
+        String password;
+
+        try {
+            password = MessageDigestUtils.getMessageDigest(user.getUserPwd(), ALGORITHM, CHARSET_NAME);
+        }
+        catch(MessageDigestException e) {
+            throw new ServiceException("MSG.INVALID_PASSWORD", "Invalid Password.", null, e);
+        }
+        
+        user.setUserPwd(password);
 
         userMapper.insertUser(user);
 
@@ -88,6 +104,10 @@ public class UserService {
                 if(userMapper.getUserAuthByPk(auth) != null) {
                     throw new ServiceException("MSG.DUPLICATED", auth.toString() + " was duplicated.", null);
                 }
+                
+                if(authMapper.getAuthByAuthId(auth.getAuthId()) == null){
+                    throw new ServiceException("MSG.NO_DATA_FOUND", user.getUserId() + " not found.", null);
+                }
 
                 userMapper.insertUserAuth(auth);
             }
@@ -96,6 +116,7 @@ public class UserService {
         return getUser(user.getUserId());
     }
 
+    @Transactional
     public void updateUser(User user) {
         Assert.notNull(user, "user must not be null");
 
@@ -127,11 +148,11 @@ public class UserService {
             parameter.put("userPwd", password);
             parameter.put("sessionUserId", user.getUserPwd());
             parameter.put("userId", user.getUserId());
-            parameter.put("limit", EXISTING_PASSWORD_LIMIT);
+            parameter.put("limit", LIMIT_EXISTING_PASSWORD);
 
             if(userMapper.isExistingPasswordOnLog(parameter)) {
                 throw new ServiceException("MSG.EXISTING_PASSWORD_ON_LOG", "Invalid Password.",
-                    new String[] {Integer.toString(EXISTING_PASSWORD_LIMIT)});
+                    new String[] {Integer.toString(LIMIT_EXISTING_PASSWORD)});
             }
 
             userMapper.updateUserPwd(parameter);
@@ -152,11 +173,13 @@ public class UserService {
                 }
 
                 if("C".equals(authTransactionType)) {
-                    Auth tempAuth = userMapper.getUserAuthByPk(auth);
-
-                    if(tempAuth != null) {
-                        throw new ServiceException("MSG.DUPLICATED", tempAuth.toString() + " was duplicated.", null);
+                    if(userMapper.getUserAuthByPk(auth) != null) {
+                        throw new ServiceException("MSG.DUPLICATED", auth.toString() + " was duplicated.", null);
                     }
+                    
+                    if(authMapper.getAuthByAuthId(auth.getAuthId()) == null){
+                        throw new ServiceException("MSG.NO_DATA_FOUND", user.getUserId() + " not found.", null);
+                    }                    
 
                     userMapper.insertUserAuth(auth);
                 }
@@ -171,6 +194,7 @@ public class UserService {
         }
     }
 
+    @Transactional
     public void deleteUser(String userId) {
         Assert.notNull(userId, "userId must not be null");
 
@@ -257,7 +281,7 @@ public class UserService {
             throw new ServiceException("MSG.MUST_NOT_NULL", "USER_PWD must not be null.", new String[] {"USER_PWD"});
         }
 
-        if(!(user.getUseYn().equals("Y") || user.getUseYn().equals("N"))) {
+        if(!("Y".equals(user.getUseYn()) || "N".equals(user.getUseYn()))) {
             throw new ServiceException("MSG.INVALID_DATA", "USE_YN is invalid.", new String[] {"USE_YN"});
         }
     }

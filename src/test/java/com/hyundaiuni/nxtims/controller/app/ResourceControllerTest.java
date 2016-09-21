@@ -10,7 +10,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,8 +29,6 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hyundaiuni.nxtims.domain.app.Resource;
 import com.hyundaiuni.nxtims.util.WebUtils;
 
@@ -130,7 +127,7 @@ public class ResourceControllerTest {
             resource.setUseYn("Y");
 
             MvcResult result = mvc.perform(
-                post(URL).contentType(MediaType.APPLICATION_JSON_UTF8).content(jsonStringFromObject(resource))).andDo(
+                post(URL).contentType(MediaType.APPLICATION_JSON_UTF8).content(JsonTestUtils.jsonStringFromObject(resource))).andDo(
                     print()).andExpect(status().isOk()).andExpect(
                         content().contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(
                             jsonPath("$.RESOURCE_NM").value("TEST")).andReturn();
@@ -139,7 +136,7 @@ public class ResourceControllerTest {
 
             String query = result.getResponse().getContentAsString();
 
-            Resource retrieveResource = jsonStringToObject(query, Resource.class);
+            Resource retrieveResource = JsonTestUtils.jsonStringToObject(query, Resource.class);
 
             log.info(retrieveResource.getLinkResourceId());
 
@@ -148,7 +145,7 @@ public class ResourceControllerTest {
             resource.setResourceNm("TEST1");
 
             mvc.perform(put(URL + "/{resourceId}", resourceId).contentType(MediaType.APPLICATION_JSON_UTF8).content(
-                jsonStringFromObject(retrieveResource))).andDo(print()).andExpect(status().isOk());
+                JsonTestUtils.jsonStringFromObject(retrieveResource))).andDo(print()).andExpect(status().isOk());
 
             mvc.perform(delete(URL + "/{resourceId}", resourceId)).andDo(print()).andExpect(status().isOk());
         }
@@ -179,7 +176,7 @@ public class ResourceControllerTest {
             resourceList.add(updateResource);
 
             mvc.perform(post(URL + "/save").contentType(MediaType.APPLICATION_JSON_UTF8).content(
-                jsonStringFromObject(resourceList))).andDo(print()).andExpect(status().isOk());
+                JsonTestUtils.jsonStringFromObject(resourceList))).andDo(print()).andExpect(status().isOk());
         }
         catch(Exception e) {
             log.error(e.getMessage());
@@ -187,15 +184,5 @@ public class ResourceControllerTest {
         }
 
         assertEquals(null, ex);
-    }
-
-    private String jsonStringFromObject(Object object) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.writeValueAsString(object);
-    }
-
-    private <T> T jsonStringToObject(String result, Class<T> valueType) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(result, valueType);
     }
 }

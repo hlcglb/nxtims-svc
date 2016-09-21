@@ -10,7 +10,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,8 +30,6 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hyundaiuni.nxtims.domain.app.Auth;
 import com.hyundaiuni.nxtims.domain.app.AuthResource;
 import com.hyundaiuni.nxtims.util.WebUtils;
@@ -164,7 +161,7 @@ public class AuthControllerTest {
             auth.setAuthResourceList(authResourceList);
 
             MvcResult result = mvc.perform(
-                post(URL).contentType(MediaType.APPLICATION_JSON_UTF8).content(jsonStringFromObject(auth))).andDo(
+                post(URL).contentType(MediaType.APPLICATION_JSON_UTF8).content(JsonTestUtils.jsonStringFromObject(auth))).andDo(
                     print()).andExpect(status().isOk()).andExpect(
                         content().contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(
                             jsonPath("$.AUTH_ID").value("TEST")).andReturn();
@@ -173,7 +170,7 @@ public class AuthControllerTest {
 
             String query = result.getResponse().getContentAsString();
 
-            Auth retrieveAuth = jsonStringToObject(query, Auth.class);
+            Auth retrieveAuth = JsonTestUtils.jsonStringToObject(query, Auth.class);
 
             log.info(retrieveAuth.getAuthId());
 
@@ -188,7 +185,7 @@ public class AuthControllerTest {
             }
 
             mvc.perform(put(URL + "/{authId}", authId).contentType(MediaType.APPLICATION_JSON_UTF8).content(
-                jsonStringFromObject(retrieveAuth))).andDo(print()).andExpect(status().isOk());
+                JsonTestUtils.jsonStringFromObject(retrieveAuth))).andDo(print()).andExpect(status().isOk());
 
             mvc.perform(delete(URL + "/{authId}", authId)).andDo(print()).andExpect(status().isOk());
         }
@@ -198,15 +195,5 @@ public class AuthControllerTest {
         }
 
         assertEquals(null, ex);
-    }
-
-    private String jsonStringFromObject(Object object) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.writeValueAsString(object);
-    }
-
-    private <T> T jsonStringToObject(String result, Class<T> valueType) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(result, valueType);
     }
 }
