@@ -7,6 +7,8 @@ import java.util.regex.Pattern;
 import com.hyundaiuni.nxtims.exception.MessageDigestException;
 
 public class PasswordUtils {
+    private PasswordUtils() {}
+    
     private static final String PASSWORD_REGEX = "^.*(?=.{10,})(?=.*[0-9])(?=.*[a-zA-Z])(?=[\\S]+$).*$";
     private static final int PASSWORD_LENGTH = 10;
     private static final String[] CANDIDATES = new String[] {"abcdefghijklmnopqrstuvwxyz", "0123456789"};
