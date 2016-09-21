@@ -72,11 +72,16 @@ public class MessageController {
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<?> insertMessage(@RequestBody Message message) {
+        Assert.notNull(message, "message must not be null");
+        
         return new ResponseEntity<>(messageService.insertMessage(message), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{msgPk}", method = RequestMethod.PUT)
     public ResponseEntity<?> updateMessage(@PathVariable("msgPk") String msgPk, @RequestBody Message message) {
+        Assert.notNull(msgPk, "msgPk must not be null");
+        Assert.notNull(message, "message must not be null");
+        
         messageService.updateMessage(msgPk, message);
 
         return new ResponseEntity<>(HttpStatus.OK);
@@ -84,6 +89,8 @@ public class MessageController {
 
     @RequestMapping(value = "/{msgPk}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteMessage(@PathVariable("msgPk") String msgPk) {
+        Assert.notNull(msgPk, "msgPk must not be null");
+        
         messageService.deleteMessage(msgPk);
 
         return new ResponseEntity<>(HttpStatus.OK);

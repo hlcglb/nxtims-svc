@@ -65,11 +65,16 @@ public class AuthController {
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<?> insertAuth(@RequestBody Auth auth) {
+        Assert.notNull(auth, "auth must not be null");
+        
         return new ResponseEntity<>(authService.insertAuth(auth), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{authId}", method = RequestMethod.PUT)
     public ResponseEntity<?> updateAuth(@PathVariable("authId") String authId, @RequestBody Auth auth) {
+        Assert.notNull(authId, "authId must not be null");
+        Assert.notNull(auth, "auth must not be null");
+
         authService.updateAuth(authId, auth);
 
         return new ResponseEntity<>(HttpStatus.OK);
@@ -77,6 +82,8 @@ public class AuthController {
 
     @RequestMapping(value = "/{authId}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteAuth(@PathVariable("authId") String authId) {
+        Assert.notNull(authId, "authId must not be null");
+        
         authService.deleteAuth(authId);
 
         return new ResponseEntity<>(HttpStatus.OK);

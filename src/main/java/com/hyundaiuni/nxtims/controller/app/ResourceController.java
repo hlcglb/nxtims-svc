@@ -58,12 +58,17 @@ public class ResourceController {
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<?> insertResource(@RequestBody Resource resource) {
+        Assert.notNull(resource, "resource must not be null");
+        
         return new ResponseEntity<>(resourceService.insertResource(resource), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{resourceId}", method = RequestMethod.PUT)
     public ResponseEntity<?> updateResource(@PathVariable("resourceId") String resourceId,
         @RequestBody Resource resource) {
+        Assert.notNull(resourceId, "resourceId must not be null");
+        Assert.notNull(resource, "resource must not be null");
+        
         resourceService.updateResource(resourceId, resource);
 
         return new ResponseEntity<>(HttpStatus.OK);
@@ -71,6 +76,8 @@ public class ResourceController {
 
     @RequestMapping(value = "/{resourceId}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteResource(@PathVariable("resourceId") String resourceId) {
+        Assert.notNull(resourceId, "resourceId must not be null");
+        
         resourceService.deleteResource(resourceId);
 
         return new ResponseEntity<>(HttpStatus.OK);
@@ -78,6 +85,8 @@ public class ResourceController {
     
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public ResponseEntity<?> saveResources(@RequestBody List<Resource> resourceList) {
+        Assert.notNull(resourceList, "resourceList must not be null");
+        
         resourceService.saveResources(resourceList);
 
         return new ResponseEntity<>(HttpStatus.OK);

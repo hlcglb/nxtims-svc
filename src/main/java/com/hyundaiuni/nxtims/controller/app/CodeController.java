@@ -63,12 +63,17 @@ public class CodeController {
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<?> insertCode(@RequestBody CodeMaster codeMaster) {
+        Assert.notNull(codeMaster, "codeMaster must not be null");
+        
         return new ResponseEntity<>(codeService.insertCode(codeMaster), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{codeMstCd}", method = RequestMethod.PUT)
     public ResponseEntity<?> updateCode(@PathVariable("codeMstCd") String codeMstCd,
         @RequestBody CodeMaster codeMaster) {
+        Assert.notNull(codeMstCd, "codeMstCd must not be null");
+        Assert.notNull(codeMaster, "codeMaster must not be null");
+        
         codeService.updateCode(codeMstCd, codeMaster);
 
         return new ResponseEntity<>(HttpStatus.OK);
@@ -76,6 +81,8 @@ public class CodeController {
 
     @RequestMapping(value = "/{codeMstCd}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteCode(@PathVariable("codeMstCd") String codeMstCd) {
+        Assert.notNull(codeMstCd, "codeMstCd must not be null");
+
         codeService.deleteCode(codeMstCd);
 
         return new ResponseEntity<>(HttpStatus.OK);
