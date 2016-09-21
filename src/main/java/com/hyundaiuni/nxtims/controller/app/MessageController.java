@@ -82,7 +82,11 @@ public class MessageController {
         Assert.notNull(msgPk, "msgPk must not be null");
         Assert.notNull(message, "message must not be null");
         
-        messageService.updateMessage(msgPk, message);
+        if(!msgPk.equals(message.getMsgPk())){
+            throw new ServiceException("MSG.INVALID_PATH_VARIABLE", "There is invalid path variable.", null);
+        }                
+        
+        messageService.updateMessage(message);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

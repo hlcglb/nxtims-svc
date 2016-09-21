@@ -171,7 +171,7 @@ public class CodeServiceTest {
                 }
             }
 
-            codeService.updateCode(tempCodeMaster.getCodeMstCd(), tempCodeMaster);
+            codeService.updateCode(tempCodeMaster);
             codeService.deleteCode(tempCodeMaster.getCodeMstCd());
         }
         catch(Exception e) {

@@ -69,7 +69,11 @@ public class ResourceController {
         Assert.notNull(resourceId, "resourceId must not be null");
         Assert.notNull(resource, "resource must not be null");
         
-        resourceService.updateResource(resourceId, resource);
+        if(!resourceId.equals(resource.getResourceId())){
+            throw new ServiceException("MSG.INVALID_PATH_VARIABLE", "There is invalid path variable.", null);
+        }         
+        
+        resourceService.updateResource(resource);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

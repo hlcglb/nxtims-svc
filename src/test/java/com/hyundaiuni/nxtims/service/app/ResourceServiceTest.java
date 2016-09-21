@@ -124,7 +124,7 @@ public class ResourceServiceTest {
 
             resource.setResourceNm("TEST3");
 
-            resourceService.updateResource(resource.getResourceId(), resource);
+            resourceService.updateResource(resource);
 
             resourceService.deleteResource(resource.getResourceId());
         }

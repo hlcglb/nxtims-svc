@@ -137,8 +137,7 @@
     <update id="updateUser" parameterType="com.hyundaiuni.nxtims.domain.app.User">
         <![CDATA[
             UPDATE USERS
-               SET USER_NM = #{user_nm},
-                   USER_PWD = #{user_pwd},
+               SET USER_NM = #{userNm},
                    TEL_NO = #{telNo},
                    EMAIL = #{email},
                    USER_CL = #{userCl},
@@ -157,14 +156,45 @@
                    UPD_USER_ID = #{sessionUserId}
              WHERE USER_ID = #{userId}
         ]]>
-    </update>    
+    </update>
+    
+    <update id="updateUserPwd" parameterType="hashmap">
+        <![CDATA[
+            UPDATE USERS
+               SET USER_PWD = #{userPwd},
+                   UPD_DATE = SYSDATE,
+                   UPD_USER_ID = #{sessionUserId}
+             WHERE USER_ID = #{userId}
+        ]]>
+    </update>        
     
     <delete id="deleteUserByUserId" parameterType="string">
         <![CDATA[
             DELETE USERS
              WHERE USER_ID = #{userId}
         ]]>
-    </delete>    
+    </delete>
+    
+    <delete id="deleteUserAuthByUserId" parameterType="string">
+        <![CDATA[
+            DELETE USER_AUTH
+             WHERE USER_ID = #{userId}
+        ]]>
+    </delete>
+    
+    <delete id="deleteUserAccessLogByUserId" parameterType="string">
+        <![CDATA[
+            DELETE USER_ACCESS_LOG
+             WHERE USER_ID = #{userId}
+        ]]>
+    </delete>
+    
+    <delete id="deleteUserPwdChangeLogByUserId" parameterType="string">
+        <![CDATA[
+            DELETE USER_PWD_CHANGE_LOG
+             WHERE USER_ID = #{userId}
+        ]]>
+    </delete>        
     
     <select id="getAuthByUserId" parameterType="string" resultType="com.hyundaiuni.nxtims.domain.app.Auth">
         <![CDATA[
@@ -173,6 +203,42 @@
              WHERE USER_ID = #{userId}
         ]]>
     </select>
+    
+    <select id="getUserAuthByPk" parameterType="com.hyundaiuni.nxtims.domain.app.Auth" resultType="com.hyundaiuni.nxtims.domain.app.Auth">
+        <![CDATA[
+            SELECT AUTH_ID AS authId
+              FROM USER_AUTH
+             WHERE USER_ID = #{userId}
+               AND AUTH_ID = #{authId}
+        ]]>
+    </select>
+    
+    <insert id="insertUserAuth" parameterType="com.hyundaiuni.nxtims.domain.app.Auth">
+        <![CDATA[
+            INSERT INTO USER_AUTH
+            (
+             USER_ID,
+             AUTH_ID,
+             REG_DATE,
+             REG_USER_ID              
+            )
+            VALUES
+            (
+             #{userId},
+             #{authId},
+             SYSDATE,
+             #{sessionUserId}
+            )              
+        ]]>
+    </insert>
+    
+    <delete id="deleteUserAuthByPk" parameterType="com.hyundaiuni.nxtims.domain.app.Auth" >
+        <![CDATA[
+            DELETE USER_AUTH
+             WHERE USER_ID = #{userId}
+               AND AUTH_ID = #{authId}
+        ]]>
+    </delete>
     
     <select id="getMenuByUserId" parameterType="string" resultType="com.hyundaiuni.nxtims.domain.app.Resource">
         <![CDATA[
@@ -286,5 +352,35 @@
                    SYSDATE
                   )
         ]]>
-    </update>          
+    </update>
+    
+    <insert id="insertUserPwdChangeLog" parameterType="hashmap">
+        <![CDATA[
+            INSERT INTO USER_PWD_CHANGE_LOG
+            (
+             USER_ID,
+             USER_PWD,
+             REG_DATE             
+            )
+            VALUES
+            (
+             #{userId},
+             #{userPwd},
+             SYSDATE
+            )              
+        ]]>
+    </insert> 
+    
+    <select id="isExistingPasswordOnLog" parameterType="hashmap" resultType="boolean">
+        <![CDATA[    
+            SELECT CASE WHEN COUNT(1) > 0 THEN 1 ELSE 0 END
+              FROM (SELECT USER_PWD
+                      FROM (SELECT USER_PWD
+                              FROM USER_PWD_CHANGE_LOG
+                             WHERE USER_ID = #{userId}
+                             ORDER BY REG_DATE DESC)
+                     WHERE ROWNUM < #{limit})
+             WHERE USER_PWD = #{userPwd}
+        ]]>
+    </select> 
 </mapper>

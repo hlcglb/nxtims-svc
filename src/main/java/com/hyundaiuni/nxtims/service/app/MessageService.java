@@ -43,6 +43,7 @@ public class MessageService {
 
     @Transactional(readOnly = true)
     public List<Message> getMessageListByParam(Map<String, Object> parameter, int offset, int limit) {
+        Assert.notNull(parameter, "parameter must not be null");
         Assert.notNull(offset, "offset must not be null");
         Assert.notNull(limit, "limit must not be null");
 
@@ -59,6 +60,8 @@ public class MessageService {
 
     @Transactional(readOnly = true)
     public List<MessageLocale> getMessageLocaleListByParam(Map<String, Object> parameter) {
+        Assert.notNull(parameter, "parameter must not be null");
+
         return messageMapper.getMessageLocaleListByParam(parameter);
     }
 
@@ -76,9 +79,7 @@ public class MessageService {
         parameter.put("msgGrpCd", message.getMsgGrpCd());
         parameter.put("msgCd", message.getMsgCd());
 
-        List<MessageLocale> msgLocList = messageMapper.getMessageLocaleListByParam(parameter);
-
-        message.setMsgLocList(msgLocList);
+        message.setMsgLocList(messageMapper.getMessageLocaleListByParam(parameter));
 
         return message;
     }
@@ -87,14 +88,7 @@ public class MessageService {
     public Message insertMessage(Message message) {
         Assert.notNull(message, "message must not be null");
 
-        if(StringUtils.isEmpty(message.getMsgGrpCd())) {
-            throw new ServiceException("MSG.MUST_NOT_NULL", "MSG_GRP_CD must not be null.",
-                new String[] {"MSG_GRP_CD"});
-        }
-
-        if(StringUtils.isEmpty(message.getMsgCd())) {
-            throw new ServiceException("MSG.MUST_NOT_NULL", "MSG_CD must not be null.", new String[] {"MSG_CD"});
-        }
+        checkMandatoryMessage(message);
 
         Map<String, Object> parameter = new HashMap<>();
         parameter.put("msgGrpCd", message.getMsgGrpCd());
@@ -106,9 +100,7 @@ public class MessageService {
             throw new ServiceException("MSG.DUPLICATED", message.toString() + " was duplicated.", null);
         }
 
-        String msgPk = messageMapper.getMessageSequence();
-
-        message.setMsgPk(msgPk);
+        message.setMsgPk(messageMapper.getMessageSequence());
 
         messageMapper.insertMessage(message);
 
@@ -116,19 +108,14 @@ public class MessageService {
 
         if(CollectionUtils.isNotEmpty(msgLocList)) {
             for(MessageLocale messageLocale : msgLocList) {
-                if(StringUtils.isEmpty(messageLocale.getLangCd())) {
-                    throw new ServiceException("MSG.MUST_NOT_NULL", "LANG_CD must not be null.",
-                        new String[] {"LANG_CD"});
-                }
+                checkMandatoryMessageLocale(messageLocale);
 
-                if(StringUtils.isEmpty(messageLocale.getMsgNm())) {
-                    throw new ServiceException("MSG.MUST_NOT_NULL", "MSG_NM must not be null.",
-                        new String[] {"MSG_NM"});
-                }
+                messageLocale.setMsgGrpCd(message.getMsgGrpCd());
+                messageLocale.setMsgCd(message.getMsgCd());
 
                 parameter = new HashMap<>();
-                parameter.put("msgGrpCd", message.getMsgGrpCd());
-                parameter.put("msgCd", message.getMsgCd());
+                parameter.put("msgGrpCd", messageLocale.getMsgGrpCd());
+                parameter.put("msgCd", messageLocale.getMsgCd());
                 parameter.put("langCd", messageLocale.getLangCd());
 
                 MessageLocale tempMessageLocale = messageMapper.getMessageLocaleByParam(parameter);
@@ -138,39 +125,28 @@ public class MessageService {
                         null);
                 }
 
-                messageLocale.setMsgGrpCd(message.getMsgGrpCd());
-                messageLocale.setMsgCd(message.getMsgCd());
-
                 messageMapper.insertMessageLocale(messageLocale);
             }
         }
 
-        return getMessage(msgPk);
+        return getMessage(message.getMsgPk());
     }
 
     @Transactional
-    public void updateMessage(String msgPk, Message message) {
-        Assert.notNull(msgPk, "msgPk must not be null");
+    public void updateMessage(Message message) {
         Assert.notNull(message, "message must not be null");
-
-        Message tempMessage = messageMapper.getMessageByMsgPk(msgPk);
-
-        if(tempMessage == null) {
-            throw new ServiceException("MSG.NO_DATA_FOUND", msgPk + " not found.", null);
-        }
 
         if(StringUtils.isEmpty(message.getMsgPk())) {
             throw new ServiceException("MSG.MUST_NOT_NULL", "MSG_PK must not be null.", new String[] {"MSG_PK"});
         }
 
-        if(StringUtils.isEmpty(message.getMsgGrpCd())) {
-            throw new ServiceException("MSG.MUST_NOT_NULL", "MSG_GRP_CD must not be null.",
-                new String[] {"MSG_GRP_CD"});
+        Message tempMessage = messageMapper.getMessageByMsgPk(message.getMsgPk());
+
+        if(tempMessage == null) {
+            throw new ServiceException("MSG.NO_DATA_FOUND", message.getMsgPk() + " not found.", null);
         }
 
-        if(StringUtils.isEmpty(message.getMsgCd())) {
-            throw new ServiceException("MSG.MUST_NOT_NULL", "MSG_CD must not be null.", new String[] {"MSG_CD"});
-        }
+        checkMandatoryMessage(message);
 
         Map<String, Object> parameter = new HashMap<>();
         parameter.put("msgGrpCd", tempMessage.getMsgGrpCd());
@@ -193,29 +169,10 @@ public class MessageService {
 
         if(CollectionUtils.isNotEmpty(msgLocList)) {
             for(MessageLocale messageLocale : msgLocList) {
-                String messageLocaleTransactionType = messageLocale.getTransactionType();
-
                 messageLocale.setMsgGrpCd(message.getMsgGrpCd());
                 messageLocale.setMsgCd(message.getMsgCd());
 
-                if("C".equals(messageLocaleTransactionType) || "U".equals(messageLocaleTransactionType)) {
-                    if(StringUtils.isEmpty(messageLocale.getLangCd())) {
-                        throw new ServiceException("MSG.MUST_NOT_NULL", "LANG_CD must not be null.",
-                            new String[] {"LANG_CD"});
-                    }
-
-                    if(StringUtils.isEmpty(messageLocale.getMsgCd())) {
-                        throw new ServiceException("MSG.MUST_NOT_NULL", "MSG_NM must not be null.",
-                            new String[] {"MSG_NM"});
-                    }
-                }
-
-                if("U".equals(messageLocaleTransactionType) || "D".equals(messageLocaleTransactionType)) {
-                    if(StringUtils.isEmpty(messageLocale.getMsgLocPk())) {
-                        throw new ServiceException("MSG.MUST_NOT_NULL", "MSG_LOC_PK must not be null.",
-                            new String[] {"MSG_LOC_PK"});
-                    }
-                }
+                String messageLocaleTransactionType = messageLocale.getTransactionType();
 
                 parameter = new HashMap<>();
                 parameter.put("msgGrpCd", messageLocale.getMsgGrpCd());
@@ -223,28 +180,39 @@ public class MessageService {
                 parameter.put("langCd", messageLocale.getLangCd());
 
                 if("C".equals(messageLocaleTransactionType)) {
-                    MessageLocale tempMessageLocale = messageMapper.getMessageLocaleByParam(parameter);
+                    checkMandatoryMessageLocale(messageLocale);
 
-                    if(tempMessageLocale != null) {
-                        throw new ServiceException("MSG.DUPLICATED", tempMessageLocale.toString() + " was duplicated.",
+                    if(messageMapper.getMessageLocaleByParam(parameter) != null) {
+                        throw new ServiceException("MSG.DUPLICATED", parameter.toString() + " was duplicated.",
                             null);
                     }
-                }
-                else if("U".equals(messageLocaleTransactionType) || "D".equals(messageLocaleTransactionType)) {
-                    MessageLocale tempMessageLocale = messageMapper.getMessageLocaleByParam(parameter);
 
-                    if(tempMessageLocale == null) {
-                        throw new ServiceException("MSG.NO_DATA_FOUND", parameter.toString() + " not found.", null);
-                    }
-                }
-
-                if("C".equals(messageLocaleTransactionType)) {
                     messageMapper.insertMessageLocale(messageLocale);
                 }
                 else if("U".equals(messageLocaleTransactionType)) {
+                    checkMandatoryMessageLocale(messageLocale);
+
+                    if(StringUtils.isEmpty(messageLocale.getMsgLocPk())) {
+                        throw new ServiceException("MSG.MUST_NOT_NULL", "MSG_LOC_PK must not be null.",
+                            new String[] {"MSG_LOC_PK"});
+                    }
+
+                    if(messageMapper.getMessageLocaleByParam(parameter) == null) {
+                        throw new ServiceException("MSG.NO_DATA_FOUND", parameter.toString() + " not found.", null);
+                    }
+
                     messageMapper.updateMessageLocale(messageLocale);
                 }
                 else if("D".equals(messageLocaleTransactionType)) {
+                    if(StringUtils.isEmpty(messageLocale.getMsgLocPk())) {
+                        throw new ServiceException("MSG.MUST_NOT_NULL", "MSG_LOC_PK must not be null.",
+                            new String[] {"MSG_LOC_PK"});
+                    }
+
+                    if(messageMapper.getMessageLocaleByParam(parameter) == null) {
+                        throw new ServiceException("MSG.NO_DATA_FOUND", parameter.toString() + " not found.", null);
+                    }
+
                     messageMapper.deleteMessageByMsgPk(messageLocale.getMsgLocPk());
                 }
                 else {
@@ -261,7 +229,7 @@ public class MessageService {
 
         Message message = messageMapper.getMessageByMsgPk(msgPk);
 
-        if(message == null) {
+        if(messageMapper.getMessageByMsgPk(msgPk) == null) {
             throw new ServiceException("MSG.NO_DATA_FOUND", msgPk + " not found.", null);
         }
 
@@ -281,5 +249,26 @@ public class MessageService {
         }
 
         return false;
+    }
+
+    private void checkMandatoryMessage(Message message) {
+        if(StringUtils.isEmpty(message.getMsgGrpCd())) {
+            throw new ServiceException("MSG.MUST_NOT_NULL", "MSG_GRP_CD must not be null.",
+                new String[] {"MSG_GRP_CD"});
+        }
+
+        if(StringUtils.isEmpty(message.getMsgCd())) {
+            throw new ServiceException("MSG.MUST_NOT_NULL", "MSG_CD must not be null.", new String[] {"MSG_CD"});
+        }
+    }
+
+    private void checkMandatoryMessageLocale(MessageLocale messageLocale) {
+        if(StringUtils.isEmpty(messageLocale.getLangCd())) {
+            throw new ServiceException("MSG.MUST_NOT_NULL", "LANG_CD must not be null.", new String[] {"LANG_CD"});
+        }
+
+        if(StringUtils.isEmpty(messageLocale.getMsgNm())) {
+            throw new ServiceException("MSG.MUST_NOT_NULL", "MSG_NM must not be null.", new String[] {"MSG_NM"});
+        }
     }
 }

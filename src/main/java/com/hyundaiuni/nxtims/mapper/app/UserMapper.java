@@ -16,9 +16,23 @@ public interface UserMapper {
     
     public void updateUser(User user);
     
+    public void updateUserPwd(Map<String, Object> parameter);
+    
     public void deleteUserByUserId(String userId);
+    
+    public void deleteUserAuthByUserId(String userId);
+    
+    public void deleteUserAccessLogByUserId(String userId);
+    
+    public void deleteUserPwdChangeLogByUserId(String userId);
 
     public List<Auth> getAuthByUserId(String userId);
+    
+    public Auth getUserAuthByPk(Auth auth);
+    
+    public void insertUserAuth(Auth auth);
+    
+    public void deleteUserAuthByPk(Auth auth);
 
     public List<Resource> getMenuByUserId(String userId);
 
@@ -33,4 +47,8 @@ public interface UserMapper {
     public void updateLockedYn(Map<String, Object> parameter);
     
     public void updateLogoutDate(Map<String, Object> parameter);
+    
+    public void insertUserPwdChangeLog(Map<String, Object> parameter);
+    
+    public boolean isExistingPasswordOnLog(Map<String, Object> parameter);
 }

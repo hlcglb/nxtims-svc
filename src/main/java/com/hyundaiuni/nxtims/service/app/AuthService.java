@@ -24,6 +24,7 @@ public class AuthService {
 
     @Transactional(readOnly = true)
     public List<Auth> getAuthListByParam(Map<String, Object> parameter, int offset, int limit) {
+        Assert.notNull(parameter, "parameter must not be null");
         Assert.notNull(offset, "offset must not be null");
         Assert.notNull(limit, "limit must not be null");
 
@@ -57,9 +58,7 @@ public class AuthService {
             throw new ServiceException("MSG.NO_DATA_FOUND", authId + " not found.", null);
         }
 
-        List<AuthResource> authResourceList = authMapper.getAuthResourceListByAuthId(authId);
-
-        auth.setAuthResourceList(authResourceList);
+        auth.setAuthResourceList(authMapper.getAuthResourceListByAuthId(authId));
 
         return auth;
     }
@@ -68,17 +67,9 @@ public class AuthService {
     public Auth insertAuth(Auth auth) {
         Assert.notNull(auth, "auth must not be null");
 
-        if(StringUtils.isEmpty(auth.getAuthId())) {
-            throw new ServiceException("MSG.MUST_NOT_NULL", "AUTH_ID must not be null.", new String[] {"AUTH_ID"});
-        }
+        checkMandatoryAuth(auth);
 
-        if(StringUtils.isEmpty(auth.getAuthNm())) {
-            throw new ServiceException("MSG.MUST_NOT_NULL", "AUTH_NM must not be null.", new String[] {"AUTH_NM"});
-        }
-
-        Auth tempAuth = authMapper.getAuthByAuthId(auth.getAuthId());
-
-        if(tempAuth != null) {
+        if(authMapper.getAuthByAuthId(auth.getAuthId()) != null) {
             throw new ServiceException("MSG.DUPLICATED", auth.toString() + " was duplicated.", null);
         }
 
@@ -99,10 +90,8 @@ public class AuthService {
                 parameter.put("authId", authResource.getAuthId());
                 parameter.put("resourceId", authResource.getResourceId());
 
-                AuthResource tempAuthResource = authMapper.getAuthResourceByPk(parameter);
-
-                if(tempAuthResource != null) {
-                    throw new ServiceException("MSG.DUPLICATED", tempAuthResource.toString() + " was duplicated.",
+                if(authMapper.getAuthResourceByPk(parameter) != null) {
+                    throw new ServiceException("MSG.DUPLICATED", parameter.toString() + " was duplicated.",
                         null);
                 }
 
@@ -114,61 +103,47 @@ public class AuthService {
     }
 
     @Transactional
-    public void updateAuth(String authId, Auth auth) {
-        Assert.notNull(authId, "authId must not be null");
+    public void updateAuth(Auth auth) {
         Assert.notNull(auth, "auth must not be null");
+        
+        checkMandatoryAuth(auth);
 
-        Auth tempAuth = authMapper.getAuthByAuthId(authId);
-
-        if(tempAuth == null) {
-            throw new ServiceException("MSG.NO_DATA_FOUND", authId + " not found.", null);
+        if(authMapper.getAuthByAuthId(auth.getAuthId()) == null) {
+            throw new ServiceException("MSG.NO_DATA_FOUND", auth.getAuthId() + " not found.", null);
         }
 
-        if(StringUtils.isEmpty(auth.getAuthNm())) {
-            throw new ServiceException("MSG.MUST_NOT_NULL", "AUTH_NM must not be null.", new String[] {"AUTH_NM"});
-        }
-
-        authMapper.updateAuth(tempAuth);
+        authMapper.updateAuth(auth);
 
         List<AuthResource> authResourceList = auth.getAuthResourceList();
 
         if(CollectionUtils.isNotEmpty(authResourceList)) {
             for(AuthResource authResource : authResourceList) {
                 String authResourceTransactionType = authResource.getTransactionType();
-
-                if("C".equals(authResourceTransactionType) || "D".equals(authResourceTransactionType)) {
-                    if(StringUtils.isEmpty(authResource.getResourceId())) {
-                        throw new ServiceException("MSG.MUST_NOT_NULL", "RESOURCE_ID must not be null.",
-                            new String[] {"RESOURCE_ID"});
-                    }
-                }
-
+                
                 authResource.setAuthId(auth.getAuthId());
-
+                
+                if(StringUtils.isEmpty(authResource.getResourceId())) {
+                    throw new ServiceException("MSG.MUST_NOT_NULL", "RESOURCE_ID must not be null.",
+                        new String[] {"RESOURCE_ID"});
+                }                
+                
                 Map<String, Object> parameter = new HashMap<>();
                 parameter.put("authId", authResource.getAuthId());
-                parameter.put("resourceId", authResource.getResourceId());
+                parameter.put("resourceId", authResource.getResourceId());                
 
                 if("C".equals(authResourceTransactionType)) {
-                    AuthResource tempAuthResource = authMapper.getAuthResourceByPk(parameter);
-
-                    if(tempAuthResource != null) {
-                        throw new ServiceException("MSG.DUPLICATED", tempAuthResource.toString() + " was duplicated.",
+                    if(authMapper.getAuthResourceByPk(parameter) != null) {
+                        throw new ServiceException("MSG.DUPLICATED", parameter.toString() + " was duplicated.",
                             null);
-                    }
-                }
-                else if("D".equals(authResourceTransactionType)) {
-                    AuthResource tempAuthResource = authMapper.getAuthResourceByPk(parameter);
-
-                    if(tempAuthResource == null) {
-                        throw new ServiceException("MSG.NO_DATA_FOUND", parameter.toString() + " not found.", null);
-                    }
-                }
-
-                if("C".equals(authResourceTransactionType)) {
+                    }                    
+                    
                     authMapper.insertAuthResource(authResource);
                 }
                 else if("D".equals(authResourceTransactionType)) {
+                    if(authMapper.getAuthResourceByPk(parameter) == null) {
+                        throw new ServiceException("MSG.NO_DATA_FOUND", parameter.toString() + " not found.", null);
+                    }                    
+                    
                     authMapper.deleteAuthResourceByPk(parameter);
                 }
                 else {
@@ -199,4 +174,14 @@ public class AuthService {
         authMapper.deleteAuthResourceByAuthId(authId);
         authMapper.deleteAuthByAuthId(authId);
     }
+    
+    private void checkMandatoryAuth(Auth auth) {
+        if(StringUtils.isEmpty(auth.getAuthId())) {
+            throw new ServiceException("MSG.MUST_NOT_NULL", "AUTH_ID must not be null.", new String[] {"AUTH_ID"});
+        }
+
+        if(StringUtils.isEmpty(auth.getAuthNm())) {
+            throw new ServiceException("MSG.MUST_NOT_NULL", "AUTH_NM must not be null.", new String[] {"AUTH_NM"});
+        }
+    }    
 }

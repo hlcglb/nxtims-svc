@@ -74,7 +74,11 @@ public class CodeController {
         Assert.notNull(codeMstCd, "codeMstCd must not be null");
         Assert.notNull(codeMaster, "codeMaster must not be null");
         
-        codeService.updateCode(codeMstCd, codeMaster);
+        if(!codeMstCd.equals(codeMaster.getCodeMstCd())){
+            throw new ServiceException("MSG.INVALID_PATH_VARIABLE", "There is invalid path variable.", null);
+        }        
+        
+        codeService.updateCode(codeMaster);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

@@ -64,7 +64,11 @@ public class UserController {
         Assert.notNull(userId, "userId must not be null");
         Assert.notNull(user, "user must not be null");
         
-        userService.updateUser(userId, user);
+        if(!userId.equals(user.getUserId())){
+            throw new ServiceException("MSG.INVALID_PATH_VARIABLE", "There is invalid path variable.", null);
+        }         
+        
+        userService.updateUser(user);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

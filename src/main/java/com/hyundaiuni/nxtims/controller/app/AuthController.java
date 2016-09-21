@@ -74,8 +74,12 @@ public class AuthController {
     public ResponseEntity<?> updateAuth(@PathVariable("authId") String authId, @RequestBody Auth auth) {
         Assert.notNull(authId, "authId must not be null");
         Assert.notNull(auth, "auth must not be null");
+        
+        if(!authId.equals(auth.getAuthId())){
+            throw new ServiceException("MSG.INVALID_PATH_VARIABLE", "There is invalid path variable.", null);
+        }
 
-        authService.updateAuth(authId, auth);
+        authService.updateAuth(auth);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

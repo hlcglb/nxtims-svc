@@ -20,14 +20,15 @@ import com.hyundaiuni.nxtims.mapper.app.CodeMapper;
 public class CodeService {
     @Autowired
     private CodeMapper codeMapper;
-    
+
     @Transactional(readOnly = true)
     public List<CodeDetail> getCodeDetailAll() {
         return codeMapper.getCodeDetailAll();
-    }    
+    }
 
     @Transactional(readOnly = true)
     public List<CodeMaster> getCodeMasterListByParam(Map<String, Object> parameter, int offset, int limit) {
+        Assert.notNull(parameter, "parameter must not be null");
         Assert.notNull(offset, "offset must not be null");
         Assert.notNull(limit, "limit must not be null");
 
@@ -54,9 +55,7 @@ public class CodeService {
             throw new ServiceException("MSG.NO_DATA_FOUND", codeMstCd + " not found.", null);
         }
 
-        List<CodeDetail> codeDetailList = codeMapper.getCodeDetailListByCodeMstCd(codeMstCd);
-
-        codeMaster.setCodeDetaileList(codeDetailList);
+        codeMaster.setCodeDetaileList(codeMapper.getCodeDetailListByCodeMstCd(codeMstCd));
 
         return codeMaster;
     }
@@ -65,20 +64,10 @@ public class CodeService {
     public CodeMaster insertCode(CodeMaster codeMaster) {
         Assert.notNull(codeMaster, "codeMaster must not be null");
 
-        if(StringUtils.isEmpty(codeMaster.getCodeMstCd())) {
-            throw new ServiceException("MSG.MUST_NOT_NULL", "CODE_MST_CD must not be null.",
-                new String[] {"CODE_MST_CD"});
-        }
+        checkMandatoryCodeMaster(codeMaster);
 
-        if(StringUtils.isEmpty(codeMaster.getCodeMstNm())) {
-            throw new ServiceException("MSG.MUST_NOT_NULL", "CODE_MST_NM must not be null.",
-                new String[] {"CODE_MST_NM"});
-        }
-
-        CodeMaster tempCodeMaster = codeMapper.getCodeMasterByCodeMstCd(codeMaster.getCodeMstCd());
-
-        if(tempCodeMaster != null) {
-            throw new ServiceException("MSG.DUPLICATED", tempCodeMaster.toString() + " was duplicated.", null);
+        if(codeMapper.getCodeMasterByCodeMstCd(codeMaster.getCodeMstCd()) != null) {
+            throw new ServiceException("MSG.DUPLICATED", codeMaster.toString() + " was duplicated.", null);
         }
 
         codeMapper.insertCodeMaster(codeMaster);
@@ -89,24 +78,14 @@ public class CodeService {
             for(CodeDetail codeDetail : codeDetailList) {
                 codeDetail.setCodeMstCd(codeMaster.getCodeMstCd());
 
-                if(StringUtils.isEmpty(codeDetail.getCodeDtlCd())) {
-                    throw new ServiceException("MSG.MUST_NOT_NULL", "CODE_DTL_CD must not be null.",
-                        new String[] {"CODE_DTL_CD"});
-                }
-
-                if(StringUtils.isEmpty(codeDetail.getCodeDtlNm())) {
-                    throw new ServiceException("MSG.MUST_NOT_NULL", "CODE_DTL_NM must not be null.",
-                        new String[] {"CODE_DTL_NM"});
-                }
+                checkMandatoryCodeDetail(codeDetail);
 
                 Map<String, Object> parameter = new HashMap<>();
                 parameter.put("codeMstCd", codeDetail.getCodeMstCd());
                 parameter.put("codeDtlCd", codeDetail.getCodeDtlCd());
 
-                CodeDetail tempCodeDetail = codeMapper.getCodeDetailByPk(parameter);
-
-                if(tempCodeDetail != null) {
-                    throw new ServiceException("MSG.DUPLICATED", tempCodeDetail.toString() + " was duplicated.", null);
+                if(codeMapper.getCodeDetailByPk(parameter) != null) {
+                    throw new ServiceException("MSG.DUPLICATED", parameter.toString() + " was duplicated.", null);
                 }
 
                 codeMapper.insertCodeDetail(codeDetail);
@@ -117,19 +96,13 @@ public class CodeService {
     }
 
     @Transactional
-    public void updateCode(String codeMstCd, CodeMaster codeMaster) {
-        Assert.notNull(codeMstCd, "codeMstCd must not be null");
+    public void updateCode(CodeMaster codeMaster) {
         Assert.notNull(codeMaster, "codeMaster must not be null");
 
-        CodeMaster tempCodeMaster = codeMapper.getCodeMasterByCodeMstCd(codeMstCd);
+        checkMandatoryCodeMaster(codeMaster);
 
-        if(tempCodeMaster == null) {
-            throw new ServiceException("MSG.NO_DATA_FOUND", codeMstCd + " not found.", null);
-        }
-
-        if(StringUtils.isEmpty(codeMaster.getCodeMstNm())) {
-            throw new ServiceException("MSG.MUST_NOT_NULL", "CODE_MST_NM must not be null.",
-                new String[] {"CODE_MST_NM"});
+        if(codeMapper.getCodeMasterByCodeMstCd(codeMaster.getCodeMstCd()) == null) {
+            throw new ServiceException("MSG.NO_DATA_FOUND", codeMaster.getCodeMstCd() + " not found.", null);
         }
 
         codeMapper.updateCodeMaster(codeMaster);
@@ -142,51 +115,38 @@ public class CodeService {
 
                 codeDetail.setCodeMstCd(codeMaster.getCodeMstCd());
 
-                if("C".equals(codeDetailTransactionType) || "U".equals(codeDetailTransactionType)) {
-                    if(StringUtils.isEmpty(codeDetail.getCodeDtlCd())) {
-                        throw new ServiceException("MSG.MUST_NOT_NULL", "CODE_DTL_CD must not be null.",
-                            new String[] {"CODE_DTL_CD"});
-                    }
-
-                    if(StringUtils.isEmpty(codeDetail.getCodeDtlNm())) {
-                        throw new ServiceException("MSG.MUST_NOT_NULL", "CODE_DTL_NM must not be null.",
-                            new String[] {"CODE_DTL_NM"});
-                    }
-                }
-                else if("D".equals(codeDetailTransactionType)) {
-                    if(StringUtils.isEmpty(codeDetail.getCodeDtlCd())) {
-                        throw new ServiceException("MSG.MUST_NOT_NULL", "CODE_DTL_CD must not be null.",
-                            new String[] {"CODE_DTL_CD"});
-                    }
-                }
-
                 Map<String, Object> parameter = new HashMap<>();
                 parameter.put("codeMstCd", codeDetail.getCodeMstCd());
                 parameter.put("codeDtlCd", codeDetail.getCodeDtlCd());
 
                 if("C".equals(codeDetailTransactionType)) {
-                    CodeDetail tempCodeDetail = codeMapper.getCodeDetailByPk(parameter);
+                    checkMandatoryCodeDetail(codeDetail);
 
-                    if(tempCodeDetail != null) {
-                        throw new ServiceException("MSG.DUPLICATED", tempCodeDetail.toString() + " was duplicated.",
-                            null);
+                    if(codeMapper.getCodeDetailByPk(parameter) != null) {
+                        throw new ServiceException("MSG.DUPLICATED", parameter.toString() + " was duplicated.", null);
                     }
-                }
-                else if("U".equals(codeDetailTransactionType) || "D".equals(codeDetailTransactionType)) {
-                    CodeDetail tempCodeDetail = codeMapper.getCodeDetailByPk(parameter);
 
-                    if(tempCodeDetail == null) {
-                        throw new ServiceException("MSG.NO_DATA_FOUND", parameter.toString() + " not found.", null);
-                    }
-                }
-
-                if("C".equals(codeDetailTransactionType)) {
                     codeMapper.insertCodeDetail(codeDetail);
                 }
                 else if("U".equals(codeDetailTransactionType)) {
+                    checkMandatoryCodeDetail(codeDetail);
+
+                    if(codeMapper.getCodeDetailByPk(parameter) == null) {
+                        throw new ServiceException("MSG.NO_DATA_FOUND", parameter.toString() + " not found.", null);
+                    }
+
                     codeMapper.updateCodeDetail(codeDetail);
                 }
                 else if("D".equals(codeDetailTransactionType)) {
+                    if(StringUtils.isEmpty(codeDetail.getCodeDtlCd())) {
+                        throw new ServiceException("MSG.MUST_NOT_NULL", "CODE_DTL_CD must not be null.",
+                            new String[] {"CODE_DTL_CD"});
+                    }
+
+                    if(codeMapper.getCodeDetailByPk(parameter) == null) {
+                        throw new ServiceException("MSG.NO_DATA_FOUND", parameter.toString() + " not found.", null);
+                    }
+
                     codeMapper.deleteCodeDetailByPk(parameter);
                 }
                 else {
@@ -201,13 +161,35 @@ public class CodeService {
     public void deleteCode(String codeMstCd) {
         Assert.notNull(codeMstCd, "codeMstCd must not be null");
 
-        CodeMaster codeMaster = codeMapper.getCodeMasterByCodeMstCd(codeMstCd);
-
-        if(codeMaster == null) {
-            throw new ServiceException("MSG.NO_DATA_FOUND", codeMaster + " not found.", null);
+        if(codeMapper.getCodeMasterByCodeMstCd(codeMstCd) == null) {
+            throw new ServiceException("MSG.NO_DATA_FOUND", codeMstCd + " not found.", null);
         }
 
         codeMapper.deleteCodeDetailByCodeMstCd(codeMstCd);
         codeMapper.deleteCodeMasterByCodeMstCd(codeMstCd);
+    }
+
+    private void checkMandatoryCodeMaster(CodeMaster codeMaster) {
+        if(StringUtils.isEmpty(codeMaster.getCodeMstCd())) {
+            throw new ServiceException("MSG.MUST_NOT_NULL", "CODE_MST_CD must not be null.",
+                new String[] {"CODE_MST_CD"});
+        }
+
+        if(StringUtils.isEmpty(codeMaster.getCodeMstNm())) {
+            throw new ServiceException("MSG.MUST_NOT_NULL", "CODE_MST_NM must not be null.",
+                new String[] {"CODE_MST_NM"});
+        }
+    }
+
+    private void checkMandatoryCodeDetail(CodeDetail codeDetail) {
+        if(StringUtils.isEmpty(codeDetail.getCodeDtlCd())) {
+            throw new ServiceException("MSG.MUST_NOT_NULL", "CODE_DTL_CD must not be null.",
+                new String[] {"CODE_DTL_CD"});
+        }
+
+        if(StringUtils.isEmpty(codeDetail.getCodeDtlNm())) {
+            throw new ServiceException("MSG.MUST_NOT_NULL", "CODE_DTL_NM must not be null.",
+                new String[] {"CODE_DTL_NM"});
+        }
     }
 }

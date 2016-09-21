@@ -27,6 +27,7 @@ public class ResourceService {
 
     @Transactional(readOnly = true)
     public List<Resource> getResourceListByParam(Map<String, Object> parameter, int offset, int limit) {
+        Assert.notNull(parameter, "parameter must not be null");
         Assert.notNull(offset, "offset must not be null");
         Assert.notNull(limit, "limit must not be null");
 
@@ -44,102 +45,38 @@ public class ResourceService {
     }
 
     public Resource insertResource(Resource resource) {
-        if(StringUtils.isEmpty(resource.getResourceNm())) {
-            throw new ServiceException("MSG.MUST_NOT_NULL", "RESOURCE_NM must not be null.",
-                new String[] {"RESOURCE_NM"});
-        }
+        Assert.notNull(resource, "resource must not be null");
 
-        if(StringUtils.isEmpty(resource.getResourceType())) {
-            throw new ServiceException("MSG.MUST_NOT_NULL", "RESOURCE_TYPE must not be null.",
-                new String[] {"RESOURCE_TYPE"});
-        }
+        checkMandatoryResource(resource);
 
-        if("02".equals(resource.getResourceType())) {
-            if(StringUtils.isEmpty(resource.getResourceUrl())) {
-                throw new ServiceException("MSG.MUST_NOT_NULL", "RESOURCE_URL must not be null.",
-                    new String[] {"RESOURCE_URL"});
-            }
-        }
-
-        if(StringUtils.isEmpty(resource.getUseYn())) {
-            throw new ServiceException("MSG.MUST_NOT_NULL", "USE_YN must not be null.", new String[] {"USE_YN"});
-        }
-
-        if(!(resource.getUseYn().equals("Y") || resource.getUseYn().equals("N"))) {
-            throw new ServiceException("MSG.INVALID_DATA", "USE_YN is invalid.", new String[] {"USE_YN"});
-        }
-
-        if(StringUtils.isNotEmpty(resource.getLinkResourceId())) {
-            Resource linkResource = resourceMapper.getResourceById(resource.getLinkResourceId());
-
-            if(linkResource == null) {
-                throw new ServiceException("MSG.INVALID_DATA", "LINK_RESOURCE_ID is invalid.",
-                    new String[] {"LINK_RESOURCE_ID"});
-            }
-        }
-
-        String resourceId = resourceMapper.getResourceSequence();
-
-        resource.setResourceId(resourceId);
+        resource.setResourceId(resourceMapper.getResourceSequence());
 
         resourceMapper.insertResource(resource);
 
-        return getResource(resourceId);
+        return getResource(resource.getResourceId());
     }
 
-    public void updateResource(String resourceId, Resource resource) {
-        Resource tempResource = resourceMapper.getResourceById(resourceId);
-
-        if(tempResource == null) {
-            throw new ServiceException("MSG.NO_DATA_FOUND", resourceId + " not found.", null);
-        }
+    public void updateResource(Resource resource) {
+        Assert.notNull(resource, "resource must not be null");
 
         if(StringUtils.isEmpty(resource.getResourceId())) {
             throw new ServiceException("MSG.MUST_NOT_NULL", "RESOURCE_ID must not be null.",
                 new String[] {"RESOURCE_ID"});
         }
 
-        if(StringUtils.isEmpty(resource.getResourceNm())) {
-            throw new ServiceException("MSG.MUST_NOT_NULL", "RESOURCE_NM must not be null.",
-                new String[] {"RESOURCE_NM"});
+        if(resourceMapper.getResourceById(resource.getResourceId()) == null) {
+            throw new ServiceException("MSG.NO_DATA_FOUND", resource.getResourceId() + " not found.", null);
         }
 
-        if(StringUtils.isEmpty(resource.getResourceType())) {
-            throw new ServiceException("MSG.MUST_NOT_NULL", "RESOURCE_TYPE must not be null.",
-                new String[] {"RESOURCE_TYPE"});
-        }
-
-        if("02".equals(resource.getResourceType())) {
-            if(StringUtils.isEmpty(resource.getResourceUrl())) {
-                throw new ServiceException("MSG.MUST_NOT_NULL", "RESOURCE_URL must not be null.",
-                    new String[] {"RESOURCE_URL"});
-            }
-        }
-
-        if(StringUtils.isEmpty(resource.getUseYn())) {
-            throw new ServiceException("MSG.MUST_NOT_NULL", "USE_YN must not be null.", new String[] {"USE_YN"});
-        }
-
-        if(!(resource.getUseYn().equals("Y") || resource.getUseYn().equals("N"))) {
-            throw new ServiceException("MSG.INVALID_DATA", "USE_YN is invalid.", new String[] {"USE_YN"});
-        }
-
-        if(StringUtils.isNotEmpty(resource.getLinkResourceId())) {
-            Resource linkResource = resourceMapper.getResourceById(resource.getLinkResourceId());
-
-            if(linkResource == null) {
-                throw new ServiceException("MSG.INVALID_DATA", "LINK_RESOURCE_ID is invalid.",
-                    new String[] {"LINK_RESOURCE_ID"});
-            }
-        }
+        checkMandatoryResource(resource);
 
         resourceMapper.updateResource(resource);
     }
 
     public void deleteResource(String resourceId) {
-        Resource resource = resourceMapper.getResourceById(resourceId);
+        Assert.notNull(resourceId, "resourceId must not be null");
 
-        if(resource == null) {
+        if(resourceMapper.getResourceById(resourceId) == null) {
             throw new ServiceException("MSG.NO_DATA_FOUND", resourceId + " not found.", null);
         }
 
@@ -153,7 +90,7 @@ public class ResourceService {
                     insertResource(resource);
                 }
                 else if("U".equals(resource.getTransactionType())) {
-                    updateResource(resource.getResourceId(), resource);
+                    updateResource(resource);
                 }
                 else if("D".equals(resource.getTransactionType())) {
                     deleteResource(resource.getResourceId());
@@ -163,6 +100,38 @@ public class ResourceService {
                         resource.getTransactionType() + " does not supported.",
                         new String[] {resource.getTransactionType()});
                 }
+            }
+        }
+    }
+
+    private void checkMandatoryResource(Resource resource) {
+        if(StringUtils.isEmpty(resource.getResourceNm())) {
+            throw new ServiceException("MSG.MUST_NOT_NULL", "RESOURCE_NM must not be null.",
+                new String[] {"RESOURCE_NM"});
+        }
+
+        if(StringUtils.isEmpty(resource.getResourceType())) {
+            throw new ServiceException("MSG.MUST_NOT_NULL", "RESOURCE_TYPE must not be null.",
+                new String[] {"RESOURCE_TYPE"});
+        }
+
+        if("02".equals(resource.getResourceType()) && StringUtils.isEmpty(resource.getResourceUrl())) {
+            throw new ServiceException("MSG.MUST_NOT_NULL", "RESOURCE_URL must not be null.",
+                new String[] {"RESOURCE_URL"});
+        }
+
+        if(StringUtils.isEmpty(resource.getUseYn())) {
+            throw new ServiceException("MSG.MUST_NOT_NULL", "USE_YN must not be null.", new String[] {"USE_YN"});
+        }
+
+        if(!("Y".equals(resource.getUseYn()) || "N".equals(resource.getUseYn()))) {
+            throw new ServiceException("MSG.INVALID_DATA", "USE_YN is invalid.", new String[] {"USE_YN"});
+        }
+
+        if(StringUtils.isNotEmpty(resource.getLinkResourceId())) {
+            if(resourceMapper.getResourceById(resource.getLinkResourceId()) == null) {
+                throw new ServiceException("MSG.INVALID_DATA", "LINK_RESOURCE_ID is invalid.",
+                    new String[] {"LINK_RESOURCE_ID"});
             }
         }
     }
