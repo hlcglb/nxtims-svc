@@ -124,4 +124,15 @@ public class UserController {
 
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
+    
+    @RequestMapping(value = "/reissuePassword", method = RequestMethod.POST)
+    public ResponseEntity<?> reissuePassword(@RequestBody Map<String, Object> request) {
+        Assert.notNull(request, "request must not be null");
+
+        String userId = MapUtils.getString(request, "USER_ID");
+        String userNm = MapUtils.getString(request, "USER_NM"); 
+        String email = MapUtils.getString(request, "EMAIL");
+
+        return new ResponseEntity<>(userService.reissuePassword(userId, userNm, email), HttpStatus.OK);
+    }    
 }

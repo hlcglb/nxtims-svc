@@ -12,6 +12,8 @@ public interface UserMapper {
     
     public User getUserById(String userId);
     
+    public User getUserByParam(Map<String, Object> parameter);
+    
     public void insertUser(User user);
     
     public void updateUser(User user);

@@ -85,6 +85,32 @@
         ]]>
     </select>
     
+    <select id="getUserByParam" parameterType="string" resultType="com.hyundaiuni.nxtims.domain.app.User">
+        <![CDATA[
+            SELECT USER_ID AS userId,
+                   USER_NM AS userNm,
+                   USER_PWD AS userPwd,
+                   TEL_NO AS telNo,
+                   EMAIL AS email,
+                   USER_CL AS userCl,
+                   DEPT_CD AS deptCd,
+                   EMP_NO AS empNo,
+                   GRADE_CD AS gradeCd,
+                   CUST_CD AS custCd,
+                   APPROVE_GRADE AS approveGrade,
+                   APPROVE_SEQ AS approveSeq,
+                   APPROVE_TAG AS approveTag,                   
+                   DECODE(SIGN(TO_DATE(EXPIRED_YMD,'YYYYMMDD')-TRUNC(SYSDATE)),-1,'Y','N') AS expiredYn,
+                   NVL(LOCKED_YN,'N') AS lockedYn,
+                   DECODE(SIGN(TO_DATE(PWD_EXPIRED_YMD,'YYYYMMDD')-TRUNC(SYSDATE)),-1,'Y','N') AS pwdExpiredYn,
+                   USE_YN AS useYn
+              FROM USERS
+             WHERE USER_ID = #{userId}
+               AND USER_NM = #{userNm}
+               AND EMAIL = #{email}
+        ]]>
+    </select>    
+    
     <insert id="insertUser" parameterType="com.hyundaiuni.nxtims.domain.app.User">
         <![CDATA[
             INSERT INTO USERS
@@ -162,6 +188,7 @@
         <![CDATA[
             UPDATE USERS
                SET USER_PWD = #{userPwd},
+                   PWD_EXPIRED_YMD = #{pwdExpiredYmd},
                    UPD_DATE = SYSDATE,
                    UPD_USER_ID = #{sessionUserId}
              WHERE USER_ID = #{userId}
@@ -382,5 +409,5 @@
                      WHERE ROWNUM < #{limit})
              WHERE USER_PWD = #{userPwd}
         ]]>
-    </select> 
+    </select>
 </mapper>

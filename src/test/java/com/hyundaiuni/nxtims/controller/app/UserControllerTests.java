@@ -109,6 +109,7 @@ public class UserControllerTests {
             user.setUserId("XXXXXX");
             user.setUserNm("XXXXXX");
             user.setUserPwd("12345qwert");
+            user.setEmail("xxxxxx@hyundai-uni.com");
             user.setUseYn("Y");
             
             Auth auth = new Auth();
@@ -242,4 +243,24 @@ public class UserControllerTests {
 
         assertEquals(null, ex);
     }
+    
+    public void testReissuePassword() {
+        Exception ex = null;
+
+        try {
+            Map<String, Object> parameter = new HashMap<>();
+            parameter.put("USER_ID", "test");
+            parameter.put("USER_NM", "테스트");
+            parameter.put("EMAIL", "byungsik.pyo@hyundai-uni.com");
+
+            mvc.perform(post(URL + "/reissuePassword", parameter).contentType(MediaType.APPLICATION_JSON_UTF8).content(
+                JSONObject.toJSONString(parameter))).andDo(print()).andExpect(status().isOk());
+        }
+        catch(Exception e) {
+            log.error(e.getMessage());
+            ex = e;
+        }
+
+        assertEquals(null, ex);
+    }    
 }

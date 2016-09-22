@@ -47,17 +47,18 @@ public class UserServiceTests {
 
         assertEquals(null, ex);
     }
-    
+
     @Test
-    public void testInsertUserInvalidPassword(){
+    public void testInsertUserInvalidPassword() {
         try {
             User user = new User();
-            
+
             user.setUserId("XXXXXX");
             user.setUserNm("XXXXXX");
             user.setUserPwd("1234qwer");
+            user.setEmail("xxxxxx@hyundai-uni.com");            
             user.setUseYn("Y");
-            
+
             userService.insertUser(user);
         }
         catch(Exception e) {
@@ -65,25 +66,26 @@ public class UserServiceTests {
             assertThat(e).isInstanceOf(ServiceException.class).hasMessageContaining("Invalid");
         }
     }
-    
+
     @Test
-    public void testInsertUserInvalidAuthId(){
+    public void testInsertUserInvalidAuthId() {
         try {
             User user = new User();
-            
+
             user.setUserId("XXXXXX");
             user.setUserNm("XXXXXX");
             user.setUserPwd("12345qwert");
             user.setUseYn("Y");
-            
+            user.setEmail("xxxxxx@hyundai-uni.com");
+
             Auth auth = new Auth();
             auth.setAuthId("TEST");
-            
+
             List<Auth> authList = new ArrayList<>();
             authList.add(auth);
-            
+
             user.setAuthList(authList);
-            
+
             userService.insertUser(user);
         }
         catch(Exception e) {
@@ -91,27 +93,28 @@ public class UserServiceTests {
             assertThat(e).isInstanceOf(ServiceException.class).hasMessageContaining("not found");
         }
     }
-    
+
     @Test
-    public void testInsertUser(){
+    public void testInsertUser() {
         try {
             User user = new User();
-            
+
             user.setUserId("XXXXXX");
             user.setUserNm("XXXXXX");
             user.setUserPwd("12345qwert");
             user.setUseYn("Y");
-            
+            user.setEmail("xxxxxx@hyundai-uni.com");
+
             Auth auth = new Auth();
             auth.setAuthId("ANONYMOUS");
-            
+
             List<Auth> authList = new ArrayList<>();
             authList.add(auth);
-            
+
             user.setAuthList(authList);
-            
+
             userService.insertUser(user);
-            
+
             userService.deleteUser(user.getUserId());
         }
         catch(Exception e) {
@@ -119,55 +122,56 @@ public class UserServiceTests {
             assertThat(e).isInstanceOf(ServiceException.class).hasMessageContaining("not found");
         }
     }
-    
+
     @Test
-    public void testUpdateUser(){
+    public void testUpdateUser() {
         try {
             User user = new User();
-            
+
             user.setUserId("XXXXXX");
             user.setUserNm("XXXXXX");
             user.setUserPwd("12345qwert");
             user.setUseYn("Y");
-            
+            user.setEmail("xxxxxx@hyundai-uni.com");
+
             Auth auth = new Auth();
             auth.setAuthId("ANONYMOUS");
-            
+
             List<Auth> authList = new ArrayList<>();
             authList.add(auth);
-            
+
             user.setAuthList(authList);
-            
+
             userService.insertUser(user);
-            
+
             user.setUserPwd("qwert12345");
-            
+
             authList = user.getAuthList();
-            
+
             if(CollectionUtils.isNotEmpty(authList)) {
                 for(Auth tempAuth : authList) {
                     tempAuth.setTransactionType("D");
                 }
             }
-            
+
             Auth auth1 = new Auth();
             auth1.setAuthId("EMPLOYEE");
             auth1.setTransactionType("C");
-            
+
             authList.add(auth1);
-            
+
             user.setAuthList(authList);
-            
+
             userService.updateUser(user);
-            
+
             userService.deleteUser(user.getUserId());
         }
         catch(Exception e) {
             log.error(e.getMessage());
             assertThat(e).isInstanceOf(ServiceException.class).hasMessageContaining("not found");
         }
-    }     
-    
+    }
+
     @Test
     public void testGetUser() {
         User user = userService.getUser("20006X");
@@ -230,6 +234,27 @@ public class UserServiceTests {
 
         try {
             userService.onLogout("test", "DB18EBE12C90845710D544C7A15D7072");
+        }
+        catch(Exception e) {
+            log.error(e.getMessage());
+            ex = e;
+        }
+
+        assertEquals(null, ex);
+    }
+
+    @Test
+    public void testReissuePassword() {
+        Exception ex = null;
+
+        try {
+            String userId = "test";
+            String userNm = "테스트";
+            String email = "byungsik.pyo@hyundai-uni.com";
+
+            User user = userService.reissuePassword(userId, userNm, email);
+
+            log.info("ReissuePassword is [" + user.getUserPwd() + "]");
         }
         catch(Exception e) {
             log.error(e.getMessage());
