@@ -1,10 +1,12 @@
 package com.hyundaiuni.nxtims.service.app;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -115,6 +117,7 @@ public class NoticeService {
                         throw new ServiceException("MSG.NO_DATA_FOUND", parameter.toString() + " not found.", null);
                     }
 
+                    FileUtils.deleteQuietly(new File(noticeFile.getFileUrl()));
                     noticeMapper.deleteNoticeFileByPk(parameter);
                 }
                 else {
@@ -128,10 +131,20 @@ public class NoticeService {
     @Transactional
     public void deleteNotice(String noticeId) {
         Assert.notNull(noticeId, "noticeId must not be null");
+        
+        Notice notice = noticeMapper.getNoticeByNoticeId(noticeId);
 
-        if(noticeMapper.getNoticeByNoticeId(noticeId) == null) {
+        if(notice == null) {
             throw new ServiceException("MSG.NO_DATA_FOUND", noticeId + " not found.", null);
         }
+        
+        List<NoticeFile> noticeFileList = notice.getNoticeFileList();
+
+        if(CollectionUtils.isNotEmpty(noticeFileList)) {
+            for(NoticeFile noticeFile : noticeFileList) {
+                FileUtils.deleteQuietly(new File(noticeFile.getFileUrl()));
+            }
+        }        
 
         noticeMapper.deleteNoticeFileByNoticeId(noticeId);
         noticeMapper.deleteNotice(noticeId);
