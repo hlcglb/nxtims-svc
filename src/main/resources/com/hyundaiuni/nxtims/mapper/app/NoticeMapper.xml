@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hyundaiuni.nxtims.mapper.app.NoticeMapper">
+    <select id="getNoticeListByParam" parameterType="hashmap" resultType="com.hyundaiuni.nxtims.domain.app.Notice">
+        <![CDATA[
+            SELECT A.NOTICE_ID AS noticeId,
+                   A.TITLE AS title,
+                   A.CONTENT AS content,
+                   A.OPEN_YMD AS openYmd,
+                   A.CLOSE_YMD AS closeYmd
+              FROM ( SELECT ROWNUM AS RNUM,
+                            A.*
+                       FROM ( SELECT NOTICE_ID,
+                                     TITLE,
+                                     SUBSTR(CONTENT,1,100) AS CONTENT,
+                                     OPEN_YMD,
+                                     CLOSE_YMD
+                                FROM NOTICES
+                               WHERE 1 = 1
+        ]]>                       
+        <if test="title != null">   
+                                 AND TITLE LIKE '%'||#{title}||'%'
+        </if>
+        <if test="content != null">   
+                                 AND CONTENT LIKE '%'||#{content}||'%'
+        </if>
+        <![CDATA[                           
+                            ) A
+                      WHERE ROWNUM <= #{offset} + #{limit} ) A
+             WHERE RNUM > #{offset}
+        ]]>
+    </select>
+    
+    <select id="getNoticeByNoticeId" parameterType="string" resultType="com.hyundaiuni.nxtims.domain.app.Notice">
+        <![CDATA[
+            SELECT A.NOTICE_ID AS noticeId,
+                   A.TITLE AS title,
+                   A.CONTENT AS content,
+                   A.OPEN_YMD AS openYmd,
+                   A.CLOSE_YMD AS closeYmd
+              FROM NOTICES A
+             WHERE NOTICE_ID = #{noticeId}
+        ]]>
+    </select>
+    
+    <select id="getNoticeFileListByNoticeId" parameterType="string" resultType="com.hyundaiuni.nxtims.domain.app.NoticeFile">
+        <![CDATA[
+            SELECT A.NOTICE_ID AS noticeId,
+                   A.SEQ AS seq,
+                   A.FILE_NM AS fileNm,
+                   A.FILE_URL AS fileUrl
+              FROM NOTICE_FILE A
+             WHERE NOTICE_ID = #{noticeId}
+        ]]>
+    </select>
+    
+    <select id="getNoticeFileByPk" parameterType="hashmap" resultType="com.hyundaiuni.nxtims.domain.app.NoticeFile">
+        <![CDATA[
+            SELECT A.NOTICE_ID AS noticeId,
+                   A.SEQ AS seq,
+                   A.FILE_NM AS fileNm,
+                   A.FILE_URL AS fileUrl
+              FROM NOTICE_FILE A
+             WHERE NOTICE_ID = #{noticeId}
+               AND SEQ = #{seq}
+        ]]>
+    </select>    
+    
+    <select id="getNoticeSequence" resultType="string">
+        <![CDATA[
+            SELECT TO_CHAR(NOTICE_ID_SEQ.NEXTVAL,'FM0000000000')
+              FROM DUAL
+        ]]>
+    </select>
+    
+    <insert id="insertNotice" parameterType="com.hyundaiuni.nxtims.domain.app.Notice">
+        <![CDATA[
+            INSERT INTO NOTICES
+            (
+             NOTICE_ID,
+             TITLE,
+             CONTENT,
+             OPEN_YMD,
+             CLOSE_YMD,
+             REG_DATE,
+             REG_USER_ID            
+            )
+            VALUES
+            (
+             #{noticeId},
+             #{title},
+             #{content},
+             #{openYmd},
+             #{closeYmd},
+             SYSDATE,
+             #{sessionUserId}
+            )
+        ]]>
+    </insert>
+    
+    <select id="getNoticeFileSequence" parameterType="string" resultType="int">
+        <![CDATA[
+            SELECT /*+ INDEX_DESC(A NOTICE_FILE_PK) */
+                   NVL(MAX(A.SEQ),0)+1
+              FROM NOTICE_FILE A
+             WHERE NOTICE_ID = #{noticeId}
+        ]]>
+    </select>
+    
+    <insert id="insertNoticeFile" parameterType="com.hyundaiuni.nxtims.domain.app.NoticeFile">
+        <![CDATA[
+            INSERT INTO NOTICE_FILE
+            (
+             NOTICE_ID,
+             SEQ,
+             FILE_NM,
+             FILE_URL,
+             REG_DATE,
+             REG_USER_ID            
+            )
+            VALUES
+            (
+             #{noticeId},
+             #{seq},
+             #{fileNm},
+             #{fileUrl},
+             SYSDATE,
+             #{sessionUserId}
+            )
+        ]]>
+    </insert>
+    
+    <update id="updateNotice" parameterType="com.hyundaiuni.nxtims.domain.app.Notice">
+        <![CDATA[
+            UPDATE NOTICES
+               SET TITLE = #{title},
+                   CONTENT = #{content},
+                   OPEN_YMD = #{openYmd},
+                   CLOSE_YMD = #{closeYmd},
+                   UPD_DATE = SYSDATE,
+                   UPD_USER_ID = #{sessionUserId}
+             WHERE NOTICE_ID = #{noticeId}
+        ]]>
+    </update>    
+    
+    <delete id="deleteNotice" parameterType="string">
+        <![CDATA[
+            DELETE NOTICES
+             WHERE NOTICE_ID = #{noticeId}
+        ]]>
+    </delete>
+    
+    <delete id="deleteNoticeFileByPk" parameterType="hashmap">
+        <![CDATA[
+            DELETE NOTICE_FILE
+             WHERE NOTICE_ID = #{noticeId}
+               AND SEQ = #{seq}
+        ]]>
+    </delete>
+    
+    <delete id="deleteNoticeFileByNoticeId" parameterType="string">
+        <![CDATA[
+            DELETE NOTICE_FILE
+             WHERE NOTICE_ID = #{noticeId}
+        ]]>
+    </delete>    
+</mapper>
