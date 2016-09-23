@@ -137,7 +137,7 @@ public class CodeServiceTest {
     }
 
     @Test
-    public void testUpdateAuth() {
+    public void testUpdateCodeMaster() {
         Exception ex = null;
 
         try {
