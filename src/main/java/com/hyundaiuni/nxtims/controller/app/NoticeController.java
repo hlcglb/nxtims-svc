@@ -56,7 +56,7 @@ public class NoticeController {
         return new ResponseEntity<>(noticeService.insertNotice(notice), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/{noticeId}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/{noticeId}", method = RequestMethod.POST)
     public ResponseEntity<?> updateNotice(@PathVariable("noticeId") String noticeId, @RequestBody Notice notice) {
         Assert.notNull(noticeId, "noticeId must not be null");
         Assert.notNull(notice, "notice must not be null");

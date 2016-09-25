@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -139,7 +138,7 @@ public class NoticeControllerTest {
                 }
             }
 
-            mvc.perform(put(URL + "/{noticeId}", noticeId).contentType(MediaType.APPLICATION_JSON_UTF8).content(
+            mvc.perform(post(URL + "/{noticeId}", noticeId).contentType(MediaType.APPLICATION_JSON_UTF8).content(
                 JsonTestUtils.jsonStringFromObject(retrieveNotice))).andDo(print()).andExpect(status().isOk());
 
             mvc.perform(delete(URL + "/{noticeId}", noticeId)).andDo(print()).andExpect(status().isOk());
