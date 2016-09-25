@@ -172,9 +172,5 @@ public class NoticeService {
         if(StringUtils.isEmpty(noticeFile.getFileNm())) {
             throw new ServiceException("MSG.MUST_NOT_NULL", "FILE_NM must not be null.", new String[] {"FILE_NM"});
         }
-
-        if(StringUtils.isEmpty(noticeFile.getFileUrl())) {
-            throw new ServiceException("MSG.MUST_NOT_NULL", "FILE_URL must not be null.", new String[] {"FILE_URL"});
-        }
     }
 }
