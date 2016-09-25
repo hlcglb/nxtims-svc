@@ -117,7 +117,6 @@ public class NoticeService {
                         throw new ServiceException("MSG.NO_DATA_FOUND", parameter.toString() + " not found.", null);
                     }
 
-                    FileUtils.deleteQuietly(new File(noticeFile.getFileUrl()));
                     noticeMapper.deleteNoticeFileByPk(parameter);
                 }
                 else {
