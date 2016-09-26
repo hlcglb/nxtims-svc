@@ -3,12 +3,9 @@ package com.hyundaiuni.nxtims.service.app;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.Test;
@@ -18,7 +15,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.hyundaiuni.nxtims.domain.app.Notice;
-import com.hyundaiuni.nxtims.domain.app.NoticeFile;
 import com.hyundaiuni.nxtims.exception.ServiceException;
 
 @RunWith(SpringRunner.class)
@@ -51,7 +47,7 @@ public class NoticeServiceTest {
         Exception ex = null;
 
         try {
-            noticeService.getNotice("0000000002");
+            noticeService.getNotice("0000000000");
         }
         catch(Exception e) {
             log.error(e.getMessage());
@@ -80,15 +76,6 @@ public class NoticeServiceTest {
             notice.setOpenYmd("20160923");
             notice.setCloseYmd("20160923");
 
-            NoticeFile noticeFile = new NoticeFile();
-            noticeFile.setFileNm("TEXT.txt");
-            noticeFile.setFileUrl("/app/arc/TEXT.txt");
-
-            List<NoticeFile> noticeFileList = new ArrayList<>();
-            noticeFileList.add(noticeFile);
-
-            notice.setNoticeFileList(noticeFileList);
-
             Notice tempNotice = noticeService.insertNotice(notice);
 
             noticeService.deleteNotice(tempNotice.getNoticeId());
@@ -112,24 +99,8 @@ public class NoticeServiceTest {
             notice.setOpenYmd("20160923");
             notice.setCloseYmd("20160923");
 
-            NoticeFile noticeFile = new NoticeFile();
-            noticeFile.setFileNm("TEXT.txt");
-            noticeFile.setFileUrl("/app/arc/TEXT.txt");
-
-            List<NoticeFile> noticeFileList = new ArrayList<>();
-            noticeFileList.add(noticeFile);
-
-            notice.setNoticeFileList(noticeFileList);
-
             Notice tempNotice = noticeService.insertNotice(notice);
-
-            List<NoticeFile> tempNoticeFileList = tempNotice.getNoticeFileList();
-
-            if(CollectionUtils.isNotEmpty(tempNoticeFileList)) {
-                for(NoticeFile tempNoticeFile : tempNoticeFileList) {
-                    tempNoticeFile.setTransactionType("D");
-                }
-            }
+            tempNotice.setTitle("TEST1");
 
             noticeService.updateNotice(tempNotice);
             noticeService.deleteNotice(tempNotice.getNoticeId());

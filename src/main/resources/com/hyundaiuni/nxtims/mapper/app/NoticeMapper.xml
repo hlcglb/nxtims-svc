@@ -64,7 +64,18 @@
              WHERE NOTICE_ID = #{noticeId}
                AND SEQ = #{seq}
         ]]>
-    </select>    
+    </select>
+    
+    <select id="getNoticeFileContentByPk" parameterType="hashmap" resultType="hashmap">
+        <![CDATA[
+            SELECT A.FILE_NM AS FILE_NM,
+                   A.FILE_CONTENT AS FILE_CONTENT
+              FROM NOTICE_FILE A
+             WHERE NOTICE_ID = #{noticeId}
+               AND SEQ = #{seq}
+        ]]>
+    </select>   
+    
     
     <select id="getNoticeSequence" resultType="string">
         <![CDATA[
@@ -115,6 +126,7 @@
              SEQ,
              FILE_NM,
              FILE_URL,
+             FILE_CONTENT,
              REG_DATE,
              REG_USER_ID            
             )
@@ -124,6 +136,7 @@
              #{seq},
              #{fileNm},
              #{fileUrl},
+             #{fileContent},
              SYSDATE,
              #{sessionUserId}
             )
@@ -141,7 +154,20 @@
                    UPD_USER_ID = #{sessionUserId}
              WHERE NOTICE_ID = #{noticeId}
         ]]>
-    </update>    
+    </update>
+
+    <update id="updateNoticeFile" parameterType="com.hyundaiuni.nxtims.domain.app.NoticeFile">
+        <![CDATA[
+            UPDATE NOTICE_FILE
+               SET FILE_NM = #{fileNm},
+                   FILE_URL = #{fileUrl},
+                   FILE_CONTENT = #{fileContent},
+                   UPD_DATE = SYSDATE,
+                   UPD_USER_ID = #{sessionUserId}
+             WHERE NOTICE_ID = #{noticeId}
+               AND SEQ = #{seq}
+        ]]>
+    </update>
     
     <delete id="deleteNotice" parameterType="string">
         <![CDATA[

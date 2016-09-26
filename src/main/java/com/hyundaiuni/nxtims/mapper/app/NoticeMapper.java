@@ -15,6 +15,8 @@ public interface NoticeMapper {
     
     public NoticeFile getNoticeFileByPk(Map<String, Object> parameter);
     
+    public Map<String, Object> getNoticeFileContentByPk(Map<String, Object> parameter);
+    
     public String getNoticeSequence();
     
     public void insertNotice(Notice notice);
@@ -24,6 +26,8 @@ public interface NoticeMapper {
     public void insertNoticeFile(NoticeFile noticeFile);
     
     public void updateNotice(Notice notice);
+    
+    public void updateNoticeFile(NoticeFile noticeFile);
     
     public void deleteNotice(String noticeId);
     

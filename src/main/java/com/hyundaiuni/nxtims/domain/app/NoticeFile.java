@@ -1,7 +1,11 @@
 package com.hyundaiuni.nxtims.domain.app;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
+import org.springframework.web.multipart.MultipartFile;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -26,6 +30,12 @@ public class NoticeFile implements Serializable {
 
     @JsonProperty(value = "TRANSACTION_TYPE")
     private String transactionType;
+
+    @JsonIgnore
+    private MultipartFile file;
+
+    @JsonIgnore
+    private byte[] fileContent;
 
     public String getNoticeId() {
         return noticeId;
@@ -75,9 +85,26 @@ public class NoticeFile implements Serializable {
         this.transactionType = transactionType;
     }
 
+    public MultipartFile getFile() {
+        return file;
+    }
+
+    public void setFile(MultipartFile file) {
+        this.file = file;
+    }
+
+    public byte[] getFileContent() {
+        return fileContent;
+    }
+
+    public void setFileContent(byte[] fileContent) {
+        this.fileContent = fileContent;
+    }
+
     @Override
     public String toString() {
         return "NoticeFile [noticeId=" + noticeId + ", seq=" + seq + ", fileNm=" + fileNm + ", fileUrl=" + fileUrl
-               + ", sessionUserId=" + sessionUserId + ", transactionType=" + transactionType + "]";
+               + ", sessionUserId=" + sessionUserId + ", transactionType=" + transactionType + ", file=" + file
+               + ", fileContent=" + Arrays.toString(fileContent) + "]";
     }
 }

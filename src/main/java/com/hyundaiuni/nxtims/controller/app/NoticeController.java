@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -49,15 +49,24 @@ public class NoticeController {
         return new ResponseEntity<>(noticeService.getNotice(noticeId), HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/getNoticeFileContent", method = RequestMethod.GET)
+    public ResponseEntity<?> getNoticeFileContent(@RequestParam("noticeId") String noticeId,
+        @RequestParam("seq") int seq) {
+        Assert.notNull(noticeId, "noticeId must not be null");
+        Assert.notNull(seq, "seq must not be null");
+
+        return new ResponseEntity<>(noticeService.getNoticeFileContentByPk(noticeId, seq), HttpStatus.OK);
+    }
+
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<?> insertNotice(@RequestBody Notice notice) {
+    public ResponseEntity<?> insertNotice(@ModelAttribute Notice notice) {
         Assert.notNull(notice, "notice must not be null");
 
         return new ResponseEntity<>(noticeService.insertNotice(notice), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{noticeId}", method = RequestMethod.POST)
-    public ResponseEntity<?> updateNotice(@PathVariable("noticeId") String noticeId, @RequestBody Notice notice) {
+    public ResponseEntity<?> updateNotice(@PathVariable("noticeId") String noticeId, @ModelAttribute Notice notice) {
         Assert.notNull(noticeId, "noticeId must not be null");
         Assert.notNull(notice, "notice must not be null");
 

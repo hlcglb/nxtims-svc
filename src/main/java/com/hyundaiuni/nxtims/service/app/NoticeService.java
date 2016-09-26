@@ -1,11 +1,14 @@
 package com.hyundaiuni.nxtims.service.app;
 
 import java.io.File;
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +20,9 @@ import com.hyundaiuni.nxtims.domain.app.Notice;
 import com.hyundaiuni.nxtims.domain.app.NoticeFile;
 import com.hyundaiuni.nxtims.exception.ServiceException;
 import com.hyundaiuni.nxtims.mapper.app.NoticeMapper;
+import com.hyundaiuni.nxtims.util.MessageDigestUtils;
+
+import oracle.sql.BLOB;
 
 @Service
 public class NoticeService {
@@ -50,6 +56,31 @@ public class NoticeService {
         return notice;
     }
 
+    public Map<String, Object> getNoticeFileContentByPk(String noticeId, int seq) {
+        Map<String, Object> parameter = new HashMap<>();
+        parameter.put("noticeId", noticeId);
+        parameter.put("seq", seq);
+
+        if(noticeMapper.getNoticeFileByPk(parameter) == null) {
+            throw new ServiceException("MSG.NO_DATA_FOUND", parameter.toString() + " not found.", null);
+        }
+
+        Map<String, Object> fileContentMap = noticeMapper.getNoticeFileContentByPk(parameter);
+
+        try {
+            BLOB blob = (BLOB)MapUtils.getObject(fileContentMap, "FILE_CONTENT");
+            
+            String decodedFileContent = MessageDigestUtils.encodeBase64(blob.getBytes(1L, (int)blob.length()));
+            
+            fileContentMap.put("FILE_CONTENT", decodedFileContent);
+        }
+        catch(SQLException e) {
+            throw new ServiceException("MSG.FILE_CONVERT_ERROR", "Cannot get bytes from attached file.", null);
+        }
+
+        return fileContentMap;
+    }
+
     @Transactional
     public Notice insertNotice(Notice notice) {
         Assert.notNull(notice, "notice must not be null");
@@ -69,6 +100,13 @@ public class NoticeService {
                 checkMandatoryNoticeFile(noticeFile);
 
                 noticeFile.setSeq(noticeMapper.getNoticeFileSequence(noticeFile.getNoticeId()));
+
+                try {
+                    noticeFile.setFileContent(noticeFile.getFile().getBytes());
+                }
+                catch(IOException e) {
+                    throw new ServiceException("MSG.FILE_CONVERT_ERROR", "Cannot get bytes from attached file.", null);
+                }
 
                 noticeMapper.insertNoticeFile(noticeFile);
             }
@@ -106,7 +144,30 @@ public class NoticeService {
 
                     noticeFile.setSeq(noticeMapper.getNoticeFileSequence(noticeFile.getNoticeId()));
 
+                    try {
+                        noticeFile.setFileContent(noticeFile.getFile().getBytes());
+                    }
+                    catch(IOException e) {
+                        throw new ServiceException("MSG.FILE_CONVERT_ERROR", "Cannot get bytes from attached file.",
+                            null);
+                    }
+
                     noticeMapper.insertNoticeFile(noticeFile);
+                }
+                else if("U".equals(noticeFileTransactionType)) {
+                    checkMandatoryNoticeFile(noticeFile);
+
+                    noticeFile.setSeq(noticeMapper.getNoticeFileSequence(noticeFile.getNoticeId()));
+
+                    try {
+                        noticeFile.setFileContent(noticeFile.getFile().getBytes());
+                    }
+                    catch(IOException e) {
+                        throw new ServiceException("MSG.FILE_CONVERT_ERROR", "Cannot get bytes from attached file.",
+                            null);
+                    }
+
+                    noticeMapper.updateNoticeFile(noticeFile);
                 }
                 else if("D".equals(noticeFileTransactionType)) {
                     Map<String, Object> parameter = new HashMap<>();
@@ -130,20 +191,20 @@ public class NoticeService {
     @Transactional
     public void deleteNotice(String noticeId) {
         Assert.notNull(noticeId, "noticeId must not be null");
-        
+
         Notice notice = noticeMapper.getNoticeByNoticeId(noticeId);
 
         if(notice == null) {
             throw new ServiceException("MSG.NO_DATA_FOUND", noticeId + " not found.", null);
         }
-        
+
         List<NoticeFile> noticeFileList = notice.getNoticeFileList();
 
         if(CollectionUtils.isNotEmpty(noticeFileList)) {
             for(NoticeFile noticeFile : noticeFileList) {
                 FileUtils.deleteQuietly(new File(noticeFile.getFileUrl()));
             }
-        }        
+        }
 
         noticeMapper.deleteNoticeFileByNoticeId(noticeId);
         noticeMapper.deleteNotice(noticeId);
@@ -170,6 +231,11 @@ public class NoticeService {
     private void checkMandatoryNoticeFile(NoticeFile noticeFile) {
         if(StringUtils.isEmpty(noticeFile.getFileNm())) {
             throw new ServiceException("MSG.MUST_NOT_NULL", "FILE_NM must not be null.", new String[] {"FILE_NM"});
+        }
+
+        if(noticeFile.getFile() == null) {
+            throw new ServiceException("MSG.MUST_NOT_NULL", "ATTACHED FILE must not be null.",
+                new String[] {"ATTACHED FILE"});
         }
     }
 }
