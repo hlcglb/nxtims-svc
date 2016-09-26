@@ -24,6 +24,12 @@
         <if test="content != null">   
                                  AND CONTENT LIKE '%'||#{content}||'%'
         </if>
+        <if test="openYmd != null">   
+                                 AND OPEN_YMD >= #{openYmd}
+        </if>
+        <if test="closeYmd != null">   
+                                 AND CLOSE_YMD >= #{closeYmd}
+        </if>        
         <![CDATA[                           
                             ) A
                       WHERE ROWNUM <= #{offset} + #{limit} ) A
