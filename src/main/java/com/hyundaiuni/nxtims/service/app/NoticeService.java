@@ -75,7 +75,7 @@ public class NoticeService {
             fileContentMap.put("FILE_CONTENT", decodedFileContent);
         }
         catch(SQLException e) {
-            throw new ServiceException("MSG.FILE_CONVERT_ERROR", "Cannot get bytes from attached file.", null);
+            throw new ServiceException("MSG.FILE_CONVERT_ERROR", "Cannot get bytes from attached file.", null, e);
         }
 
         return fileContentMap;
@@ -105,7 +105,7 @@ public class NoticeService {
                     noticeFile.setFileContent(noticeFile.getFile().getBytes());
                 }
                 catch(IOException e) {
-                    throw new ServiceException("MSG.FILE_CONVERT_ERROR", "Cannot get bytes from attached file.", null);
+                    throw new ServiceException("MSG.FILE_CONVERT_ERROR", "Cannot get bytes from attached file.", null, e);
                 }
 
                 noticeMapper.insertNoticeFile(noticeFile);
@@ -149,7 +149,7 @@ public class NoticeService {
                     }
                     catch(IOException e) {
                         throw new ServiceException("MSG.FILE_CONVERT_ERROR", "Cannot get bytes from attached file.",
-                            null);
+                            null, e);
                     }
 
                     noticeMapper.insertNoticeFile(noticeFile);
@@ -164,7 +164,7 @@ public class NoticeService {
                     }
                     catch(IOException e) {
                         throw new ServiceException("MSG.FILE_CONVERT_ERROR", "Cannot get bytes from attached file.",
-                            null);
+                            null, e);
                     }
 
                     noticeMapper.updateNoticeFile(noticeFile);
